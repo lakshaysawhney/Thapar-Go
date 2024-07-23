@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend   
 from rest_framework import filters
 from .models import Pool, PoolMember, PoolRequest
-from .serializers import PoolSerializer, PoolMemberSerializer, PoolRequestSerializer
+from .serializers import PoolSerializer
 
 class PoolViewSet(viewsets.ModelViewSet):
     queryset = Pool.objects.all()
@@ -37,13 +37,7 @@ class PoolViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'Invalid gender choice.'}, status=status.HTTP_400_BAD_REQUEST)
         
         # Creating the PoolMember instance
-        PoolMember.objects.create(
-            pool=pool,
-            user=request.user,
-            name=request.user.full_name
-            gender=gender,
-            phone_number=phone_number
-        )
+        PoolMember.objects.create(pool=pool, user=request.user, name=request.user.full_name, gender=gender, phone_number=phone_number)
         return Response({'detail': 'Joined the pool successfully.'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated])
