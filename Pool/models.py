@@ -14,24 +14,14 @@ class Pool(models.Model):
     description = models.CharField(max_length = 400, null = True, blank = True)
 
 class PoolMember(models.Model):
-    GENDER_CHOICES = [
-        ('Male', 'Male'),
-        ('Female', 'Female'),
-        ('Others', 'Others')
-    ]
     pool = models.ForeignKey(Pool, related_name='members', on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, related_name='pools', on_delete=models.CASCADE)
     is_creator = models.BooleanField(default=False)
-    name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
-    phone_number = models.CharField(max_length=10)
 
     def __str__(self):
-        return self.name
+        return self.user.full_name
 
 class PoolRequest(models.Model):
     pool = models.ForeignKey(Pool, related_name='requests', on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, related_name='requests', on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('rejected', 'Rejected')], default='pending')
-
-    

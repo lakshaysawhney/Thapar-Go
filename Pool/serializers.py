@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from Pool.models import Pool, PoolMember, PoolRequest
 from authentication.models import CustomUser
-from authentication.serializers import CustomUserSerializer
 
 class CustomUserLimitedSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,19 +8,27 @@ class CustomUserLimitedSerializer(serializers.ModelSerializer):
         fields = ['full_name', 'phone_number', 'gender']
 
 class PoolMemberSerializer(serializers.ModelSerializer):
+    full_name = serializers.ReadOnlyField(source='user.full_name')
+    phone_number = serializers.ReadOnlyField(source='user.phone_number')
+    gender = serializers.ReadOnlyField(source='user.gender')
     class Meta:
         model = PoolMember
-        fields = '__all__'
+        fields = ['full_name', 'phone_number', 'gender', 'is_creator', 'pool']
 
 class PoolSerializer(serializers.ModelSerializer):
     created_by = CustomUserLimitedSerializer(read_only = True)
     members = PoolMemberSerializer(many=True, read_only=True)
+
     class Meta:
         model = Pool
         fields = '__all__'
 
+    def get_members (self, obj):
+        members = PoolMember.objects.filter(self = obj)
+        return PoolMemberSerializer(members, many=True).data
+
 class PoolRequestSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer(read_only=True)
+    user = CustomUserLimitedSerializer(read_only=True)
     class Meta:
         model = PoolRequest
         fields = '__all__'

@@ -6,7 +6,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'full_name', 'phone_number', 'email', 'roll_num', 'password']
+        fields = ['username', 'full_name', 'phone_number', 'email', 'roll_num', 'gender', 'password']
         extra_kwargs = {
             'password' : {'write_only' : True}
         }
@@ -19,7 +19,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Email is already taken')
             # Checking for Thapar mail
             if not data['email'].endswith('@thapar.edu'):
-                raise serializers.ValidationError('Thapar.edu Email accepted only')
+                raise serializers.ValidationError('Thapar Email accepted only')
             # Validating Phone number
             if len(data['phone_number'])!=10 or not data['phone_number'].isdigit():
                 raise serializers.ValidationError("Invalid Phone number")
