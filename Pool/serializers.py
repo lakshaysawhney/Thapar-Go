@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from Pool.models import Pool, PoolMember, PoolRequest
+from Pool.models import Pool, PoolMember
 from authentication.models import CustomUser
 
 class CustomUserLimitedSerializer(serializers.ModelSerializer):
@@ -27,8 +27,3 @@ class PoolSerializer(serializers.ModelSerializer):
         members = PoolMember.objects.filter(self = obj)
         return PoolMemberSerializer(members, many=True).data
 
-class PoolRequestSerializer(serializers.ModelSerializer):
-    user = CustomUserLimitedSerializer(read_only=True)
-    class Meta:
-        model = PoolRequest
-        fields = '__all__'

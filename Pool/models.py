@@ -12,6 +12,10 @@ class Pool(models.Model):
     fare_per_head = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     created_by = models.ForeignKey(CustomUser, related_name='created_pools', on_delete=models.CASCADE)
     description = models.CharField(max_length = 400, null = True, blank = True)
+    is_female_only = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.start_point} to {self.end_point} by {self.created_by.full_name}"
 
 class PoolMember(models.Model):
     pool = models.ForeignKey(Pool, related_name='members', on_delete=models.CASCADE)
@@ -21,7 +25,3 @@ class PoolMember(models.Model):
     def __str__(self):
         return self.user.full_name
 
-class PoolRequest(models.Model):
-    pool = models.ForeignKey(Pool, related_name='requests', on_delete=models.CASCADE)
-    user = models.ForeignKey(CustomUser, related_name='requests', on_delete=models.CASCADE)
-    status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('rejected', 'Rejected')], default='pending')
