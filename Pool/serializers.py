@@ -26,4 +26,3 @@ class PoolSerializer(serializers.ModelSerializer):
     def get_members (self, obj):
         members = PoolMember.objects.filter(self = obj)
         return PoolMemberSerializer(members, many=True).data
-
