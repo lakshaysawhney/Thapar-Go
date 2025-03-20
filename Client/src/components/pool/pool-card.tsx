@@ -35,23 +35,23 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 			<Card
 				className={`cursor-pointer overflow-hidden h-full ${
 					pool.femaleOnly
-						? "bg-pink-50 border-pink-200"
-						: "bg-white border-red-100"
+						? "bg-pink-50 border-pink-200 dark:bg-background dark:border-primary/20"
+						: "bg-white border-red-100 dark:bg-background dark:border-primary/10"
 				}`}
 			>
 				<CardContent className="p-0">
-					<div className="p-4 flex flex-col h-full">
+					<div className="p-4 flex flex-col h-full card-content-mobile">
 						<div className="flex justify-between items-start mb-3">
 							<div>
-								<h3 className="font-semibold text-lg text-red-800">
+								<h3 className="font-semibold text-lg text-red-800 dark:text-primary">
 									{pool.startPoint} → {pool.endPoint}
 								</h3>
-								<p className="text-sm text-gray-600">
+								<p className="text-sm text-gray-600 dark:text-muted-foreground">
 									by {pool.createdBy}
 								</p>
 							</div>
 							{pool.femaleOnly && (
-								<Badge className="bg-pink-500">
+								<Badge className="bg-pink-500 dark:bg-primary/80">
 									<Female
 										size={14}
 										className="mr-1"
@@ -61,10 +61,10 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 							)}
 						</div>
 
-						<div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
+						<div className="flex items-center gap-2 text-sm text-gray-700 dark:text-foreground/80 mb-2">
 							<Clock
 								size={16}
-								className="text-red-500 flex-shrink-0"
+								className="text-red-500 dark:text-primary flex-shrink-0"
 							/>
 							<span className="truncate">
 								{formatDate(pool.departureTime)} •{" "}
@@ -78,7 +78,7 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 								<div className="flex items-center gap-1">
 									<Users
 										size={16}
-										className="text-red-500"
+										className="text-red-500 dark:text-primary"
 									/>
 									<span className="text-sm">
 										{pool.currentPersons}/{pool.totalPersons}
@@ -87,14 +87,14 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 								<div className="flex items-center gap-1">
 									<Car
 										size={16}
-										className="text-red-500"
+										className="text-red-500 dark:text-primary"
 									/>
 									<span className="text-sm">{pool.transportMode}</span>
 								</div>
 								<div className="flex items-center gap-1">
 									<DollarSign
 										size={16}
-										className="text-red-500"
+										className="text-red-500 dark:text-primary"
 									/>
 									<span className="text-sm">
 										{formatFarePerHead(pool)}/person

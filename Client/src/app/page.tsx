@@ -8,7 +8,7 @@ export default async function Home() {
 
 	// If not authenticated, redirect to login
 	if (!session) {
-		redirect("/login");
+		// redirect("/login");
 	}
 
 	return <PoolDashboard />;

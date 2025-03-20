@@ -353,7 +353,7 @@ export function CreatePoolForm({
 						<Label className="flex items-center gap-1">
 							<DollarSign
 								size={16}
-								className="text-red-500"
+								className="text-red-500 dark:text-primary"
 							/>
 							Fare Per Head
 						</Label>
@@ -364,7 +364,7 @@ export function CreatePoolForm({
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: 5 }}
 								transition={{ duration: 0.2 }}
-								className="h-10 px-3 py-2 rounded-md border border-input bg-gray-100 text-sm mt-2 flex items-center"
+								className="h-10 px-3 py-2 rounded-md border border-input bg-gray-100 dark:bg-muted text-sm mt-2 flex items-center"
 							>
 								{farePerHead}
 							</motion.div>
@@ -431,7 +431,7 @@ export function CreatePoolForm({
 					</Button>
 					<Button
 						type="submit"
-						className="bg-red-600 hover:bg-red-700"
+						className="bg-red-600 hover:bg-red-700 dark:bg-primary dark:hover:bg-primary/90"
 					>
 						Create Pool
 					</Button>

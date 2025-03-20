@@ -99,9 +99,7 @@ export function AppHeader({ onCreatePool }: AppHeaderProps) {
 								</DropdownMenuItem>
 								<DropdownMenuItem
 									className="flex items-center gap-2 text-destructive focus:text-destructive"
-									onClick={() =>
-										signOut({ callbackUrl: "/login" })
-									}
+									onClick={() => signOut({ callbackUrl: "/login" })}
 								>
 									<LogOut className="h-4 w-4" />
 									<span>Log out</span>
@@ -136,7 +134,7 @@ export function AppHeader({ onCreatePool }: AppHeaderProps) {
 					exit={{ opacity: 0, y: -10 }}
 					className="md:hidden bg-background/95 backdrop-blur-sm border-b border-border"
 				>
-					<div className="container mx-auto p-4 flex flex-col gap-4">
+					<div className="container mx-auto p-4 flex flex-col gap-3">
 						<Button
 							variant="default"
 							className="bg-primary hover:bg-primary/90 w-full"
@@ -150,7 +148,7 @@ export function AppHeader({ onCreatePool }: AppHeaderProps) {
 
 						{session?.user && (
 							<>
-								<div className="flex items-center gap-3 p-2">
+								<div className="flex items-center gap-3 p-2 bg-background/50 rounded-md">
 									<Avatar className="h-10 w-10 border-2 border-primary/20">
 										<AvatarImage
 											src={session.user.image ?? ""}
@@ -179,9 +177,7 @@ export function AppHeader({ onCreatePool }: AppHeaderProps) {
 								<Button
 									variant="outline"
 									className="flex items-center gap-2 justify-start text-destructive"
-									onClick={() =>
-										signOut({ callbackUrl: "/login" })
-									}
+									onClick={() => signOut({ callbackUrl: "/login" })}
 								>
 									<LogOut className="h-4 w-4" />
 									<span>Log out</span>

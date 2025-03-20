@@ -77,8 +77,11 @@ export default function SignupPage() {
 			// In a real app, you would store this in a database
 			localStorage.setItem("userProfile", JSON.stringify(data));
 
-			// Redirect to Google sign-in
-			await signIn("google", { callbackUrl: "/" });
+			// Redirect to Google sign-in with explicit redirect parameter
+			await signIn("google", {
+				callbackUrl: "/",
+				redirect: true,
+			});
 		} catch (error) {
 			toast({
 				title: "Error",
@@ -93,7 +96,10 @@ export default function SignupPage() {
 	const handleGoogleSignIn = async () => {
 		setIsLoading(true);
 		try {
-			await signIn("google", { callbackUrl: "/" });
+			await signIn("google", {
+				callbackUrl: "/",
+				redirect: true,
+			});
 		} catch (error) {
 			toast({
 				title: "Error",

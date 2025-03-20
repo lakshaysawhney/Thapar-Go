@@ -61,13 +61,13 @@ export function FilterSidebar({
 			<SheetTrigger asChild>
 				<Button
 					variant="outline"
-					className="flex items-center gap-2 border-red-200 text-red-600 hover:bg-red-50"
+					className="flex items-center gap-2 border-red-200 text-red-600 hover:bg-red-50 dark:border-primary/20 dark:text-primary dark:hover:bg-primary/10"
 				>
 					<Filter size={18} />
 					Filters
 				</Button>
 			</SheetTrigger>
-			<SheetContent className="w-[300px] sm:w-[400px] bg-white overflow-y-auto">
+			<SheetContent className="w-[300px] sm:w-[400px] bg-white dark:bg-background overflow-y-auto">
 				<SheetHeader>
 					<SheetTitle>Filters</SheetTitle>
 				</SheetHeader>
@@ -92,7 +92,7 @@ export function FilterSidebar({
 							>
 								<Female
 									size={16}
-									className="text-pink-500"
+									className="text-pink-500 dark:text-primary"
 								/>
 								Female only
 							</Label>
@@ -200,7 +200,7 @@ export function FilterSidebar({
 					<div className="space-y-4">
 						<div className="flex justify-between">
 							<h3 className="text-sm font-medium">Fare per head</h3>
-							<span className="text-sm text-gray-500">
+							<span className="text-sm text-gray-500 dark:text-muted-foreground">
 								${filters.fareRange[0]} - ${filters.fareRange[1]}
 							</span>
 						</div>
@@ -212,7 +212,7 @@ export function FilterSidebar({
 							onValueChange={(value) =>
 								onUpdateFilter("fareRange", value as [number, number])
 							}
-							className="[&>span]:bg-red-500"
+							className="[&>span]:bg-red-500 dark:[&>span]:bg-primary"
 						/>
 					</div>
 
@@ -224,7 +224,7 @@ export function FilterSidebar({
 							Reset
 						</Button>
 						<Button
-							className="bg-red-600 hover:bg-red-700"
+							className="bg-red-600 hover:bg-red-700 dark:bg-primary dark:hover:bg-primary/90"
 							onClick={() => onOpenChange(false)}
 						>
 							Apply
