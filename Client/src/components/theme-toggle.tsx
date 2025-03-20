@@ -17,12 +17,12 @@ export function ThemeToggle() {
 			variant="ghost"
 			size="icon"
 			onClick={toggleTheme}
-			className="rounded-full"
+			className="rounded-full bg-white/20 dark:bg-black/20 backdrop-blur-md hover:bg-white/30 dark:hover:bg-black/30"
 		>
 			<motion.div
 				initial={{ scale: 0.8, rotate: 0 }}
 				animate={{ scale: 1, rotate: theme === "dark" ? 180 : 0 }}
-				transition={{ duration: 0.3 }}
+				transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
 				className="relative h-6 w-6"
 			>
 				<Sun className="absolute h-6 w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

@@ -1,9 +1,11 @@
 "use client";
 
 import { Filter, UserIcon as Female } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { AnimatedButton } from "@/components/ui/animated-button";
 import {
 	Select,
 	SelectContent,
@@ -61,18 +63,28 @@ export function FilterSidebar({
 			<SheetTrigger asChild>
 				<Button
 					variant="outline"
-					className="flex items-center gap-2 border-red-200 text-red-600 hover:bg-red-50 dark:border-primary/20 dark:text-primary dark:hover:bg-primary/10"
+					className="flex items-center gap-2 border-white/20 dark:border-white/10 bg-white/20 dark:bg-black/20 backdrop-blur-md hover:bg-white/30 dark:hover:bg-black/30"
 				>
 					<Filter size={18} />
 					Filters
 				</Button>
 			</SheetTrigger>
-			<SheetContent className="w-[300px] sm:w-[400px] bg-white dark:bg-background overflow-y-auto">
+			<SheetContent className="w-[300px] sm:w-[400px] bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10 overflow-y-auto">
 				<SheetHeader>
 					<SheetTitle>Filters</SheetTitle>
 				</SheetHeader>
-				<div className="py-4 space-y-6">
-					<div className="space-y-2">
+				<motion.div
+					className="py-4 space-y-6"
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.3, staggerChildren: 0.1 }}
+				>
+					<motion.div
+						className="space-y-2"
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3 }}
+					>
 						<h3 className="text-sm font-medium">Pool Type</h3>
 						<div className="flex items-center space-x-2">
 							<Checkbox
@@ -92,7 +104,7 @@ export function FilterSidebar({
 							>
 								<Female
 									size={16}
-									className="text-pink-500 dark:text-primary"
+									className="text-pink-500"
 								/>
 								Female only
 							</Label>
@@ -111,9 +123,14 @@ export function FilterSidebar({
 							/>
 							<Label htmlFor="mixed">Mixed</Label>
 						</div>
-					</div>
+					</motion.div>
 
-					<div className="space-y-2">
+					<motion.div
+						className="space-y-2"
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3, delay: 0.1 }}
+					>
 						<h3 className="text-sm font-medium">Start Point</h3>
 						<Select
 							value={filters.startPointFilter ?? ""}
@@ -124,10 +141,10 @@ export function FilterSidebar({
 								)
 							}
 						>
-							<SelectTrigger>
+							<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
 								<SelectValue placeholder="Select start point" />
 							</SelectTrigger>
-							<SelectContent>
+							<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
 								<SelectItem value="any">Any</SelectItem>
 								{startPoints.map((location) => (
 									<SelectItem
@@ -139,9 +156,14 @@ export function FilterSidebar({
 								))}
 							</SelectContent>
 						</Select>
-					</div>
+					</motion.div>
 
-					<div className="space-y-2">
+					<motion.div
+						className="space-y-2"
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3, delay: 0.2 }}
+					>
 						<h3 className="text-sm font-medium">End Point</h3>
 						<Select
 							value={filters.endPointFilter ?? ""}
@@ -152,10 +174,10 @@ export function FilterSidebar({
 								)
 							}
 						>
-							<SelectTrigger>
+							<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
 								<SelectValue placeholder="Select end point" />
 							</SelectTrigger>
-							<SelectContent>
+							<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
 								<SelectItem value="any">Any</SelectItem>
 								{endPoints.map((location) => (
 									<SelectItem
@@ -167,9 +189,14 @@ export function FilterSidebar({
 								))}
 							</SelectContent>
 						</Select>
-					</div>
+					</motion.div>
 
-					<div className="space-y-2">
+					<motion.div
+						className="space-y-2"
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3, delay: 0.3 }}
+					>
 						<h3 className="text-sm font-medium">Transport Mode</h3>
 						<Select
 							value={filters.transportModeFilter ?? ""}
@@ -180,10 +207,10 @@ export function FilterSidebar({
 								)
 							}
 						>
-							<SelectTrigger>
+							<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
 								<SelectValue placeholder="Select transport mode" />
 							</SelectTrigger>
-							<SelectContent>
+							<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
 								<SelectItem value="any">Any</SelectItem>
 								{transportModes.map((mode) => (
 									<SelectItem
@@ -195,12 +222,17 @@ export function FilterSidebar({
 								))}
 							</SelectContent>
 						</Select>
-					</div>
+					</motion.div>
 
-					<div className="space-y-4">
+					<motion.div
+						className="space-y-4"
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3, delay: 0.4 }}
+					>
 						<div className="flex justify-between">
 							<h3 className="text-sm font-medium">Fare per head</h3>
-							<span className="text-sm text-gray-500 dark:text-muted-foreground">
+							<span className="text-sm text-muted-foreground">
 								${filters.fareRange[0]} - ${filters.fareRange[1]}
 							</span>
 						</div>
@@ -212,25 +244,32 @@ export function FilterSidebar({
 							onValueChange={(value) =>
 								onUpdateFilter("fareRange", value as [number, number])
 							}
-							className="[&>span]:bg-red-500 dark:[&>span]:bg-primary"
+							className="[&>span]:bg-primary"
 						/>
-					</div>
+					</motion.div>
 
-					<div className="flex justify-between pt-4">
+					<motion.div
+						className="flex justify-between pt-4"
+						initial={{ opacity: 0, y: 10 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3, delay: 0.5 }}
+					>
 						<Button
 							variant="outline"
 							onClick={onResetFilters}
+							className="border-white/20 dark:border-white/10"
 						>
 							Reset
 						</Button>
-						<Button
-							className="bg-red-600 hover:bg-red-700 dark:bg-primary dark:hover:bg-primary/90"
+						<AnimatedButton
+							className="bg-primary hover:bg-primary/90"
 							onClick={() => onOpenChange(false)}
+							glowColor="rgba(255, 0, 0, 0.3)"
 						>
 							Apply
-						</Button>
-					</div>
-				</div>
+						</AnimatedButton>
+					</motion.div>
+				</motion.div>
 			</SheetContent>
 		</Sheet>
 	);

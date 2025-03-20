@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { useState, useCallback } from "react";
+import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,9 +24,10 @@ import {
 	getUniqueStartPoints,
 	getUniqueEndPoints,
 } from "@/data/pool-data";
-import type { CreatePoolFormValues } from "@/schemas/pool-schema";
+import type { CreatePoolFormValues } from "@/schemas/schema";
 import { CreatePoolForm } from "@/components/pool/create-pool-form";
 import { AppHeader } from "@/components/layout/app-header";
+import { AnimatedBackground } from "@/components/ui/animated-background";
 
 /**
  * Main dashboard component for the car pooling application
@@ -64,14 +66,38 @@ export default function PoolDashboard() {
 		setIsCreatePoolOpen(false);
 	};
 
+	const container = {
+		hidden: { opacity: 0 },
+		show: {
+			opacity: 1,
+			transition: {
+				staggerChildren: 0.1,
+			},
+		},
+	};
+
+	const item = {
+		hidden: { opacity: 0, y: 20 },
+		show: { opacity: 1, y: 0 },
+	};
+
 	return (
-		<div className="min-h-screen bg-background">
+		<AnimatedBackground
+			variant="beams"
+			intensity="subtle"
+			className="min-h-screen"
+		>
 			{/* Header */}
 			<AppHeader onCreatePool={() => setIsCreatePoolOpen(true)} />
 
 			{/* Search and Filter Section */}
 			<div className="container mx-auto p-4">
-				<div className="flex flex-col sm:flex-row gap-2 mb-6">
+				<motion.div
+					className="flex flex-col sm:flex-row gap-2 mb-6"
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.5 }}
+				>
 					<div className="relative flex-grow">
 						<Search
 							className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
@@ -79,7 +105,7 @@ export default function PoolDashboard() {
 						/>
 						<Input
 							placeholder="Search by creator..."
-							className="pl-10 border-primary/20 focus-visible:ring-primary"
+							className="pl-10 bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10 backdrop-blur-md focus-visible:ring-primary"
 							value={filters.searchQuery}
 							onChange={handleSearchChange}
 						/>
@@ -95,14 +121,14 @@ export default function PoolDashboard() {
 						transportModes={transportModes}
 						fareRange={fareRange}
 					/>
-				</div>
+				</motion.div>
 
 				{/* View Tabs */}
 				<Tabs
 					defaultValue="all"
 					className="mb-6"
 				>
-					<TabsList className="bg-primary/5 w-full sm:w-auto">
+					<TabsList className="bg-white/20 dark:bg-black/20 backdrop-blur-md border border-white/20 dark:border-white/10 w-full sm:w-auto">
 						<TabsTrigger
 							value="all"
 							className="flex-1 sm:flex-initial data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
@@ -121,26 +147,43 @@ export default function PoolDashboard() {
 						className="mt-4"
 					>
 						{/* Pool Cards */}
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+						<motion.div
+							className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
+							variants={container}
+							initial="hidden"
+							animate="show"
+						>
 							{filteredPools.length > 0 ? (
 								filteredPools.map((pool) => (
-									<PoolCard
+									<motion.div
 										key={pool.id}
-										pool={pool}
-										onClick={() => handlePoolSelect(pool)}
-									/>
+										variants={item}
+									>
+										<PoolCard
+											pool={pool}
+											onClick={() => handlePoolSelect(pool)}
+										/>
+									</motion.div>
 								))
 							) : (
-								<div className="col-span-full text-center py-10 text-muted-foreground">
+								<motion.div
+									className="col-span-full text-center py-10 text-muted-foreground"
+									variants={item}
+								>
 									No pools match your search criteria
-								</div>
+								</motion.div>
 							)}
-						</div>
+						</motion.div>
 					</TabsContent>
 					<TabsContent value="my">
-						<div className="text-center py-10 text-muted-foreground">
+						<motion.div
+							className="text-center py-10 text-muted-foreground"
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ delay: 0.2 }}
+						>
 							You haven't created any pools yet
-						</div>
+						</motion.div>
 					</TabsContent>
 				</Tabs>
 			</div>
@@ -157,7 +200,7 @@ export default function PoolDashboard() {
 				open={isCreatePoolOpen}
 				onOpenChange={setIsCreatePoolOpen}
 			>
-				<DialogContent className="sm:max-w-[600px] bg-background/95 backdrop-blur-sm max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+				<DialogContent className="sm:max-w-[600px] bg-background/80 backdrop-blur-lg border border-white/20 dark:border-white/10 max-h-[90vh] overflow-y-auto p-4 sm:p-6">
 					<DialogHeader>
 						<DialogTitle className="text-xl text-primary">
 							Create New Pool
@@ -176,6 +219,6 @@ export default function PoolDashboard() {
 					/>
 				</DialogContent>
 			</Dialog>
-		</div>
+		</AnimatedBackground>
 	);
 }

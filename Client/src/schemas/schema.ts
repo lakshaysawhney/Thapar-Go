@@ -45,3 +45,17 @@ export const createPoolSchema = z.object({
 });
 
 export type CreatePoolFormValues = z.infer<typeof createPoolSchema>;
+
+// Enhanced signup schema with phone number
+export const signupSchema = z.object({
+	name: z.string().min(2, { message: "Name must be at least 2 characters" }),
+	email: z.string().email({ message: "Please enter a valid email address" }),
+	gender: z.enum(["male", "female", "other"], {
+		required_error: "Please select a gender",
+	}),
+	phone: z
+		.string()
+		.min(10, { message: "Phone number must be at least 10 digits" }),
+});
+
+export type SignupFormValues = z.infer<typeof signupSchema>;
