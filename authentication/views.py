@@ -17,7 +17,7 @@ class GoogleLoginView(SocialLoginView):
     """
     Custom Google OAuth Login view with thapar.edu domain validation.
     """
-    adapter_class = CustomGoogleOAuth2Adapter
+    adapter_class = CustomGoogleOAuth2Adapter 
 
     def post(self, request, *args, **kwargs):
         logger.debug("Starting Google OAuth login process.")
@@ -54,7 +54,7 @@ class GoogleLoginView(SocialLoginView):
 
         return response
 
-        
+            
 # View for adding additional user information (phone_number, gender)
 class UserAdditionalInfoView(APIView):
     permission_classes = [IsAuthenticated]

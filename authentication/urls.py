@@ -1,7 +1,7 @@
 from django.urls import path
 from authentication.views import GoogleLoginView, UserAdditionalInfoView, AllUsersView, LogoutView
 from rest_framework_simplejwt import views as jwt_views
-    
+  
 app_name = 'authentication' # Adding namespace for frontend integration ease
 
 urlpatterns = [

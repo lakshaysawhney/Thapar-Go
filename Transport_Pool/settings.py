@@ -12,24 +12,30 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
-from Transport_Pool import secrets
+#from Transport_Pool import secrets
+from dotenv import load_dotenv
+import os
+import pathlib
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secrets.SECRET_KEY
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['your-production-domain.com']
+    ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "your-production-domain.com").split(",")
 
 CORS_ALLOWED_ORIGINS = [
     "https://1274-2401-4900-8811-41bb-3c28-9bfb-bfc4-95aa.ngrok-free.app",
@@ -93,10 +99,15 @@ WSGI_APPLICATION = 'Transport_Pool.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv("DB_NAME"),
+        'USER': os.getenv("DB_USER"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("DB_HOST"),
+        'PORT': os.getenv("DB_PORT"),
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -115,7 +126,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -158,9 +168,9 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'offline',
         },          
         'APP': {
-            'client_id': secrets.GOOGLE_CLIENT_ID,
-            'secret': secrets.GOOGLE_CLIENT_SECRET,
-            'key': '',  
+            'client_id': os.getenv("GOOGLE_CLIENT_ID"),
+            'secret': os.getenv("GOOGLE_CLIENT_SECRET"),
+            'key': '',   
         },
         'REDIRECT_URI': 'https://1274-2401-4900-8811-41bb-3c28-9bfb-bfc4-95aa.ngrok-free.app/auth/google/login/callback/',
     }
@@ -182,6 +192,6 @@ SIMPLE_JWT = {
 
 SITE_ID = 1 # to avoid errors while using django.contrib.sites since site_id is used by G-OAuth
 
-import os
+
 
 
