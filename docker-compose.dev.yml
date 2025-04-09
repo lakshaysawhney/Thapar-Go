@@ -1,8 +1,8 @@
 services:
   db:
     env_file:
-      - .env.dev
+      - .env.dev   
 
   web:
     env_file:
-      - .env.dev
+      - .env.dev   
