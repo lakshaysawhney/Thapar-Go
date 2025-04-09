@@ -1,2 +1,4 @@
 secrets.py
 .env
+.env.prod
+.env.dev
