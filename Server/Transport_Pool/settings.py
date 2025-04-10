@@ -27,7 +27,7 @@ if ENVIRONMENT == "production":
     load_dotenv(dotenv_path=BASE_DIR / ".env.prod")
 else:
     load_dotenv(dotenv_path=BASE_DIR / ".env.dev")  # fallback to .env.dev locally
-    
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -36,7 +36,7 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "your-production-domain.com").split(",")
+    ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "3.111.41.208").split(",")
 
 CORS_ALLOWED_ORIGINS = [
     "https://1274-2401-4900-8811-41bb-3c28-9bfb-bfc4-95aa.ngrok-free.app",
