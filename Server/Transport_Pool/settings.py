@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
-#from Transport_Pool import secrets
 from dotenv import load_dotenv
 import os
 import pathlib
@@ -39,7 +38,9 @@ else:
     ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "3.111.41.208").split(",")
 
 CORS_ALLOWED_ORIGINS = [
-    "https://1274-2401-4900-8811-41bb-3c28-9bfb-bfc4-95aa.ngrok-free.app",
+    "https://thapargo.com",
+    "https://www.thapargo.com",
+    "https://your-frontend-domain.com"  # if frontend is separate
 ]
 
 # Application definition
@@ -172,7 +173,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'secret': os.getenv("GOOGLE_CLIENT_SECRET"),
             'key': '',   
         },
-        'REDIRECT_URI': 'https://1274-2401-4900-8811-41bb-3c28-9bfb-bfc4-95aa.ngrok-free.app/auth/google/login/callback/',
+        'REDIRECT_URI': 'https://thapargo.com/auth/google/login/callback/',
     }
 }
 
