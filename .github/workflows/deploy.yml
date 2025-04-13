@@ -29,6 +29,8 @@ jobs:
         ssh -i ~/.ssh/id_rsa ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
           cd Thapar_Go
           echo "${{ secrets.ENV_FILE_PROD }}" > .env.prod
-          docker compose -f docker-compose.yml -f docker-compose.prod.yml down
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml down || true
+          docker rm -f db || true
           docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+
         EOF
