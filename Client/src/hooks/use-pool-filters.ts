@@ -1,17 +1,19 @@
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
-import type { FilterState } from "@/types/pool";
+import type { FilterState, Pool } from "@/types/pool";
 import { calculateFarePerHead } from "@/lib/utils/pool-utils";
-import { poolData, getFarePerHeadRange } from "@/data/pool-data";
 
 /**
  * Custom hook for filtering pools
  * @returns Filter state, handlers, and filtered pools
  */
-export const usePoolFilters = () => {
-	// Get fare range from data
-	const { min: minFare, max: maxFare } = getFarePerHeadRange();
+export const usePoolFilters = (pools: Pool[] = []) => {
+	// Initialize with default fare range
+	const [fareRange, setFareRange] = useState({
+		min: 0,
+		max: 100,
+	});
 
 	// Initialize filter state
 	const [filters, setFilters] = useState<FilterState>({
@@ -20,8 +22,17 @@ export const usePoolFilters = () => {
 		startPointFilter: null,
 		endPointFilter: null,
 		transportModeFilter: null,
-		fareRange: [minFare, maxFare],
+		fareRange: [fareRange.min, fareRange.max],
 	});
+
+	// Set initial fare range
+	const setInitialFareRange = useCallback((min: number, max: number) => {
+		setFareRange({ min, max });
+		setFilters((prev) => ({
+			...prev,
+			fareRange: [min, max],
+		}));
+	}, []);
 
 	// Update individual filter
 	const updateFilter = useCallback(
@@ -39,17 +50,22 @@ export const usePoolFilters = () => {
 			startPointFilter: null,
 			endPointFilter: null,
 			transportModeFilter: null,
-			fareRange: [minFare, maxFare],
+			fareRange: [fareRange.min, fareRange.max],
 		});
-	}, [minFare, maxFare]);
+	}, [fareRange.min, fareRange.max]);
 
 	// Apply filters to pool data
 	const filteredPools = useMemo(() => {
-		return poolData.filter((pool) => {
+		if (!pools.length) return [];
+
+		return pools.filter((pool) => {
+			// Get creator name from either format
+			const creatorName = pool.created_by?.full_name ?? pool.createdBy ?? "";
+
 			// Search by creator
 			if (
 				filters.searchQuery &&
-				!pool.createdBy
+				!creatorName
 					.toLowerCase()
 					.includes(filters.searchQuery.toLowerCase())
 			) {
@@ -57,39 +73,47 @@ export const usePoolFilters = () => {
 			}
 
 			// Filter by female only
-			if (
-				filters.femaleOnlyFilter !== null &&
-				pool.femaleOnly !== filters.femaleOnlyFilter
-			) {
-				return false;
+			if (filters.femaleOnlyFilter !== null) {
+				const isFemaleOnly =
+					pool.is_female_only ?? pool.femaleOnly ?? false;
+				if (isFemaleOnly !== filters.femaleOnlyFilter) {
+					return false;
+				}
 			}
 
 			// Filter by start point
-			if (
-				filters.startPointFilter &&
-				pool.startPoint !== filters.startPointFilter
-			) {
-				return false;
+			if (filters.startPointFilter) {
+				const startPoint = pool.start_point ?? pool.startPoint ?? "";
+				if (startPoint !== filters.startPointFilter) {
+					return false;
+				}
 			}
 
 			// Filter by end point
-			if (
-				filters.endPointFilter &&
-				pool.endPoint !== filters.endPointFilter
-			) {
-				return false;
+			if (filters.endPointFilter) {
+				const endPoint = pool.end_point ?? pool.endPoint ?? "";
+				if (endPoint !== filters.endPointFilter) {
+					return false;
+				}
 			}
 
 			// Filter by transport mode
-			if (
-				filters.transportModeFilter &&
-				pool.transportMode !== filters.transportModeFilter
-			) {
-				return false;
+			if (filters.transportModeFilter) {
+				const transportMode =
+					pool.transport_mode ?? pool.transportMode ?? "";
+				if (transportMode !== filters.transportModeFilter) {
+					return false;
+				}
 			}
 
 			// Filter by fare per head
-			const farePerHead = calculateFarePerHead(pool);
+			let farePerHead;
+			if (pool.fare_per_head) {
+				farePerHead = Number.parseFloat(pool.fare_per_head);
+			} else {
+				farePerHead = calculateFarePerHead(pool);
+			}
+
 			if (
 				farePerHead < filters.fareRange[0] ||
 				farePerHead > filters.fareRange[1]
@@ -99,16 +123,14 @@ export const usePoolFilters = () => {
 
 			return true;
 		});
-	}, [filters]);
+	}, [filters, pools]);
 
 	return {
 		filters,
 		updateFilter,
 		resetFilters,
 		filteredPools,
-		fareRange: {
-			min: minFare,
-			max: maxFare,
-		},
+		fareRange,
+		setInitialFareRange,
 	};
 };

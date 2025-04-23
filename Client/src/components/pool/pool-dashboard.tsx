@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -19,11 +19,7 @@ import { PoolCard } from "@/components/pool/pool-card";
 import { PoolDetails } from "@/components/pool/pool-details";
 import { FilterSidebar } from "@/components/pool/filter-sidebar";
 import { usePoolFilters } from "@/hooks/use-pool-filters";
-import {
-	transportModes,
-	getUniqueStartPoints,
-	getUniqueEndPoints,
-} from "@/data/pool-data";
+import { samplePoolData } from "@/data/sample-pool-data"; // Add this import
 import type { CreatePoolFormValues } from "@/schemas/schema";
 import { CreatePoolForm } from "@/components/pool/create-pool-form";
 import { AppHeader } from "@/components/layout/app-header";
@@ -33,18 +29,99 @@ import { AnimatedBackground } from "@/components/ui/animated-background";
  * Main dashboard component for the car pooling application
  */
 export default function PoolDashboard() {
-	// Get unique locations from pool data
-	const startPoints = getUniqueStartPoints();
-	const endPoints = getUniqueEndPoints();
-
 	// State for dialogs
 	const [selectedPool, setSelectedPool] = useState<Pool | null>(null);
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	const [isCreatePoolOpen, setIsCreatePoolOpen] = useState(false);
+	const [pools, setPools] = useState<Pool[]>([]);
+
+	// Load pool data on component mount
+	useEffect(() => {
+		// In a real app, this would be an API call
+		// For now, we'll use the sample data
+		setPools(samplePoolData);
+	}, []);
+
+	// Dynamically extract unique values from the current pool data
+	const dynamicFilterOptions = useMemo(() => {
+		if (!pools.length)
+			return {
+				startPoints: [],
+				endPoints: [],
+				transportModes: [],
+				fareRange: { min: 0, max: 100 },
+			};
+
+		// Extract unique start points
+		const startPoints = Array.from(
+			new Set(
+				pools.map((pool) => {
+					return pool.start_point || pool.startPoint || "";
+				}),
+			),
+		).filter(Boolean);
+
+		// Extract unique end points
+		const endPoints = Array.from(
+			new Set(
+				pools.map((pool) => {
+					return pool.end_point || pool.endPoint || "";
+				}),
+			),
+		).filter(Boolean);
+
+		// Extract unique transport modes
+		const transportModes = Array.from(
+			new Set(
+				pools.map((pool) => {
+					return pool.transport_mode || pool.transportMode || "";
+				}),
+			),
+		).filter(Boolean);
+
+		// Calculate fare range
+		const fares = pools.map((pool) => {
+			if (pool.fare_per_head) {
+				return Number.parseFloat(pool.fare_per_head);
+			} else if (
+				pool.totalFare &&
+				(pool.total_persons || pool.totalPersons)
+			) {
+				const totalPersons = pool.total_persons || pool.totalPersons || 1;
+				return pool.totalFare / totalPersons;
+			}
+			return 0;
+		});
+
+		const fareRange = {
+			min: Math.floor(Math.min(...fares)),
+			max: Math.ceil(Math.max(...fares)),
+		};
+
+		return { startPoints, endPoints, transportModes, fareRange };
+	}, [pools]);
 
 	// Use custom hook for filtering
-	const { filters, updateFilter, resetFilters, filteredPools, fareRange } =
-		usePoolFilters();
+	const {
+		filters,
+		updateFilter,
+		resetFilters,
+		filteredPools,
+		setInitialFareRange,
+	} = usePoolFilters(pools);
+
+	// Update fare range when it changes
+	useEffect(() => {
+		if (
+			dynamicFilterOptions.fareRange.min !== undefined &&
+			dynamicFilterOptions.fareRange.max !== undefined
+		) {
+			setInitialFareRange(
+				dynamicFilterOptions.fareRange.min,
+				dynamicFilterOptions.fareRange.max,
+			);
+		}
+	}, [dynamicFilterOptions.fareRange, setInitialFareRange]);
 
 	// Handle search input
 	const handleSearchChange = useCallback(
@@ -83,7 +160,7 @@ export default function PoolDashboard() {
 
 	return (
 		<AnimatedBackground
-			variant="beams"
+			variant="paths"
 			intensity="subtle"
 			className="min-h-screen"
 		>
@@ -116,10 +193,10 @@ export default function PoolDashboard() {
 						filters={filters}
 						onUpdateFilter={updateFilter}
 						onResetFilters={resetFilters}
-						startPoints={startPoints}
-						endPoints={endPoints}
-						transportModes={transportModes}
-						fareRange={fareRange}
+						startPoints={dynamicFilterOptions.startPoints}
+						endPoints={dynamicFilterOptions.endPoints}
+						transportModes={dynamicFilterOptions.transportModes}
+						fareRange={dynamicFilterOptions.fareRange}
 					/>
 				</motion.div>
 
@@ -212,9 +289,9 @@ export default function PoolDashboard() {
 
 					<CreatePoolForm
 						onSubmit={handleCreatePool}
-						startPoints={startPoints}
-						endPoints={endPoints}
-						transportModes={transportModes}
+						startPoints={dynamicFilterOptions.startPoints}
+						endPoints={dynamicFilterOptions.endPoints}
+						transportModes={dynamicFilterOptions.transportModes}
 						onCancel={() => setIsCreatePoolOpen(false)}
 					/>
 				</DialogContent>

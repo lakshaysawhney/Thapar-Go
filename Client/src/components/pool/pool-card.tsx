@@ -16,6 +16,7 @@ import {
 	UserIcon as Female,
 	MapPin,
 	ArrowRight,
+	Phone,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -39,8 +40,26 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 	const rotateX = useTransform(y, [-100, 100], [10, -10]);
 	const rotateY = useTransform(x, [-100, 100], [-10, 10]);
 
+	// Handle both naming conventions
+	const startPoint = pool.start_point || pool.startPoint || "";
+	const endPoint = pool.end_point || pool.endPoint || "";
+	const departureTime = pool.departure_time || pool.departureTime || "";
+	const arrivalTime = pool.arrival_time || pool.arrivalTime || "";
+	const transportMode = pool.transport_mode || pool.transportMode || "";
+	const totalPersons = pool.total_persons || pool.totalPersons || 0;
+	const currentPersons = pool.current_persons || pool.currentPersons || 0;
+	const isFemaleOnly = pool.is_female_only || pool.femaleOnly || false;
+	const farePerHead =
+		pool.fare_per_head || (pool.totalFare ? formatFarePerHead(pool) : "0.00");
+
+	// Get creator name
+	const creatorName =
+		pool.created_by?.full_name || pool.createdBy || "Unknown";
+	const creatorPhone = pool.created_by?.phone_number || "";
+	const creatorGender = pool.created_by?.gender || "";
+
 	// Calculate available seats
-	const availableSeats = pool.totalPersons - pool.currentPersons;
+	const availableSeats = totalPersons - currentPersons;
 
 	// Handle mouse move for 3D effect
 	const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -84,7 +103,7 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 				transition={{ type: "spring", stiffness: 400, damping: 30 }}
 			>
 				<GlassCard
-					variant={pool.femaleOnly ? "female" : "default"}
+					variant={isFemaleOnly ? "female" : "default"}
 					onClick={onClick}
 					className="h-full relative overflow-hidden"
 					hoverEffect={false}
@@ -93,7 +112,7 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 					<div className="absolute inset-0 overflow-hidden opacity-20 pointer-events-none">
 						<motion.div
 							className={`w-full h-full bg-gradient-to-br ${
-								pool.femaleOnly
+								isFemaleOnly
 									? "from-pink-500/30 via-transparent to-pink-300/20"
 									: "from-primary/30 via-transparent to-primary/20"
 							}`}
@@ -120,24 +139,24 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 							>
 								<motion.div
 									className={`absolute inset-0 rounded-xl border-2 ${
-										pool.femaleOnly
+										isFemaleOnly
 											? "border-pink-500/50"
 											: "border-primary/50"
 									}`}
 									animate={{
 										boxShadow: [
 											`0 0 0px ${
-												pool.femaleOnly
+												isFemaleOnly
 													? "rgba(236, 72, 153, 0.3)"
 													: "rgba(220, 38, 38, 0.3)"
 											}`,
 											`0 0 8px ${
-												pool.femaleOnly
+												isFemaleOnly
 													? "rgba(236, 72, 153, 0.5)"
 													: "rgba(220, 38, 38, 0.5)"
 											}`,
 											`0 0 0px ${
-												pool.femaleOnly
+												isFemaleOnly
 													? "rgba(236, 72, 153, 0.3)"
 													: "rgba(220, 38, 38, 0.3)"
 											}`,
@@ -158,7 +177,7 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 						{isHovered && (
 							<motion.div
 								className={`absolute inset-0 ${
-									pool.femaleOnly ? "bg-pink-500/10" : "bg-primary/10"
+									isFemaleOnly ? "bg-pink-500/10" : "bg-primary/10"
 								}`}
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
@@ -178,7 +197,9 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 										className="text-primary"
 									/>
 									<h3 className="font-semibold text-lg text-primary flex items-center gap-1">
-										<span>{pool.startPoint}</span>
+										<span className="truncate max-w-[80px] sm:max-w-[120px]">
+											{startPoint}
+										</span>
 										<motion.div
 											animate={{ x: [0, 5, 0] }}
 											transition={{
@@ -192,16 +213,39 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 												className="text-primary mx-1"
 											/>
 										</motion.div>
-										<span>{pool.endPoint}</span>
+										<span className="truncate max-w-[80px] sm:max-w-[120px]">
+											{endPoint}
+										</span>
 									</h3>
 								</div>
 								<p className="text-sm text-foreground/70 dark:text-foreground/60 flex items-center gap-1">
 									<span>by</span>
-									<span className="font-medium">{pool.createdBy}</span>
+									<span className="font-medium">{creatorName}</span>
+									{creatorGender && (
+										<Badge
+											className={`ml-1 ${
+												creatorGender.toLowerCase() === "female"
+													? "bg-pink-500/80"
+													: "bg-blue-500/80"
+											}`}
+											variant="outline"
+										>
+											{creatorGender}
+										</Badge>
+									)}
 								</p>
+								{creatorPhone && (
+									<p className="text-xs text-foreground/60 flex items-center gap-1">
+										<Phone
+											size={12}
+											className="text-primary"
+										/>
+										{creatorPhone}
+									</p>
+								)}
 							</div>
 
-							{pool.femaleOnly && (
+							{isFemaleOnly && (
 								<motion.div
 									whileHover={{ scale: 1.05 }}
 									whileTap={{ scale: 0.95 }}
@@ -225,11 +269,11 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 							/>
 							<div className="flex flex-col">
 								<span className="font-medium">
-									{formatDate(pool.departureTime)}
+									{formatDate(departureTime)}
 								</span>
 								<span className="text-xs">
-									{formatTime(pool.departureTime)} -{" "}
-									{formatTime(pool.arrivalTime)}
+									{formatTime(departureTime)} -{" "}
+									{formatTime(arrivalTime)}
 								</span>
 							</div>
 						</div>
@@ -253,7 +297,7 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 									className="text-primary mb-1"
 								/>
 								<span className="text-xs font-medium">
-									{pool.currentPersons}/{pool.totalPersons}
+									{currentPersons}/{totalPersons}
 								</span>
 								<span className="text-[10px] text-foreground/60">
 									Seats
@@ -277,7 +321,7 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 									className="text-primary mb-1"
 								/>
 								<span className="text-xs font-medium">
-									{pool.transportMode}
+									{transportMode}
 								</span>
 								<span className="text-[10px] text-foreground/60">
 									Vehicle
@@ -301,7 +345,7 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 									className="text-primary mb-1"
 								/>
 								<span className="text-xs font-medium">
-									{formatFarePerHead(pool)}
+									{farePerHead}
 								</span>
 								<span className="text-[10px] text-foreground/60">
 									Per Person
