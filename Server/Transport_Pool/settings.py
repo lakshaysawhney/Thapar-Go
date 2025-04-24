@@ -40,7 +40,7 @@ else:
 CORS_ALLOWED_ORIGINS = [
     "https://thapargo.com",
     "https://www.thapargo.com",
-    "https://your-frontend-domain.com"  # if frontend is separate
+    "http://localhost:3000"
 ]
 
 # Application definition

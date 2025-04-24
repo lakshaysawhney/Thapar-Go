@@ -35,6 +35,17 @@ import { AnimatedButton } from "@/components/ui/animated-button";
 import { signupSchema, type SignupFormValues } from "@/schemas/schema";
 import googleIcon from "@/../public/google.svg";
 
+interface GoogleUserInfo {
+	access: string;
+	refresh: string;
+	user: {
+		email: string;
+		full_name: string;
+		phone_number: number;
+		gender: "Male" | "Female" | "Others";
+	};
+}
+
 export default function SignupPage() {
 	const router = useRouter();
 	const { toast } = useToast();
@@ -67,11 +78,27 @@ export default function SignupPage() {
 	const login = useGoogleLogin({
 		onSuccess: async (tokenResponse) => {
 			console.log(tokenResponse);
-			// In a real app, you would fetch user info from Google API
-			// For now, let's simulate getting user info
+
+			const response = await fetch(
+				"https://thapargo.com/auth/google/login/callback/",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						access_token: tokenResponse.access_token,
+					}),
+				},
+			);
+			const userDetails = (await response.json()) as GoogleUserInfo;
+
+			localStorage.setItem("access", userDetails.access);
+			localStorage.setItem("refresh", userDetails.refresh);
+
 			setGoogleUserInfo({
-				name: "John Doe",
-				email: "john.doe@example.com",
+				name: userDetails.user.full_name ?? "john doe",
+				email: userDetails.user.email ?? "johndoe@gmail.com",
 			});
 			setIsLoading(false);
 			setStep("details");
@@ -86,6 +113,20 @@ export default function SignupPage() {
 			});
 		},
 	});
+
+	// const login = () => {
+	// 	// For OAuth redirect flows, we need to redirect the user to the authorization URL
+	// 	window.location.href =
+	// 		`https://accounts.google.com/o/oauth2/v2/auth?` +
+	// 		`client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}` +
+	// 		`&redirect_uri=${encodeURIComponent(
+	// 			"https://thapargo.com/auth/google/login/callback/",
+	// 		)}` +
+	// 		`&response_type=code` +
+	// 		`&scope=openid%20email%20profile` +
+	// 		`&access_type=offline` +
+	// 		`&prompt=consent`;
+	// };
 
 	const handleGoogleSignUp = () => {
 		setIsLoading(true);
