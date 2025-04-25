@@ -8,6 +8,7 @@ import {
 	DollarSign,
 	UserIcon as Female,
 	Phone,
+	Edit,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -23,11 +24,20 @@ import { AnimatedButton } from "@/components/ui/animated-button";
 import { Badge } from "@/components/ui/badge";
 import type { Pool } from "@/types/pool";
 import { formatTime, formatDate } from "@/lib/utils/date-utils";
+import { useState } from "react";
+import { EditPoolForm } from "@/components/pool/edit-pool-form";
+import { poolApi } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
 
 interface PoolDetailsProps {
 	pool: Pool | null;
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
+	onPoolUpdated?: () => void;
+	startPoints?: string[];
+	endPoints?: string[];
+	transportModes?: string[];
+	isCurrentUserCreator?: boolean;
 }
 
 /**
@@ -37,7 +47,16 @@ export function PoolDetails({
 	pool,
 	open,
 	onOpenChange,
+	onPoolUpdated,
+	startPoints = [],
+	endPoints = [],
+	transportModes = [],
+	isCurrentUserCreator = false,
 }: Readonly<PoolDetailsProps>) {
+	const [isJoining, setIsJoining] = useState(false);
+	const [isEditing, setIsEditing] = useState(false);
+	const { toast } = useToast();
+
 	if (!pool) return null;
 
 	// Handle both naming conventions
@@ -59,6 +78,37 @@ export function PoolDetails({
 		pool.created_by?.full_name ?? pool.createdBy ?? "Unknown";
 	const creatorPhone = pool.created_by?.phone_number ?? "";
 	const creatorGender = pool.created_by?.gender ?? "";
+
+	const handleJoinPool = async () => {
+		if (!pool) return;
+
+		try {
+			setIsJoining(true);
+			await poolApi.joinPool(pool.id);
+
+			toast({
+				title: "Success",
+				description: "You have successfully joined the pool!",
+			});
+
+			// Close the dialog
+			onOpenChange(false);
+		} catch (error) {
+			console.error("Error joining pool:", error);
+			// Error is already handled in the API service
+		} finally {
+			setIsJoining(false);
+		}
+	};
+
+	const handlePoolUpdated = async () => {
+		setIsEditing(false);
+
+		// Notify parent component that pool was updated
+		if (onPoolUpdated) {
+			onPoolUpdated();
+		}
+	};
 
 	return (
 		<AnimatePresence>
@@ -243,19 +293,52 @@ export function PoolDetails({
 						</motion.div>
 
 						<div className="flex justify-end gap-2 mt-4">
-							<Button
-								variant="outline"
-								onClick={() => onOpenChange(false)}
-								className="border-white/20 dark:border-white/10"
-							>
-								Close
-							</Button>
-							<AnimatedButton
-								className="bg-primary hover:bg-primary/90"
-								glowColor="rgba(255, 0, 0, 0.3)"
-							>
-								Join Pool
-							</AnimatedButton>
+							{isEditing ? (
+								<EditPoolForm
+									pool={pool}
+									startPoints={startPoints}
+									endPoints={endPoints}
+									transportModes={transportModes}
+									onCancel={() => setIsEditing(false)}
+									onSuccess={handlePoolUpdated}
+								/>
+							) : (
+								<>
+									<Button
+										variant="outline"
+										onClick={() => onOpenChange(false)}
+										className="border-white/20 dark:border-white/10"
+									>
+										Close
+									</Button>
+
+									{isCurrentUserCreator && (
+										<Button
+											variant="outline"
+											onClick={() => setIsEditing(true)}
+											className="border-white/20 dark:border-white/10 flex items-center gap-1"
+										>
+											<Edit size={16} />
+											Edit
+										</Button>
+									)}
+
+									{!isCurrentUserCreator && (
+										<AnimatedButton
+											className="bg-primary hover:bg-primary/90"
+											glowColor="rgba(255, 0, 0, 0.3)"
+											onClick={handleJoinPool}
+											disabled={isJoining}
+										>
+											{isJoining ? (
+												<div className="h-5 w-5 border-2 border-primary-foreground/50 border-t-transparent rounded-full animate-spin mx-auto" />
+											) : (
+												"Join Pool"
+											)}
+										</AnimatedButton>
+									)}
+								</>
+							)}
 						</div>
 					</DialogContent>
 				</Dialog>
