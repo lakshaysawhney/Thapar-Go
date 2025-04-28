@@ -67,6 +67,13 @@ class UserAdditionalInfoView(APIView):
             return Response({"message": "User information updated successfully."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+class CurrentUserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = CustomUserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AllUsersView(APIView):
     permission_classes = [IsAdminUser]
