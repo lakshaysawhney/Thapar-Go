@@ -40,8 +40,6 @@ else:
 CORS_ALLOWED_ORIGINS = [
     "https://thapargo.com",
     "https://www.thapargo.com",
-    "https://your-frontend-domain.com",
-    # if frontend is separate
 ]
 
 # Application definition
@@ -163,7 +161,7 @@ AUTH_USER_MODEL = 'authentication.CustomUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-       'rest_framework.permissions.AllowAny',
+       'rest_framework.permissions.IsAuthenticated',
    ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -203,3 +201,17 @@ SIMPLE_JWT = {
 }
 
 SITE_ID = 1 # to avoid errors while using django.contrib.sites since site_id is used by G-OAuth
+
+# Enabling CSRF for authenticated endpoints
+CSRF_COOKIE_SECURE = True  
+CSRF_COOKIE_HTTPONLY = False  # False so frontend can read & send via header
+CSRF_TRUSTED_ORIGINS = [
+    "https://thapargo.com",
+    "https://www.thapargo.com"
+]
+
+# Cookies config for JWT
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'None'  # because frontend and backend are on different subdomains
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_NAME = "csrftoken"
