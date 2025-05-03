@@ -30,20 +30,23 @@ else:
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = os.getenv("DEBUG", "True") == "True"
+DEBUG = os.getenv("DEBUG") == "True"
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
+    CORS_ALLOWED_ORIGINS = [
+        "https://thapargo.com",
+        "https://www.thapargo.com",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
 else:
     ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
+    CORS_ALLOWED_ORIGINS = [
+        "https://thapargo.com",
+        "https://www.thapargo.com",
+    ]
 
-CORS_ALLOWED_ORIGINS = [
-    "https://thapargo.com",
-    "https://www.thapargo.com",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    # for production only frontend production url is needed 
-]
 
 CORS_ALLOW_CREDENTIALS = True
 
