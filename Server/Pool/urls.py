@@ -5,7 +5,6 @@ from .views import PoolViewSet
 router = DefaultRouter()
 router.register(r'pools', PoolViewSet, basename='pool')
 
-
 urlpatterns = [
     path('', include(router.urls)),
 ]

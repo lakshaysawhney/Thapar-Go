@@ -35,16 +35,18 @@ DEBUG = os.getenv("DEBUG") == "True"
 if DEBUG:
     ALLOWED_HOSTS = ['*']
     CORS_ALLOWED_ORIGINS = [
-        "https://thapargo.com",
-        "https://www.thapargo.com",
+        "https://api.thapargo.com",
+        "https://www.api.thapargo.com",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
     ]
 else:
     ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
     CORS_ALLOWED_ORIGINS = [
-        "https://thapargo.com",
-        "https://www.thapargo.com",
+        "https://api.thapargo.com",
+        "https://www.api.thapargo.com",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
     ]
 
 
