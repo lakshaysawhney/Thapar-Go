@@ -50,7 +50,7 @@ export type CreatePoolFormValues = z.infer<typeof createPoolSchema>;
 export const signupSchema = z.object({
 	name: z.string().min(2, { message: "Name must be at least 2 characters" }),
 	email: z.string().email({ message: "Please enter a valid email address" }),
-	gender: z.enum(["male", "female", "other"], {
+	gender: z.enum(["Male", "Female", "Others"], {
 		required_error: "Please select a gender",
 	}),
 	phone: z

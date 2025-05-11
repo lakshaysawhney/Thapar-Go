@@ -56,5 +56,5 @@ export interface UserProfile {
 	name: string;
 	email: string;
 	image?: string;
-	gender?: "male" | "female" | "other";
+	gender?: "Male" | "Female" | "Others";
 }
