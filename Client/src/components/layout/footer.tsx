@@ -5,7 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Github } from "lucide-react";
 import { useTheme } from "next-themes";
-import thapargoLogo from "@/../public/thapargo_black.png";
+import thapargoLogo from "@/../public/thapargo.png";
 import thapargoLogoDark from "@/../public/thapargo_white.png";
 
 export function Footer() {

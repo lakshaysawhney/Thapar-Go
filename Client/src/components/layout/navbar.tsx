@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
-import thapargoLogo from "@/../public/thapargo_black.png";
+import thapargoLogo from "@/../public/thapargo.png";
 import thapargoLogoDark from "@/../public/thapargo_white.png";
 
 interface NavbarProps {
@@ -68,33 +68,25 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 				href={isAuthenticated ? "/" : "/landing"}
 				className="flex items-center gap-2"
 			>
-				<div className="relative h-10 w-10 overflow-hidden">
+				<div className="relative h-14 w-14 overflow-hidden">
 					{theme === "dark" ? (
 						<Image
 							src={thapargoLogoDark || "/placeholder.svg"}
 							alt="ThaparGo Logo"
-							width={40}
-							height={40}
-							className="object-contain"
+							width={90}
+							height={90}
+							className="object-contain h-20 w-auto"
 						/>
 					) : (
 						<Image
 							src={thapargoLogo || "/placeholder.svg"}
 							alt="ThaparGo Logo"
-							width={40}
-							height={40}
-							className="object-contain"
+							width={90}
+							height={90}
+							className="object-contain h-20 w-auto"
 						/>
 					)}
 				</div>
-				<motion.span
-					className="text-2xl font-bold text-primary hidden sm:block"
-					initial={{ opacity: 0, x: -20 }}
-					animate={{ opacity: 1, x: 0 }}
-					transition={{ delay: 0.2, duration: 0.5 }}
-				>
-					CarPool
-				</motion.span>
 			</Link>
 		);
 	};
