@@ -104,6 +104,9 @@ export const authApi = {
 		return apiRequest<GoogleSignUp>(
 			"/auth/google/",
 			{
+				body: JSON.stringify({
+					access_token: accessToken,
+				}),
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
 				},
