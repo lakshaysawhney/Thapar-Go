@@ -87,7 +87,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
 ]
-    
+  
 ROOT_URLCONF = 'Transport_Pool.urls'
 
 TEMPLATES = [
@@ -172,7 +172,7 @@ AUTH_USER_MODEL = 'authentication.CustomUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-       'rest_framework.permissions.AllowAny',
+       'rest_framework.permissions.IsAuthenticated',
    ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -211,3 +211,5 @@ SIMPLE_JWT = {
 }
 
 SITE_ID = 1 # to avoid errors while using django.contrib.sites since site_id is used by G-OAuth
+
+

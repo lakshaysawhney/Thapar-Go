@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
 from django_filters.rest_framework import DjangoFilterBackend   
 from rest_framework import filters
 from .models import Pool, PoolMember
@@ -13,19 +14,30 @@ logger = logging.getLogger(__name__)
 class PoolViewSet(viewsets.ModelViewSet):
     queryset = Pool.objects.all()
     serializer_class = PoolSerializer
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['start_point', 'end_point', 'is_female_only', 'departure_time', 'arrival_time', 'fare_per_head']
     search_fields = ['start_point', 'end_point']
     ordering_fields = ['departure_time', 'arrival_time', 'fare_per_head']
     
     def perform_create(self, serializer):
-        # Ensure only female users can create female-only pools
         if serializer.validated_data.get('is_female_only', False) and self.request.user.gender != 'Female':
-            return Response({'detail': 'Only female users can create female-only pools.'}, status=status.HTTP_403_FORBIDDEN)
-        
-        pool = serializer.save(created_by = self.request.user)
+            raise PermissionDenied("Only female users can create female-only pools.")
+
+        pool = serializer.save(created_by=self.request.user)
         PoolMember.objects.create(pool=pool, user=self.request.user, is_creator=True)
+
+    def update(self, request, *args, **kwargs):
+        pool = self.get_object()
+        if pool.created_by != request.user:
+            raise PermissionDenied("You do not have permission to update this pool.")
+        return super().update(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        pool = self.get_object()
+        if pool.created_by != request.user:
+            raise PermissionDenied("You do not have permission to update this pool.")
+        return super().partial_update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         return Response({'detail' : 'Delete operation is not allowed,'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -56,4 +68,3 @@ class PoolViewSet(viewsets.ModelViewSet):
         pool.save()
 
         return Response({'detail': 'Joined the pool successfully.'}, status=status.HTTP_200_OK)
-
