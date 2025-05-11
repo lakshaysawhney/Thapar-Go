@@ -133,7 +133,7 @@ export default function LandingPage() {
 									<div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent" />
 									<Image
 										src="/placeholder.svg?height=720&width=1280"
-										alt="Thapar University CarPool Dashboard"
+										alt="Thapar University ThaparGo Dashboard"
 										width={1280}
 										height={720}
 										className="w-full h-full object-cover"
@@ -177,8 +177,8 @@ export default function LandingPage() {
 								viewport={{ once: true }}
 								transition={{ duration: 0.5 }}
 							>
-								Why Choose <span className="text-primary">CarPool</span>
-								?
+								Why Choose{" "}
+								<span className="text-primary">ThaparGo</span>?
 							</motion.h2>
 							<motion.p
 								className="text-lg text-muted-foreground max-w-2xl mx-auto"
@@ -264,15 +264,14 @@ export default function LandingPage() {
 								transition={{ duration: 0.6 }}
 							>
 								<h2 className="text-3xl md:text-4xl font-bold mb-6">
-									About{" "}
-									<span className="text-primary">Thapar CarPool</span>
+									About <span className="text-primary">ThaparGo</span>
 								</h2>
 								<p className="text-lg mb-6 text-muted-foreground">
-									Thapar CarPool is a student-led initiative designed
-									to solve transportation challenges faced by students
-									at Thapar University. Our platform connects students
-									who are traveling in the same direction, allowing
-									them to share rides and split costs.
+									ThaparGo is a student-led initiative designed to
+									solve transportation challenges faced by students at
+									Thapar University. Our platform connects students who
+									are traveling in the same direction, allowing them to
+									share rides and split costs.
 								</p>
 								<p className="text-lg mb-6 text-muted-foreground">
 									Whether you're commuting to campus daily, heading
@@ -351,8 +350,8 @@ export default function LandingPage() {
 								viewport={{ once: true }}
 								transition={{ duration: 0.5, delay: 0.2 }}
 							>
-								Get answers to common questions about using the Thapar
-								CarPool platform.
+								Get answers to common questions about using the ThaparGo
+								platform.
 							</motion.p>
 						</div>
 
@@ -412,9 +411,8 @@ export default function LandingPage() {
 								Ready to Start Carpooling?
 							</h2>
 							<p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-								Join the Thapar University CarPool community today and
-								start saving on your transportation costs while making
-								new connections.
+								Join the ThaparGo community today and start saving on
+								your transportation costs while making new connections.
 							</p>
 							<div className="inline-block">
 								<AnimatedButton

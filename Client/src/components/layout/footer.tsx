@@ -57,8 +57,7 @@ export function Footer() {
 
 				<div className="mt-6 text-center">
 					<p className="text-xs text-muted-foreground">
-						© {new Date().getFullYear()} Thapar University CarPool. All
-						rights reserved.
+						© {new Date().getFullYear()} ThaparGo. All rights reserved.
 					</p>
 				</div>
 			</div>
