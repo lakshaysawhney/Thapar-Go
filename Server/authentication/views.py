@@ -11,6 +11,7 @@ from authentication.adapters import CustomGoogleOAuth2Adapter
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.models import SocialAccount
 from rest_framework.authentication import SessionAuthentication
+from datetime import timedelta
 
 # dj_rest_auth -> extension of DRF - provides out of box authentication solns. like Social Login
 import logging
@@ -64,7 +65,7 @@ class GoogleLoginView(SocialLoginView):
             return Response({
                 "message": "Google login successful. Please complete your profile.",
                 "email": user.email,
-                "name": user.get_full_name(),
+                "name": user.full_name,
                 "temp_token": str(access_token)
             }, status=status.HTTP_200_OK)
 
