@@ -1,6 +1,7 @@
 import { toast } from "@/hooks/use-toast";
 
-const API_BASE_URL = "https://thapargo.com";
+const API_BASE_URL = "http://127.0.0.1:8000";
+// const API_BASE_URL = "https://thapargo.com";
 
 /**
  * Generic API request handler with error handling
@@ -84,7 +85,7 @@ export const authApi = {
 	 */
 	googleLogin: async (accessToken: string): Promise<GoogleAuthResponse> => {
 		return apiRequest<GoogleAuthResponse>(
-			"/auth/google/login/callback/",
+			"/auth/google/",
 			{
 				method: "POST",
 				body: JSON.stringify({
@@ -120,7 +121,7 @@ export const authApi = {
 	 */
 	completeSignup: async (data: SignupData): Promise<GoogleAuthResponse> => {
 		return apiRequest<GoogleAuthResponse>(
-			"/auth/google/signup/complete/",
+			"/auth/user/register-info/",
 			{
 				method: "POST",
 				body: JSON.stringify(data),
