@@ -104,6 +104,7 @@ export const authApi = {
 		return apiRequest<GoogleSignUp>(
 			"/auth/google/",
 			{
+				method: "POST",
 				body: JSON.stringify({
 					access_token: accessToken,
 				}),
