@@ -5,6 +5,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['email', 'full_name', 'phone_number', 'gender']
+        read_only_fields = ['email', 'full_name']
         
     def validate(self, data):
         # Validating Phone number

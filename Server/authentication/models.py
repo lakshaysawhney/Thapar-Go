@@ -31,6 +31,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ('Female', 'Female'),
         ('Others', 'Others') 
     ]
+    google_authenticated = models.BooleanField(default=False)
     #user related fields
     email = models.EmailField(unique = True)
     full_name = models.CharField(max_length=50)
