@@ -123,8 +123,11 @@ export const authApi = {
 		return apiRequest<GoogleAuthResponse>(
 			"/auth/user/register-info/",
 			{
-				method: "POST",
+				method: "PUT",
 				body: JSON.stringify(data),
+				headers: {
+					Authorization: `Bearer ${data.access_token}`,
+				},
 			},
 			"Failed to complete signup",
 		);
