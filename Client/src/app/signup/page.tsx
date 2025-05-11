@@ -58,6 +58,21 @@ export default function SignupPage() {
 		},
 	});
 
+	useEffect(() => {
+		if (
+			step === "details" &&
+			(!googleUserInfo.name || !googleUserInfo.email)
+		) {
+			toast({
+				title: "Missing Information",
+				description:
+					"We couldn't retrieve your name or email from Google. Please try signing in again.",
+				variant: "destructive",
+			});
+			setStep("initial");
+		}
+	}, [step, googleUserInfo, toast]);
+
 	// Update form values when Google user info changes
 	useEffect(() => {
 		if (googleUserInfo.name && googleUserInfo.email) {
