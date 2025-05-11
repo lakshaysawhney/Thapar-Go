@@ -19,7 +19,7 @@ class PoolViewSet(viewsets.ModelViewSet):
     filterset_fields = ['start_point', 'end_point', 'is_female_only', 'departure_time', 'arrival_time', 'fare_per_head']
     search_fields = ['start_point', 'end_point']
     ordering_fields = ['departure_time', 'arrival_time', 'fare_per_head']
-
+    
     def perform_create(self, serializer):
         if serializer.validated_data.get('is_female_only', False) and self.request.user.gender != 'Female':
             raise PermissionDenied("Only female users can create female-only pools.")

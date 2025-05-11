@@ -35,7 +35,7 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
 				<GoogleOAuthProvider
-					clientId={String(process.env.GOOGLE_CLIENT_ID)}
+					clientId={String(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID)}
 				>
 					<ThemeProvider
 						attribute="class"

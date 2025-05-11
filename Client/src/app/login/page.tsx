@@ -20,6 +20,7 @@ import Image from "next/image";
 import { AnimatedBackground } from "@/components/ui/animated-background";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import googleIcon from "@/../public/google.svg";
+import { authApi } from "@/lib/index";
 
 export default function LoginPage() {
 	const router = useRouter();
@@ -31,11 +32,6 @@ export default function LoginPage() {
 	const error = searchParams.get("error");
 
 	useEffect(() => {
-		// If already authenticated, redirect to home
-		// if (status === "authenticated") {
-		// 	router.push("/");
-		// }
-
 		// Show error toast if there's an error
 		if (error) {
 			toast({
@@ -44,18 +40,37 @@ export default function LoginPage() {
 				variant: "destructive",
 			});
 		}
-	}, [router, error, toast]);
+	}, [error, toast]);
 
 	const login = useGoogleLogin({
-		onSuccess: (tokenResponse) => {
-			console.log(tokenResponse);
-			// In a real app, you would handle the token and redirect to the home page
-			// For now, let's simulate a successful login
-			setIsLoading(false);
-			router.push("/");
+		onSuccess: async (tokenResponse) => {
+			try {
+				setIsLoading(true);
+
+				// Call the backend API with the Google token
+				const response = await authApi.googleLogin(
+					tokenResponse.access_token,
+				);
+
+				// Store auth tokens in localStorage
+				localStorage.setItem("access", response.access);
+				localStorage.setItem("refresh", response.refresh);
+
+				// Redirect to the pools page
+				router.push("/");
+			} catch (error) {
+				console.error("Login error:", error);
+				toast({
+					title: "Login Failed",
+					description: "Unable to sign in with Google. Please try again.",
+					variant: "destructive",
+				});
+			} finally {
+				setIsLoading(false);
+			}
 		},
 		onError(errorResponse) {
-			console.log(errorResponse);
+			console.error("Google login error:", errorResponse);
 			setIsLoading(false);
 			toast({
 				title: "Error",
@@ -69,18 +84,6 @@ export default function LoginPage() {
 		setIsLoading(true);
 		login();
 	};
-
-	// If loading session, show loading state
-	if (status === "loading") {
-		return (
-			<div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-background to-primary/5">
-				<div className="animate-pulse text-primary text-center">
-					<Car className="h-12 w-12 mx-auto mb-4" />
-					<p>Loading...</p>
-				</div>
-			</div>
-		);
-	}
 
 	return (
 		<AnimatedBackground

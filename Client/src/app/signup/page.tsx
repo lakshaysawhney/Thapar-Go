@@ -34,6 +34,7 @@ import { AnimatedBackground } from "@/components/ui/animated-background";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { signupSchema, type SignupFormValues } from "@/schemas/schema";
 import googleIcon from "@/../public/google.svg";
+import { authApi } from "@/lib/index";
 
 export default function SignupPage() {
 	const router = useRouter();
@@ -43,6 +44,7 @@ export default function SignupPage() {
 	const [googleUserInfo, setGoogleUserInfo] = useState<{
 		name?: string;
 		email?: string;
+		accessToken?: string;
 	}>({});
 
 	// Initialize form
@@ -66,18 +68,34 @@ export default function SignupPage() {
 
 	const login = useGoogleLogin({
 		onSuccess: async (tokenResponse) => {
-			console.log(tokenResponse);
-			// In a real app, you would fetch user info from Google API
-			// For now, let's simulate getting user info
-			setGoogleUserInfo({
-				name: "John Doe",
-				email: "john.doe@example.com",
-			});
-			setIsLoading(false);
-			setStep("details");
+			try {
+				setIsLoading(true);
+
+				// Get user info from Google token
+				const userInfo = await authApi.getGoogleUserInfo(
+					tokenResponse.access_token,
+				);
+
+				setGoogleUserInfo({
+					name: userInfo.name,
+					email: userInfo.email,
+					accessToken: tokenResponse.access_token,
+				});
+
+				setIsLoading(false);
+				setStep("details");
+			} catch (error) {
+				console.error("Google auth error:", error);
+				setIsLoading(false);
+				toast({
+					title: "Error",
+					description: "Failed to sign in with Google.",
+					variant: "destructive",
+				});
+			}
 		},
 		onError(errorResponse) {
-			console.log(errorResponse);
+			console.error("Google login error:", errorResponse);
 			setIsLoading(false);
 			toast({
 				title: "Error",
@@ -93,13 +111,41 @@ export default function SignupPage() {
 	};
 
 	const onSubmit = async (data: SignupFormValues) => {
-		console.log("Form submitted:", data);
-		// In a real app, you would send this data to your backend
-		toast({
-			title: "Account created",
-			description: "Your account has been created successfully.",
-		});
-		router.push("/");
+		try {
+			setIsLoading(true);
+
+			if (!googleUserInfo.accessToken) {
+				throw new Error("Google authentication token is missing");
+			}
+
+			// Send the complete user data to the backend
+			const response = await authApi.completeSignup({
+				access_token: googleUserInfo.accessToken,
+				phone_number: data.phone,
+				gender: data.gender,
+			});
+
+			// Store auth tokens
+			localStorage.setItem("access", response.access);
+			localStorage.setItem("refresh", response.refresh);
+
+			toast({
+				title: "Account created",
+				description: "Your account has been created successfully.",
+			});
+
+			// Redirect to the pools page
+			router.push("/");
+		} catch (error) {
+			console.error("Signup error:", error);
+			toast({
+				title: "Signup Failed",
+				description: "Unable to complete signup. Please try again.",
+				variant: "destructive",
+			});
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -175,7 +221,7 @@ export default function SignupPage() {
 										) : (
 											<div className="flex justify-center items-center gap-2.5">
 												<Image
-													src={googleIcon || "/placeholder.svg"}
+													src={googleIcon ?? "/placeholder.svg"}
 													alt="Google Icon"
 													width={20}
 													height={20}

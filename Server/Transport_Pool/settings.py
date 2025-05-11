@@ -30,17 +30,28 @@ else:
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = os.getenv("DEBUG", "True") == "True"
+DEBUG = os.getenv("DEBUG") == "True"
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
+    CORS_ALLOWED_ORIGINS = [
+        "https://api.thapargo.com",
+        "https://www.api.thapargo.com",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
 else:
-    ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "3.111.41.208").split(",")
+    ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
+    CORS_ALLOWED_ORIGINS = [
+        "https://api.thapargo.com",
+        "https://www.api.thapargo.com",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
 
-CORS_ALLOWED_ORIGINS = [
-    "https://thapargo.com",
-    "https://www.thapargo.com",
-]
+
+CORS_ALLOW_CREDENTIALS = True
+
 
 # Application definition
 
@@ -60,11 +71,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
+    'corsheaders',
     'authentication',
     'Pool',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # keep cors middleware at top
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -112,10 +125,9 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / "db.sqlite3",
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -180,7 +192,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'secret': os.getenv("GOOGLE_CLIENT_SECRET"),
             'key': '',   
         },
-        'REDIRECT_URI': 'https://thapargo.com/auth/google/login/callback/',
+        # 'REDIRECT_URI': 'https://thapargo.com/auth/google/login/callback/',
     }
 }
 

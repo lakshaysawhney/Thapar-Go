@@ -1,17 +1,32 @@
 // Define the pool type
 export interface Pool {
-	id: string;
-	startPoint: string;
-	endPoint: string;
-	departureTime: string;
-	arrivalTime: string;
-	transportMode: string;
-	totalPersons: number;
-	currentPersons: number;
-	totalFare: number;
-	createdBy: string;
-	description: string;
-	femaleOnly: boolean;
+	id: string | number;
+	created_by?: {
+		full_name: string;
+		phone_number: string;
+		gender: string;
+	};
+	createdBy?: string; // Keep for backward compatibility
+	members?: any[];
+	start_point?: string;
+	startPoint?: string; // Keep for backward compatibility
+	end_point?: string;
+	endPoint?: string; // Keep for backward compatibility
+	departure_time?: string;
+	departureTime?: string; // Keep for backward compatibility
+	arrival_time?: string;
+	arrivalTime?: string; // Keep for backward compatibility
+	transport_mode?: string;
+	transportMode?: string; // Keep for backward compatibility
+	total_persons?: number;
+	totalPersons?: number; // Keep for backward compatibility
+	current_persons?: number;
+	currentPersons?: number; // Keep for backward compatibility
+	fare_per_head?: string;
+	totalFare?: number; // Keep for backward compatibility
+	description?: string;
+	is_female_only?: boolean;
+	femaleOnly?: boolean; // Keep for backward compatibility
 }
 
 export interface FilterState {

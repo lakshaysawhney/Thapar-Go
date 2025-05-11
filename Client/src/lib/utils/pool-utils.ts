@@ -6,7 +6,16 @@ import type { Pool } from "@/types/pool";
  * @returns Fare per head as a number
  */
 export const calculateFarePerHead = (pool: Pool): number => {
-	return pool.totalFare / pool.totalPersons;
+	// If fare_per_head is directly available, parse it
+	if (pool.fare_per_head) {
+		return Number.parseFloat(pool.fare_per_head);
+	}
+
+	// Otherwise calculate from totalFare and totalPersons
+	const totalPersons = pool.total_persons ?? pool.totalPersons ?? 1;
+	const totalFare = pool.totalFare ?? 0;
+
+	return totalFare / totalPersons;
 };
 
 /**
@@ -15,7 +24,13 @@ export const calculateFarePerHead = (pool: Pool): number => {
  * @returns Formatted fare per head string
  */
 export const formatFarePerHead = (pool: Pool): string => {
-	return `$${(pool.totalFare / pool.totalPersons).toFixed(2)}`;
+	// If fare_per_head is directly available, return it
+	if (pool.fare_per_head) {
+		return pool.fare_per_head;
+	}
+
+	// Otherwise calculate and format
+	return calculateFarePerHead(pool).toFixed(2);
 };
 
 /**
@@ -29,5 +44,5 @@ export const calculateFormattedFarePerHead = (
 	totalPersons: number,
 ): string => {
 	if (totalPersons <= 0) return "$0.00";
-	return `$${(totalFare / totalPersons).toFixed(2)}`;
+	return `${(totalFare / totalPersons).toFixed(2)}`;
 };
