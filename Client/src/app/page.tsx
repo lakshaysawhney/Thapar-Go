@@ -3,17 +3,19 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import PoolDashboard from "@/components/pool/pool-dashboard";
+import { Navbar } from "@/components/layout/navbar";
 
 export default function Home() {
 	const router = useRouter();
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
+	const [isCreatePoolOpen, setIsCreatePoolOpen] = useState(false);
 
 	useEffect(() => {
 		// Check if user is authenticated
 		const accessToken = localStorage.getItem("access");
 		if (!accessToken) {
-			router.push("/login");
+			router.push("/landing");
 		} else {
 			setIsAuthenticated(true);
 		}
@@ -28,5 +30,10 @@ export default function Home() {
 		);
 	}
 
-	return isAuthenticated ? <PoolDashboard /> : null;
+	return isAuthenticated ? (
+		<>
+			<Navbar onCreatePool={() => setIsCreatePoolOpen(true)} />
+			<PoolDashboard />
+		</>
+	) : null;
 }

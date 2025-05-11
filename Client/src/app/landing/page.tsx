@@ -20,6 +20,7 @@ import {
 	ChevronRight,
 	Github,
 } from "lucide-react";
+import thapargoLogo from "@/../public/thapargo.png";
 
 export default function LandingPage() {
 	const router = useRouter();
@@ -55,27 +56,15 @@ export default function LandingPage() {
 				<div className="container mx-auto flex justify-between items-center p-4">
 					<Link
 						href="/landing"
-						className="flex items-center gap-2"
+						className="flex items-center"
 					>
-						<motion.div
-							initial={{ rotate: -10 }}
-							animate={{ rotate: 10 }}
-							transition={{
-								repeat: Number.POSITIVE_INFINITY,
-								repeatType: "reverse",
-								duration: 1.5,
-							}}
-						>
-							<Car className="h-6 w-6 text-primary" />
-						</motion.div>
-						<motion.span
-							className="text-2xl font-bold text-primary"
-							initial={{ opacity: 0, x: -20 }}
-							animate={{ opacity: 1, x: 0 }}
-							transition={{ delay: 0.2, duration: 0.5 }}
-						>
-							CarPool
-						</motion.span>
+						<Image
+							src={thapargoLogo}
+							alt="ThaparGo Logo"
+							width={40}
+							height={40}
+							className="h-16 w-auto bg-black/10 dark:bg-white/10 rounded-full p-1"
+						/>
 					</Link>
 
 					{/* Desktop Navigation */}
@@ -100,7 +89,7 @@ export default function LandingPage() {
 								FAQ
 							</Link>
 							<Link
-								href="https://github.com/thapar-university"
+								href="https://github.com/himanishpuri/Thapar-Go"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
@@ -124,6 +113,7 @@ export default function LandingPage() {
 									<Button
 										variant="ghost"
 										onClick={() => router.push("/login")}
+										className="bg-gray-50"
 									>
 										Login
 									</Button>
@@ -189,7 +179,7 @@ export default function LandingPage() {
 								FAQ
 							</Link>
 							<Link
-								href="https://github.com/thapar-university"
+								href="https://github.com/himanishpuri/Thapar-Go"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
@@ -290,7 +280,7 @@ export default function LandingPage() {
 								<Button
 									variant="outline"
 									size="lg"
-									className="px-8 py-6 text-lg border-white/20 dark:border-white/10"
+									className="bg-gray-50 px-8 py-6 text-lg border-white/20 dark:border-white/10"
 									onClick={() => {
 										const aboutSection =
 											document.getElementById("about");
@@ -596,13 +586,15 @@ export default function LandingPage() {
 								start saving on your transportation costs while making
 								new connections.
 							</p>
-							<AnimatedButton
-								className="bg-primary hover:bg-primary/90 px-8 py-6 text-lg"
-								onClick={handleGetStarted}
-								glowColor="rgba(255, 0, 0, 0.3)"
-							>
-								Get Started Now
-							</AnimatedButton>
+							<div className="inline-block">
+								<AnimatedButton
+									className="bg-primary hover:bg-primary/90 px-8 py-6 text-lg"
+									onClick={handleGetStarted}
+									glowColor="rgba(255, 0, 0, 0.3)"
+								>
+									Get Started Now
+								</AnimatedButton>
+							</div>
 						</motion.div>
 					</div>
 				</section>

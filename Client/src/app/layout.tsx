@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "@/components/ui/toaster";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -43,7 +45,11 @@ export default function RootLayout({
 						enableSystem
 						disableTransitionOnChange
 					>
-						{children}
+						<div className="flex flex-col min-h-screen">
+							<Navbar />
+							<main className="flex-1">{children}</main>
+							<Footer />
+						</div>
 						<Toaster />
 					</ThemeProvider>
 				</GoogleOAuthProvider>
