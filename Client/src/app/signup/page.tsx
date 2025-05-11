@@ -378,7 +378,7 @@ export default function SignupPage() {
 																>
 																	<FormItem className="flex items-center space-x-3 space-y-0">
 																		<FormControl>
-																			<RadioGroupItem value="male" />
+																			<RadioGroupItem value="Male" />
 																		</FormControl>
 																		<FormLabel className="font-normal">
 																			Male
@@ -386,7 +386,7 @@ export default function SignupPage() {
 																	</FormItem>
 																	<FormItem className="flex items-center space-x-3 space-y-0">
 																		<FormControl>
-																			<RadioGroupItem value="female" />
+																			<RadioGroupItem value="Female" />
 																		</FormControl>
 																		<FormLabel className="font-normal">
 																			Female
@@ -394,10 +394,10 @@ export default function SignupPage() {
 																	</FormItem>
 																	<FormItem className="flex items-center space-x-3 space-y-0">
 																		<FormControl>
-																			<RadioGroupItem value="other" />
+																			<RadioGroupItem value="Others" />
 																		</FormControl>
 																		<FormLabel className="font-normal">
-																			Other
+																			Others
 																		</FormLabel>
 																	</FormItem>
 																</RadioGroup>
