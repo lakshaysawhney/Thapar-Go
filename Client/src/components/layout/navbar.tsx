@@ -1,5 +1,7 @@
 "use client";
 
+import type React from "react";
+
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,11 +20,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
-import thapargoLogo from "@/../public/thapargo.png";
-import thapargoLogoDark from "@/../public/thapargo_white.png";
+
+import thapargo from "@/../public/thapargo.png";
+import thapargodark from "@/../public/thapargo_white.png";
 
 interface NavbarProps {
 	onCreatePool?: () => void;
+}
+
+// Define the type for navigation links
+interface NavLink {
+	href: string;
+	label: string;
+	icon?: React.ReactNode;
+	onClick?: () => void;
+	isExternal?: boolean;
 }
 
 export function Navbar({ onCreatePool }: NavbarProps) {
@@ -61,38 +73,31 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 		return "U";
 	};
 
-	// Logo component with theme awareness
+	// Logo component with theme awareness and improved visibility
 	const Logo = () => {
 		return (
 			<Link
 				href={isAuthenticated ? "/" : "/landing"}
 				className="flex items-center gap-2"
 			>
-				<div className="relative h-14 w-14 overflow-hidden">
-					{theme === "dark" ? (
-						<Image
-							src={thapargoLogoDark || "/placeholder.svg"}
-							alt="ThaparGo Logo"
-							width={90}
-							height={90}
-							className="object-contain h-20 w-auto"
-						/>
-					) : (
-						<Image
-							src={thapargoLogo || "/placeholder.svg"}
-							alt="ThaparGo Logo"
-							width={90}
-							height={90}
-							className="object-contain h-20 w-auto"
-						/>
-					)}
+				<div
+					className={`h-28 w-28 overflow-hidden rounded-full flex items-center justify-center`}
+				>
+					<Image
+						src={theme === "dark" ? thapargodark : thapargo}
+						alt="ThaparGoLogo"
+						width={190}
+						height={190}
+						className="object-contain"
+						style={{ maxWidth: "100%", maxHeight: "100%" }}
+					/>
 				</div>
 			</Link>
 		);
 	};
 
 	// Landing page navigation links
-	const landingPageLinks = [
+	const landingPageLinks: NavLink[] = [
 		{ href: "#features", label: "Features" },
 		{ href: "#about", label: "About" },
 		{ href: "#faq", label: "FAQ" },
@@ -100,12 +105,12 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 			href: "https://github.com/himanishpuri/Thapar-Go",
 			label: "GitHub",
 			icon: <Github size={16} />,
-			external: true,
+			isExternal: true,
 		},
 	];
 
 	// App navigation links (when authenticated)
-	const appLinks = [
+	const appLinks: NavLink[] = [
 		{ href: "/", label: "Dashboard", icon: <Home size={16} /> },
 		{
 			href: "#",
@@ -125,45 +130,51 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.5 }}
 		>
-			<div className="container mx-auto flex justify-between items-center p-4">
+			<div className="container mx-auto flex justify-between items-center p-4 py-0">
 				<Logo />
 
 				{/* Desktop Navigation */}
 				<div className="hidden md:flex items-center gap-4">
 					<nav className="flex items-center gap-6 mr-4">
-						{navLinks.map((link, index) =>
-							link.external ? (
-								<Link
-									key={index}
-									href={link.href}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
-								>
-									{link.icon && link.icon}
-									{link.label}
-								</Link>
-							) : link.onClick ? (
-								<Button
-									key={index}
-									variant="ghost"
-									onClick={link.onClick}
-									className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
-								>
-									{link.icon && link.icon}
-									{link.label}
-								</Button>
-							) : (
-								<Link
-									key={index}
-									href={link.href}
-									className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
-								>
-									{link.icon && link.icon}
-									{link.label}
-								</Link>
-							),
-						)}
+						{navLinks.map((link, index) => {
+							if (link.isExternal) {
+								return (
+									<Link
+										key={index}
+										href={link.href}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
+									>
+										{link.icon && link.icon}
+										{link.label}
+									</Link>
+								);
+							} else if (link.onClick) {
+								return (
+									<Button
+										key={index}
+										variant="ghost"
+										onClick={link.onClick}
+										className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
+									>
+										{link.icon && link.icon}
+										{link.label}
+									</Button>
+								);
+							} else {
+								return (
+									<Link
+										key={index}
+										href={link.href}
+										className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
+									>
+										{link.icon && link.icon}
+										{link.label}
+									</Link>
+								);
+							}
+						})}
 					</nav>
 
 					<ThemeToggle />
@@ -277,44 +288,50 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 						className="md:hidden backdrop-blur-md border-b border-white/10 dark:border-white/5"
 					>
 						<div className="container mx-auto p-4 flex flex-col gap-3">
-							{navLinks.map((link, index) =>
-								link.external ? (
-									<Link
-										key={index}
-										href={link.href}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
-										onClick={toggleMenu}
-									>
-										{link.icon && link.icon}
-										{link.label}
-									</Link>
-								) : link.onClick ? (
-									<Button
-										key={index}
-										variant="ghost"
-										onClick={() => {
-											link.onClick?.();
-											toggleMenu();
-										}}
-										className="justify-start p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
-									>
-										{link.icon && link.icon}
-										{link.label}
-									</Button>
-								) : (
-									<Link
-										key={index}
-										href={link.href}
-										className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
-										onClick={toggleMenu}
-									>
-										{link.icon && link.icon}
-										{link.label}
-									</Link>
-								),
-							)}
+							{navLinks.map((link, index) => {
+								if (link.isExternal) {
+									return (
+										<Link
+											key={index}
+											href={link.href}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
+											onClick={toggleMenu}
+										>
+											{link.icon && link.icon}
+											{link.label}
+										</Link>
+									);
+								} else if (link.onClick) {
+									return (
+										<Button
+											key={index}
+											variant="ghost"
+											onClick={() => {
+												link.onClick?.();
+												toggleMenu();
+											}}
+											className="justify-start p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
+										>
+											{link.icon && link.icon}
+											{link.label}
+										</Button>
+									);
+								} else {
+									return (
+										<Link
+											key={index}
+											href={link.href}
+											className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
+											onClick={toggleMenu}
+										>
+											{link.icon && link.icon}
+											{link.label}
+										</Link>
+									);
+								}
+							})}
 
 							{isAuthenticated ? (
 								<>

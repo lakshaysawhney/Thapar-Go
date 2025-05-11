@@ -5,8 +5,9 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Github } from "lucide-react";
 import { useTheme } from "next-themes";
-import thapargoLogo from "@/../public/thapargo.png";
-import thapargoLogoDark from "@/../public/thapargo_white.png";
+
+import thapargo from "@/../public/thapargo.png";
+import thapargodark from "@/../public/thapargo_white.png";
 
 export function Footer() {
 	const { theme } = useTheme();
@@ -16,28 +17,18 @@ export function Footer() {
 			<div className="container mx-auto px-4">
 				<div className="flex flex-col md:flex-row justify-between items-center gap-4">
 					<div className="flex items-center gap-2">
-						<div className="relative h-8 w-8 overflow-hidden">
-							{theme === "dark" ? (
-								<Image
-									src={thapargoLogoDark || "/placeholder.svg"}
-									alt="ThaparGo Logo"
-									width={32}
-									height={32}
-									className="object-contain"
-								/>
-							) : (
-								<Image
-									src={thapargoLogo || "/placeholder.svg"}
-									alt="ThaparGo Logo"
-									width={32}
-									height={32}
-									className="object-contain"
-								/>
-							)}
+						<div
+							className={`relative h-36 w-36 overflow-hidden rounded-full flex items-center justify-center `}
+						>
+							<Image
+								src={theme === "dark" ? thapargodark : thapargo}
+								alt="ThaparGoLogo"
+								width={190}
+								height={190}
+								className="object-contain p-1"
+								style={{ maxWidth: "100%", maxHeight: "100%" }}
+							/>
 						</div>
-						<span className="text-lg font-bold text-primary">
-							CarPool
-						</span>
 					</div>
 
 					<div className="flex flex-col md:flex-row items-center gap-4">
