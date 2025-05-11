@@ -72,14 +72,15 @@ export default function SignupPage() {
 				setIsLoading(true);
 
 				// Get user info from Google token
-				const userInfo = await authApi.getGoogleUserInfo(
+
+				const userInfo = await authApi.getGoogleSignUp(
 					tokenResponse.access_token,
 				);
 
 				setGoogleUserInfo({
 					name: userInfo.name,
 					email: userInfo.email,
-					accessToken: userInfo.temp_token
+					accessToken: userInfo.temp_token,
 				});
 
 				setIsLoading(false);
@@ -128,6 +129,11 @@ export default function SignupPage() {
 			// Store auth tokens
 			localStorage.setItem("access", response.access);
 			localStorage.setItem("refresh", response.refresh);
+
+			setGoogleUserInfo((prev) => ({
+				...prev,
+				accessToken: response.access,
+			}));
 
 			toast({
 				title: "Account created",

@@ -64,7 +64,7 @@ interface GoogleAuthResponse {
 	};
 }
 
-interface GoogleUserInfo {
+interface GoogleSignUp {
 	message: string;
 	email: string;
 	name: string;
@@ -100,21 +100,16 @@ export const authApi = {
 	/**
 	 * Get user info from Google token
 	 */
-	getGoogleUserInfo: async (accessToken: string): Promise<GoogleUserInfo> => {
-		const response = await fetch(
+	getGoogleSignUp: async (accessToken: string): Promise<GoogleSignUp> => {
+		return apiRequest<GoogleSignUp>(
 			"/auth/google/",
 			{
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
 				},
 			},
+			"Failed to get user info from Google",
 		);
-
-		if (!response.ok) {
-			throw new Error("Failed to get user info from Google");
-		}
-
-		return response.json();
 	},
 
 	/**
