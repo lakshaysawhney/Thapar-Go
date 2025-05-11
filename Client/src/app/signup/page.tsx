@@ -61,8 +61,11 @@ export default function SignupPage() {
 	// Update form values when Google user info changes
 	useEffect(() => {
 		if (googleUserInfo.name && googleUserInfo.email) {
-			form.setValue("name", googleUserInfo.name);
-			form.setValue("email", googleUserInfo.email);
+			form.reset({
+				...form.getValues(), // keep phone & gender if already entered
+				name: googleUserInfo.name,
+				email: googleUserInfo.email,
+			});
 		}
 	}, [googleUserInfo, form]);
 
@@ -270,136 +273,140 @@ export default function SignupPage() {
 									</CardDescription>
 								</CardHeader>
 								<CardContent className="space-y-4">
-									<Form {...form}>
-										<form
-											onSubmit={form.handleSubmit(onSubmit)}
-											className="space-y-4"
-										>
-											<FormField
-												control={form.control}
-												name="name"
-												render={({ field }) => (
-													<FormItem>
-														<FormLabel>Name</FormLabel>
-														<FormControl>
-															<Input
-																placeholder="Enter your name"
-																{...field}
-																className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10"
-																disabled
-															/>
-														</FormControl>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
-
-											<FormField
-												control={form.control}
-												name="email"
-												render={({ field }) => (
-													<FormItem>
-														<FormLabel>Email</FormLabel>
-														<FormControl>
-															<Input
-																type="email"
-																placeholder="Enter your email"
-																{...field}
-																className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10"
-																disabled
-															/>
-														</FormControl>
-														<FormDescription>
-															Email from your Google account
-														</FormDescription>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
-
-											<FormField
-												control={form.control}
-												name="phone"
-												render={({ field }) => (
-													<FormItem>
-														<FormLabel className="flex items-center gap-1">
-															<Phone className="h-4 w-4" />
-															Phone Number
-														</FormLabel>
-														<FormControl>
-															<Input
-																type="tel"
-																placeholder="Enter your phone number"
-																{...field}
-																className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10"
-															/>
-														</FormControl>
-														<FormDescription>
-															We'll use this to contact you about
-															rides
-														</FormDescription>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
-
-											<FormField
-												control={form.control}
-												name="gender"
-												render={({ field }) => (
-													<FormItem className="space-y-3">
-														<FormLabel>Gender</FormLabel>
-														<FormControl>
-															<RadioGroup
-																onValueChange={field.onChange}
-																defaultValue={field.value}
-																className="flex flex-col space-y-1"
-															>
-																<FormItem className="flex items-center space-x-3 space-y-0">
-																	<FormControl>
-																		<RadioGroupItem value="male" />
-																	</FormControl>
-																	<FormLabel className="font-normal">
-																		Male
-																	</FormLabel>
-																</FormItem>
-																<FormItem className="flex items-center space-x-3 space-y-0">
-																	<FormControl>
-																		<RadioGroupItem value="female" />
-																	</FormControl>
-																	<FormLabel className="font-normal">
-																		Female
-																	</FormLabel>
-																</FormItem>
-																<FormItem className="flex items-center space-x-3 space-y-0">
-																	<FormControl>
-																		<RadioGroupItem value="other" />
-																	</FormControl>
-																	<FormLabel className="font-normal">
-																		Other
-																	</FormLabel>
-																</FormItem>
-															</RadioGroup>
-														</FormControl>
-														<FormMessage />
-													</FormItem>
-												)}
-											/>
-
-											<AnimatedButton
-												type="submit"
-												className="w-full bg-primary hover:bg-primary/90"
-												disabled={isLoading}
-												glowColor="rgba(255, 0, 0, 0.3)"
+									{googleUserInfo.name && googleUserInfo.email && (
+										<Form {...form}>
+											<form
+												onSubmit={form.handleSubmit(onSubmit)}
+												className="space-y-4"
 											>
-												{isLoading ? (
-													<div className="h-5 w-5 border-2 border-primary-foreground/50 border-t-transparent rounded-full animate-spin" />
-												) : (
-													"Complete Sign Up"
-												)}
-											</AnimatedButton>
-										</form>
-									</Form>
+												<FormField
+													control={form.control}
+													name="name"
+													render={({ field }) => (
+														<FormItem>
+															<FormLabel>Name</FormLabel>
+															<FormControl>
+																<Input
+																	placeholder="Enter your name"
+																	{...field}
+																	className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10"
+																	disabled
+																/>
+															</FormControl>
+															<FormMessage />
+														</FormItem>
+													)}
+												/>
+
+												<FormField
+													control={form.control}
+													name="email"
+													render={({ field }) => (
+														<FormItem>
+															<FormLabel>Email</FormLabel>
+															<FormControl>
+																<Input
+																	type="email"
+																	placeholder="Enter your email"
+																	{...field}
+																	className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10"
+																	disabled
+																/>
+															</FormControl>
+															<FormDescription>
+																Email from your Google account
+															</FormDescription>
+															<FormMessage />
+														</FormItem>
+													)}
+												/>
+
+												<FormField
+													control={form.control}
+													name="phone"
+													render={({ field }) => (
+														<FormItem>
+															<FormLabel className="flex items-center gap-1">
+																<Phone className="h-4 w-4" />
+																Phone Number
+															</FormLabel>
+															<FormControl>
+																<Input
+																	type="tel"
+																	placeholder="Enter your phone number"
+																	{...field}
+																	className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10"
+																/>
+															</FormControl>
+															<FormDescription>
+																We'll use this to contact you
+																about rides
+															</FormDescription>
+															<FormMessage />
+														</FormItem>
+													)}
+												/>
+
+												<FormField
+													control={form.control}
+													name="gender"
+													render={({ field }) => (
+														<FormItem className="space-y-3">
+															<FormLabel>Gender</FormLabel>
+															<FormControl>
+																<RadioGroup
+																	onValueChange={
+																		field.onChange
+																	}
+																	defaultValue={field.value}
+																	className="flex flex-col space-y-1"
+																>
+																	<FormItem className="flex items-center space-x-3 space-y-0">
+																		<FormControl>
+																			<RadioGroupItem value="male" />
+																		</FormControl>
+																		<FormLabel className="font-normal">
+																			Male
+																		</FormLabel>
+																	</FormItem>
+																	<FormItem className="flex items-center space-x-3 space-y-0">
+																		<FormControl>
+																			<RadioGroupItem value="female" />
+																		</FormControl>
+																		<FormLabel className="font-normal">
+																			Female
+																		</FormLabel>
+																	</FormItem>
+																	<FormItem className="flex items-center space-x-3 space-y-0">
+																		<FormControl>
+																			<RadioGroupItem value="other" />
+																		</FormControl>
+																		<FormLabel className="font-normal">
+																			Other
+																		</FormLabel>
+																	</FormItem>
+																</RadioGroup>
+															</FormControl>
+															<FormMessage />
+														</FormItem>
+													)}
+												/>
+
+												<AnimatedButton
+													type="submit"
+													className="w-full bg-primary hover:bg-primary/90"
+													disabled={isLoading}
+													glowColor="rgba(255, 0, 0, 0.3)"
+												>
+													{isLoading ? (
+														<div className="h-5 w-5 border-2 border-primary-foreground/50 border-t-transparent rounded-full animate-spin" />
+													) : (
+														"Complete Sign Up"
+													)}
+												</AnimatedButton>
+											</form>
+										</Form>
+									)}
 								</CardContent>
 							</Card>
 						</motion.div>
