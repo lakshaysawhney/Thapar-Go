@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from django_filters.rest_framework import DjangoFilterBackend   
 from rest_framework import filters
@@ -14,8 +14,7 @@ logger = logging.getLogger(__name__)
 class PoolViewSet(viewsets.ModelViewSet):
     queryset = Pool.objects.all()
     serializer_class = PoolSerializer
-    # permission_classes = [IsAuthenticated]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['start_point', 'end_point', 'is_female_only', 'departure_time', 'arrival_time', 'fare_per_head']
     search_fields = ['start_point', 'end_point']
@@ -43,7 +42,7 @@ class PoolViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return Response({'detail' : 'Delete operation is not allowed,'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
-    @action(detail=True, methods=['post'], permission_classes=[AllowAny])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def join(self, request, pk=None):
         pool = self.get_object()
 

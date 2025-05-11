@@ -98,24 +98,23 @@ WSGI_APPLICATION = 'Transport_Pool.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('DB_NAME'),
-#         'USER': os.environ.get('DB_USER'),
-#         'PASSWORD': os.environ.get('DB_PASSWORD'),
-#         'HOST': os.environ.get('DB_HOST'),
-#         'PORT': os.environ.get('DB_PORT'),
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 
 # Password validation
@@ -164,8 +163,7 @@ REST_FRAMEWORK = {
        'rest_framework.permissions.IsAuthenticated',
    ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication', # for testing
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
 
@@ -202,16 +200,4 @@ SIMPLE_JWT = {
 
 SITE_ID = 1 # to avoid errors while using django.contrib.sites since site_id is used by G-OAuth
 
-# Enabling CSRF for authenticated endpoints
-CSRF_COOKIE_SECURE = True  
-CSRF_COOKIE_HTTPONLY = False  # False so frontend can read & send via header
-CSRF_TRUSTED_ORIGINS = [
-    "https://thapargo.com",
-    "https://www.thapargo.com"
-]
 
-# Cookies config for JWT
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = 'None'  # because frontend and backend are on different subdomains
-CSRF_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_NAME = "csrftoken"
