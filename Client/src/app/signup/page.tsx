@@ -79,7 +79,7 @@ export default function SignupPage() {
 				setGoogleUserInfo({
 					name: userInfo.name,
 					email: userInfo.email,
-					accessToken: tokenResponse.access_token,
+					accessToken: userInfo.temp_token
 				});
 
 				setIsLoading(false);

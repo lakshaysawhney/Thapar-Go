@@ -65,9 +65,10 @@ interface GoogleAuthResponse {
 }
 
 interface GoogleUserInfo {
+	message: string;
 	email: string;
 	name: string;
-	picture?: string;
+	temp_token: string;
 }
 
 interface SignupData {
@@ -101,7 +102,7 @@ export const authApi = {
 	 */
 	getGoogleUserInfo: async (accessToken: string): Promise<GoogleUserInfo> => {
 		const response = await fetch(
-			"https://www.googleapis.com/oauth2/v3/userinfo",
+			"/auth/google/",
 			{
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
