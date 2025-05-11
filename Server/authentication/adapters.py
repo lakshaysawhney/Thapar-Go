@@ -28,6 +28,7 @@ class CustomGoogleOAuth2Adapter(GoogleOAuth2Adapter):
 
         # Assigning full name into the custom field
         user.full_name = full_name
+        user.save()
 
         logger.info(f"Successfully populated user {email} with full_name = {full_name}")
         return user
