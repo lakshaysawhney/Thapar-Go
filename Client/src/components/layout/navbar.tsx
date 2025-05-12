@@ -42,7 +42,8 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 	const pathname = usePathname();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
-	const { theme } = useTheme();
+	const { resolvedTheme } = useTheme();
+	const [mounted, setMounted] = useState(false);
 
 	// Determine if we're on the landing page
 	const isLandingPage = pathname === "/" || pathname === "/landing";
@@ -52,6 +53,13 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 		const accessToken = localStorage.getItem("access");
 		setIsAuthenticated(!!accessToken);
 	}, []);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	const currentTheme = mounted ? resolvedTheme : undefined;
+	const logoSrc = currentTheme === "dark" ? thapargodark : thapargo;
 
 	const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -81,7 +89,7 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 				className="flex items-center justify-center"
 			>
 				<Image
-					src={theme === "dark" ? thapargodark : thapargo}
+					src={logoSrc}
 					alt="ThaparGoLogo"
 					width={110}
 					height={110}

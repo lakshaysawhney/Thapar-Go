@@ -5,24 +5,40 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Github } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 import thapargo from "@/../public/thapargo.png";
 import thapargodark from "@/../public/thapargo_white.png";
 
 export function Footer() {
-	const { theme } = useTheme();
+	const { resolvedTheme } = useTheme();
+	const [mounted, setMounted] = useState(false);
+
+	// Only show the correct logo after component has mounted to avoid hydration mismatch
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	// Use resolvedTheme which gives the actual theme currently shown to the user
+	const currentTheme = mounted ? resolvedTheme : undefined;
+	const logoSrc = currentTheme === "dark" ? thapargodark : thapargo;
 
 	return (
 		<footer className="bg-white/5 dark:bg-black/5 backdrop-blur-sm border-t border-white/10 dark:border-white/5 py-6">
 			<div className="container mx-auto px-4">
 				<div className="flex flex-col md:flex-row justify-between items-center gap-4">
 					<div className="flex items-center gap-2">
-						<Image
-							src={theme === "dark" ? thapargodark : thapargo}
-							alt="ThaparGoLogo"
-							width={160}
-							height={160}
-						/>
+						{mounted ? (
+							<Image
+								src={logoSrc}
+								alt="ThaparGoLogo"
+								width={160}
+								height={160}
+							/>
+						) : (
+							// Placeholder with same dimensions to prevent layout shift
+							<div className="w-[160px] h-[160px]" />
+						)}
 					</div>
 
 					<div className="flex flex-col md:flex-row items-center gap-4">
