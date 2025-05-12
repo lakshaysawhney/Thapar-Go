@@ -4,10 +4,10 @@ import * as z from "zod";
 
 // Define the form schema with zod
 export const createPoolSchema = z.object({
-	startPoint: z.string().min(1, "Start point is required"),
-	endPoint: z.string().min(1, "End point is required"),
-	departureTime: z.string().min(1, "Departure time is required"),
-	arrivalTime: z
+	start_point: z.string().min(1, "Start point is required"),
+	end_point: z.string().min(1, "End point is required"),
+	departure_time: z.string().min(1, "Departure time is required"),
+	arrival_time: z
 		.string()
 		.min(1, "Arrival time is required")
 		.refine(
@@ -20,12 +20,12 @@ export const createPoolSchema = z.object({
 				path: ["arrivalTime"],
 			},
 		),
-	transportMode: z.string().min(1, "Transport mode is required"),
-	totalPersons: z.coerce
+	transport_mode: z.string().min(1, "Transport mode is required"),
+	total_persons: z.coerce
 		.number()
 		.min(1, "Must have at least 1 person")
 		.max(20, "Maximum 20 persons"),
-	currentPersons: z.coerce
+	current_persons: z.coerce
 		.number()
 		.min(1, "Must have at least 1 person")
 		.refine(
@@ -37,11 +37,11 @@ export const createPoolSchema = z.object({
 				path: ["currentPersons"],
 			},
 		),
-	totalFare: z.coerce.number().min(1, "Total fare must be at least $1"),
+	total_fare: z.coerce.number().min(1, "Total fare must be at least $1"),
 	description: z
 		.string()
 		.min(10, "Description must be at least 10 characters"),
-	femaleOnly: z.boolean().default(false),
+	is_female_only: z.boolean().default(false),
 });
 
 export type CreatePoolFormValues = z.infer<typeof createPoolSchema>;

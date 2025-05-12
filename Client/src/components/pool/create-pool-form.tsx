@@ -27,7 +27,6 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import {
-	DollarSign,
 	Clock,
 	MapPin,
 	Users,
@@ -42,9 +41,9 @@ import { useToast } from "@/hooks/use-toast";
 
 interface CreatePoolFormProps {
 	onSubmit: (data: CreatePoolFormValues) => void;
-	startPoints: string[];
-	endPoints: string[];
-	transportModes: string[];
+	start_points: string[];
+	end_points: string[];
+	transport_modes: string[];
 	onCancel: () => void;
 }
 
@@ -53,9 +52,9 @@ interface CreatePoolFormProps {
  */
 export function CreatePoolForm({
 	onSubmit,
-	startPoints,
-	endPoints,
-	transportModes,
+	start_points,
+	end_points,
+	transport_modes,
 	onCancel,
 }: Readonly<CreatePoolFormProps>) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,40 +65,43 @@ export function CreatePoolForm({
 	const form = useForm<CreatePoolFormValues>({
 		resolver: zodResolver(createPoolSchema),
 		defaultValues: {
-			startPoint: "",
-			endPoint: "",
-			departureTime: "",
-			arrivalTime: "",
-			transportMode: "",
-			totalPersons: 1,
-			currentPersons: 1,
-			totalFare: 0,
+			start_point: "",
+			end_point: "",
+			departure_time: "",
+			arrival_time: "",
+			transport_mode: "",
+			total_persons: 1,
+			current_persons: 1,
+			total_fare: 0,
 			description: "",
-			femaleOnly: false,
+			is_female_only: false,
 		},
 		mode: "onChange",
 	});
 
 	// Watch values for live calculations and validation
-	const totalPersons = form.watch("totalPersons");
-	const totalFare = form.watch("totalFare");
-	const departureTime = form.watch("departureTime");
-	const arrivalTime = form.watch("arrivalTime");
+	const total_persons = form.watch("total_persons");
+	const total_fare = form.watch("total_fare");
+	const departure_time = form.watch("departure_time");
+	const arrival_time = form.watch("arrival_time");
 
 	// Calculate fare per head
-	const farePerHead = calculateFormattedFarePerHead(totalFare, totalPersons);
+	const fare_per_head = calculateFormattedFarePerHead(
+		total_fare,
+		total_persons,
+	);
 
 	// Validate arrival time is after departure time
-	const isArrivalTimeValid =
-		!arrivalTime ||
-		!departureTime ||
-		new Date(arrivalTime) > new Date(departureTime);
+	const isarrival_timeValid =
+		!arrival_time ||
+		!departure_time ||
+		new Date(arrival_time) > new Date(departure_time);
 
 	// Form submission handler
 	const handleSubmit = async (data: CreatePoolFormValues) => {
 		try {
 			setIsSubmitting(true);
-			await onSubmit(data);
+			await Promise.resolve(onSubmit(data));
 
 			form.reset();
 
@@ -131,33 +133,31 @@ export function CreatePoolForm({
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<FormField
 								control={form.control}
-								name="startPoint"
+								name="start_point"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Start Point</FormLabel>
 										{!useCustomLocations ? (
-											<>
-												<Select
-													onValueChange={field.onChange}
-													defaultValue={field.value}
-												>
-													<FormControl>
-														<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
-															<SelectValue placeholder="Select start point" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
-														{startPoints.map((point) => (
-															<SelectItem
-																key={point}
-																value={point}
-															>
-																{point}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-											</>
+											<Select
+												onValueChange={field.onChange}
+												defaultValue={field.value}
+											>
+												<FormControl>
+													<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
+														<SelectValue placeholder="Select start point" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
+													{start_points.map((point) => (
+														<SelectItem
+															key={point}
+															value={point}
+														>
+															{point}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
 										) : (
 											<FormControl>
 												<Input
@@ -174,7 +174,7 @@ export function CreatePoolForm({
 
 							<FormField
 								control={form.control}
-								name="endPoint"
+								name="end_point"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>End Point</FormLabel>
@@ -189,7 +189,7 @@ export function CreatePoolForm({
 													</SelectTrigger>
 												</FormControl>
 												<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
-													{endPoints.map((point) => (
+													{end_points.map((point) => (
 														<SelectItem
 															key={point}
 															value={point}
@@ -225,7 +225,7 @@ export function CreatePoolForm({
 							>
 								{useCustomLocations
 									? "Use dropdown locations"
-									: "Enter custom locations"}
+									: "Enter custom locations and Transport Mode"}
 							</Button>
 						</div>
 					</div>
@@ -239,7 +239,7 @@ export function CreatePoolForm({
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<FormField
 								control={form.control}
-								name="departureTime"
+								name="departure_time"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Departure Time</FormLabel>
@@ -257,7 +257,7 @@ export function CreatePoolForm({
 
 							<FormField
 								control={form.control}
-								name="arrivalTime"
+								name="arrival_time"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Arrival Time</FormLabel>
@@ -267,12 +267,12 @@ export function CreatePoolForm({
 												{...field}
 												className={cn(
 													"bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10",
-													!isArrivalTimeValid &&
+													!isarrival_timeValid &&
 														"border-red-500 focus-visible:ring-red-500",
 												)}
 											/>
 										</FormControl>
-										{!isArrivalTimeValid && (
+										{!isarrival_timeValid && (
 											<motion.p
 												className="text-sm font-medium text-red-500 flex items-center gap-1 mt-1"
 												initial={{ opacity: 0, y: -10 }}
@@ -298,7 +298,7 @@ export function CreatePoolForm({
 
 						<FormField
 							control={form.control}
-							name="transportMode"
+							name="transport_mode"
 							render={({ field }) => (
 								<>
 									{!useCustomLocations ? (
@@ -314,7 +314,7 @@ export function CreatePoolForm({
 													</SelectTrigger>
 												</FormControl>
 												<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
-													{transportModes.map((mode) => (
+													{transport_modes.map((mode) => (
 														<SelectItem
 															key={mode}
 															value={mode}
@@ -346,7 +346,7 @@ export function CreatePoolForm({
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 							<FormField
 								control={form.control}
-								name="totalPersons"
+								name="total_persons"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="flex items-center gap-1">
@@ -369,7 +369,7 @@ export function CreatePoolForm({
 
 							<FormField
 								control={form.control}
-								name="currentPersons"
+								name="current_persons"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="flex items-center gap-1">
@@ -380,17 +380,18 @@ export function CreatePoolForm({
 											<Input
 												type="number"
 												min={1}
-												max={form.getValues("totalPersons")}
+												max={form.getValues("total_persons")}
 												{...field}
 												className={cn(
 													"bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10",
 													field.value >
-														form.getValues("totalPersons") &&
+														form.getValues("total_persons") &&
 														"border-red-500 focus-visible:ring-red-500",
 												)}
 											/>
 										</FormControl>
-										{field.value > form.getValues("totalPersons") && (
+										{field.value >
+											form.getValues("total_persons") && (
 											<motion.p
 												className="text-sm font-medium text-red-500 flex items-center gap-1 mt-1"
 												initial={{ opacity: 0, y: -10 }}
@@ -407,12 +408,11 @@ export function CreatePoolForm({
 
 							<FormField
 								control={form.control}
-								name="totalFare"
+								name="total_fare"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="flex items-center gap-1">
-											<span>&#8377;</span>
-											Total Fare
+											<span>&#8377;</span> Total Fare
 										</FormLabel>
 										<FormControl>
 											<Input
@@ -432,18 +432,18 @@ export function CreatePoolForm({
 						<div className="bg-white/10 dark:bg-black/10 p-3 rounded-md border border-white/10 dark:border-white/5">
 							<div className="flex justify-between items-center">
 								<Label className="flex items-center gap-1">
-									<span className="text-primary">&#8377;</span>
-									Fare Per Head
+									<span className="text-primary">&#8377;</span> Fare
+									Per Head
 								</Label>
 								<motion.div
-									key={farePerHead}
+									key={fare_per_head}
 									initial={{ opacity: 0.8, y: -5 }}
 									animate={{ opacity: 1, y: 0 }}
 									exit={{ opacity: 0, y: 5 }}
 									transition={{ duration: 0.2 }}
 									className="text-lg font-medium text-primary"
 								>
-									{farePerHead}
+									{fare_per_head}
 								</motion.div>
 							</div>
 							<p className="text-xs text-muted-foreground mt-1">
@@ -482,7 +482,7 @@ export function CreatePoolForm({
 
 						<FormField
 							control={form.control}
-							name="femaleOnly"
+							name="is_female_only"
 							render={({ field }) => (
 								<FormItem className="flex flex-row items-center justify-between rounded-lg border border-white/20 dark:border-white/10 p-4 bg-white/20 dark:bg-black/20">
 									<div className="space-y-0.5">

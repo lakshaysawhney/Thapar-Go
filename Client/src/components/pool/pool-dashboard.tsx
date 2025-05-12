@@ -347,9 +347,9 @@ export default function PoolDashboard() {
 
 					<CreatePoolForm
 						onSubmit={handleCreatePool}
-						startPoints={dynamicFilterOptions.startPoints}
-						endPoints={dynamicFilterOptions.endPoints}
-						transportModes={dynamicFilterOptions.transportModes}
+						start_points={dynamicFilterOptions.startPoints}
+						end_points={dynamicFilterOptions.endPoints}
+						transport_modes={dynamicFilterOptions.transportModes}
 						onCancel={() => setIsCreatePoolOpen(false)}
 					/>
 				</DialogContent>
