@@ -5,7 +5,6 @@ import {
 	Clock,
 	Users,
 	Car,
-	DollarSign,
 	UserIcon as Female,
 	Phone,
 	Edit,
@@ -258,10 +257,12 @@ export function PoolDetails({
 										Fare per Person
 									</h4>
 									<p className="flex items-center gap-1 mt-1">
-										<DollarSign
-											size={16}
+										<span
 											className="text-primary"
-										/>
+											style={{ fontSize: 16 }}
+										>
+											₹
+										</span>
 										{farePerHead}
 									</p>
 								</div>

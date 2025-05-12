@@ -12,7 +12,6 @@ import {
 	Clock,
 	Users,
 	Car,
-	DollarSign,
 	UserIcon as Female,
 	MapPin,
 	ArrowRight,
@@ -340,10 +339,12 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 									damping: 20,
 								}}
 							>
-								<DollarSign
-									size={18}
+								<span
 									className="text-primary mb-1"
-								/>
+									style={{ fontSize: "18px", fontWeight: "bold" }}
+								>
+									₹
+								</span>
 								<span className="text-xs font-medium">
 									{farePerHead}
 								</span>

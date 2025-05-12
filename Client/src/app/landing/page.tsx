@@ -2,25 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { AnimatedBackground } from "@/components/ui/animated-background";
-import {
-	Car,
-	Users,
-	Clock,
-	DollarSign,
-	MapPin,
-	Menu,
-	X,
-	ChevronRight,
-	Github,
-} from "lucide-react";
-import thapargoLogo from "@/../public/thapargo.png";
+import { Car, Users, Clock, MapPin, ChevronRight } from "lucide-react";
 
 export default function LandingPage() {
 	const router = useRouter();
@@ -209,7 +196,9 @@ export default function LandingPage() {
 								},
 								{
 									icon: (
-										<DollarSign className="h-10 w-10 text-primary" />
+										<span className="h-10 w-10 text-primary text-3xl font-bold">
+											₹
+										</span>
 									),
 									title: "Save Money",
 									description:
@@ -290,7 +279,11 @@ export default function LandingPage() {
 											text: "Female-only pools for enhanced safety and comfort",
 										},
 										{
-											icon: <DollarSign size={20} />,
+											icon: (
+												<span className="text-primary text-xl font-bold">
+													₹
+												</span>
+											),
 											text: "Transparent fare sharing system",
 										},
 									].map((item, index) => (

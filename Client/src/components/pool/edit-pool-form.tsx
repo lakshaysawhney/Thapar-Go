@@ -25,7 +25,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { DollarSign, Clock, MapPin, Users } from "lucide-react";
+import { Clock, MapPin, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createPoolSchema, type CreatePoolFormValues } from "@/schemas/schema";
 import { calculateFormattedFarePerHead } from "@/lib/utils/pool-utils";
@@ -386,10 +386,12 @@ export function EditPoolForm({
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel className="flex items-center gap-1">
-										<DollarSign
-											size={16}
+										<span
 											className="text-primary"
-										/>
+											style={{ fontSize: "16px", lineHeight: "1" }}
+										>
+											₹
+										</span>
 										Total Fare
 									</FormLabel>
 									<FormControl>
@@ -408,10 +410,12 @@ export function EditPoolForm({
 
 						<div>
 							<FormLabel className="flex items-center gap-1">
-								<DollarSign
-									size={16}
+								<span
 									className="text-primary"
-								/>
+									style={{ fontSize: "16px", lineHeight: "1" }}
+								>
+									₹
+								</span>{" "}
 								Fare Per Head
 							</FormLabel>
 							<motion.div
