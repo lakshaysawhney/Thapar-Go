@@ -17,25 +17,34 @@ export function Footer() {
 			<div className="container mx-auto px-4">
 				<div className="flex flex-col md:flex-row justify-between items-center gap-4">
 					<div className="flex items-center gap-2">
-						<div
-							className={`relative h-36 w-36 overflow-hidden rounded-full flex items-center justify-center `}
-						>
-							<Image
-								src={theme === "dark" ? thapargodark : thapargo}
-								alt="ThaparGoLogo"
-								width={190}
-								height={190}
-								className="object-contain p-1"
-								style={{ maxWidth: "100%", maxHeight: "100%" }}
-							/>
-						</div>
+						<Image
+							src={theme === "dark" ? thapargodark : thapargo}
+							alt="ThaparGoLogo"
+							width={160}
+							height={160}
+						/>
 					</div>
 
 					<div className="flex flex-col md:flex-row items-center gap-4">
-						<p className="text-sm text-muted-foreground text-center md:text-right">
+						<p className="text-md text-muted-foreground text-center md:text-right">
 							Created by{" "}
-							<span className="font-medium">Himanish Puri</span> and{" "}
-							<span className="font-medium">Lakshay Sawhney</span>
+							<Link
+								href="https://github.com/himanishpuri"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="font-medium underline hover:no-underline"
+							>
+								Himanish Puri
+							</Link>{" "}
+							and{" "}
+							<Link
+								href="https://github.com/lakshaysawhney"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="font-medium underline hover:no-underline"
+							>
+								Lakshay Sawhney
+							</Link>
 						</p>
 
 						<motion.div

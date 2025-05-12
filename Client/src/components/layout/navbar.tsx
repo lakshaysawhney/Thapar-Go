@@ -78,20 +78,14 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 		return (
 			<Link
 				href={isAuthenticated ? "/" : "/landing"}
-				className="flex items-center gap-2"
+				className="flex items-center justify-center"
 			>
-				<div
-					className={`h-28 w-28 overflow-hidden rounded-full flex items-center justify-center`}
-				>
-					<Image
-						src={theme === "dark" ? thapargodark : thapargo}
-						alt="ThaparGoLogo"
-						width={190}
-						height={190}
-						className="object-contain"
-						style={{ maxWidth: "100%", maxHeight: "100%" }}
-					/>
-				</div>
+				<Image
+					src={theme === "dark" ? thapargodark : thapargo}
+					alt="ThaparGoLogo"
+					width={110}
+					height={110}
+				/>
 			</Link>
 		);
 	};
@@ -140,36 +134,36 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 							if (link.isExternal) {
 								return (
 									<Link
-										key={index}
+										key={link.label}
 										href={link.href}
 										target="_blank"
 										rel="noopener noreferrer"
 										className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
 									>
-										{link.icon && link.icon}
+										{link.icon}
 										{link.label}
 									</Link>
 								);
 							} else if (link.onClick) {
 								return (
 									<Button
-										key={index}
+										key={link.label}
 										variant="ghost"
 										onClick={link.onClick}
 										className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
 									>
-										{link.icon && link.icon}
+										{link.icon}
 										{link.label}
 									</Button>
 								);
 							} else {
 								return (
 									<Link
-										key={index}
+										key={link.label}
 										href={link.href}
 										className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
 									>
-										{link.icon && link.icon}
+										{link.icon}
 										{link.label}
 									</Link>
 								);
@@ -292,21 +286,21 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 								if (link.isExternal) {
 									return (
 										<Link
-											key={index}
+											key={link.label}
 											href={link.href}
 											target="_blank"
 											rel="noopener noreferrer"
 											className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
 											onClick={toggleMenu}
 										>
-											{link.icon && link.icon}
+											{link.icon}
 											{link.label}
 										</Link>
 									);
 								} else if (link.onClick) {
 									return (
 										<Button
-											key={index}
+											key={link.label}
 											variant="ghost"
 											onClick={() => {
 												link.onClick?.();
@@ -314,19 +308,19 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 											}}
 											className="justify-start p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
 										>
-											{link.icon && link.icon}
+											{link.icon}
 											{link.label}
 										</Button>
 									);
 								} else {
 									return (
 										<Link
-											key={index}
+											key={link.label}
 											href={link.href}
 											className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
 											onClick={toggleMenu}
 										>
-											{link.icon && link.icon}
+											{link.icon}
 											{link.label}
 										</Link>
 									);
