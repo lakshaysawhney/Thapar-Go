@@ -152,9 +152,41 @@ export const authApi = {
 			"Failed to fetch current user details",
 		);
 	},
+
+	/**
+	 * Logout user
+	 */
 	logout: async (): Promise<void> => {
-		// Clear local storage
-		localStorage.removeItem("access");
-		localStorage.removeItem("refresh");
+		try {
+			// Get tokens from local storage
+			const accessToken = localStorage.getItem("access");
+			const refreshToken = localStorage.getItem("refresh");
+
+			if (!accessToken || !refreshToken) {
+				throw new Error("No tokens found for logout");
+			}
+
+			// Make logout API request
+			await apiRequest<void>(
+				"/auth/logout/",
+				{
+					method: "POST",
+					body: JSON.stringify({
+						refresh_token: refreshToken,
+					}),
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+					},
+				},
+				"Failed to logout",
+			);
+
+			// Clear local storage
+			localStorage.removeItem("access");
+			localStorage.removeItem("refresh");
+		} catch (error) {
+			console.error("Logout Error:", error);
+			throw error;
+		}
 	},
 };

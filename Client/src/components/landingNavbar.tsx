@@ -23,6 +23,7 @@ import { useTheme } from "next-themes";
 
 import thapargo from "@/../public/thapargo.png";
 import thapargodark from "@/../public/thapargo_white.png";
+import { authApi } from "@/lib";
 
 interface NavbarProps {
 	onCreatePool?: () => void;
@@ -70,8 +71,7 @@ export function LandingNavbar({ onCreatePool }: NavbarProps) {
 	const handleLogout = async () => {
 		try {
 			// Clear local storage
-			localStorage.removeItem("access");
-			localStorage.removeItem("refresh");
+			await authApi.logout();
 
 			// Redirect to login page
 			router.push("/login");

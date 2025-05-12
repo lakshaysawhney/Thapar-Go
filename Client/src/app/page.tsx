@@ -8,16 +8,15 @@ export default function Home() {
 	const router = useRouter();
 	const [isAuthenticated, setIsAuthenticated] = useState(true);
 	const [isLoading, setIsLoading] = useState(true);
-	const [isCreatePoolOpen, setIsCreatePoolOpen] = useState(false);
 
 	useEffect(() => {
 		// Check if user is authenticated
 		const accessToken = localStorage.getItem("access");
-		// if (!accessToken) {
-		// 	router.push("/landing");
-		// } else {
-		// 	setIsAuthenticated(true);
-		// }
+		if (!accessToken) {
+			router.push("/landing");
+		} else {
+			setIsAuthenticated(true);
+		}
 		setIsLoading(false);
 	}, [router]);
 

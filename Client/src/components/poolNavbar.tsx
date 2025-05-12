@@ -23,6 +23,7 @@ import { useTheme } from "next-themes";
 
 import thapargo from "@/../public/thapargo.png";
 import thapargodark from "@/../public/thapargo_white.png";
+import { authApi } from "@/lib";
 
 interface NavbarProps {
 	onCreatePool?: () => void;
@@ -39,7 +40,6 @@ interface NavLink {
 
 export function PoolNavbar({ onCreatePool }: NavbarProps) {
 	const router = useRouter();
-	const pathname = usePathname();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const { resolvedTheme } = useTheme();
@@ -63,8 +63,7 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 	const handleLogout = async () => {
 		try {
 			// Clear local storage
-			localStorage.removeItem("access");
-			localStorage.removeItem("refresh");
+			authApi.logout();
 
 			// Redirect to login page
 			router.push("/login");
