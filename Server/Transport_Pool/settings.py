@@ -212,4 +212,6 @@ SIMPLE_JWT = {
 
 SITE_ID = 1 # to avoid errors while using django.contrib.sites since site_id is used by G-OAuth
 
+SOCIALACCOUNT_ADAPTER = 'authentication.adapters.CustomSocialAccountAdapter'
+
 

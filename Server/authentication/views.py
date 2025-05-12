@@ -7,9 +7,9 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from authentication.permissions import IsGoogleAuthenticated
 from authentication.models import CustomUser 
 from authentication.serializers import CustomUserSerializer 
-from authentication.adapters import CustomGoogleOAuth2Adapter
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.models import SocialAccount
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_framework.authentication import SessionAuthentication
 from datetime import timedelta
 
@@ -24,10 +24,11 @@ class GoogleLoginView(SocialLoginView):
     Custom Google OAuth Login view with thapar.edu domain validation.
     """
     authentication_classes = [SessionAuthentication]
+    adapter_class = GoogleOAuth2Adapter
     permission_classes = [AllowAny]
-    adapter_class = CustomGoogleOAuth2Adapter 
 
     def post(self, request, *args, **kwargs):
+        print("DEBUG: GoogleLoginView post method called")
         logger.debug("Starting Google OAuth login process.")
         logger.debug(f"Redirect URI being sent: {self.request.build_absolute_uri()}")
 
@@ -53,20 +54,32 @@ class GoogleLoginView(SocialLoginView):
                 )
             
             # setting google_authenticated boolean field to true
-            user = request.user
+            user = CustomUser.objects.get(id=request.user.id)
             user.google_authenticated = True
             user.save()
 
             logger.info(f"User {social_user.user.email} successfully logged in.")
 
-            access_token = AccessToken.for_user(user)
-            access_token.set_exp(lifetime=timedelta(minutes=5))
+            # Check if user profile is complete
+            if user.phone_number and user.gender:
+                refresh = RefreshToken.for_user(user)
+                return Response({
+                    "message": "Login successful.",
+                    "email": user.email,
+                    "name": user.full_name,
+                    "access": str(refresh.access_token),
+                    "refresh": str(refresh)
+                }, status=status.HTTP_200_OK)
+
+            # Else: profile incomplete → send temporary token
+            temp_token = AccessToken.for_user(user)
+            temp_token.set_exp(lifetime=timedelta(minutes=5))
 
             return Response({
                 "message": "Google login successful. Please complete your profile.",
                 "email": user.email,
                 "name": user.full_name,
-                "temp_token": str(access_token)
+                "temp_token": str(temp_token)
             }, status=status.HTTP_200_OK)
 
         except Exception as e:
