@@ -30,7 +30,7 @@ export const createPoolSchema = z.object({
 		.min(1, "Must have at least 1 person")
 		.refine(
 			(currentPersons, form) => {
-				return currentPersons <= form.data.totalPersons;
+				return currentPersons <= form?.data?.totalPersons;
 			},
 			{
 				message: "Current persons cannot exceed total persons",

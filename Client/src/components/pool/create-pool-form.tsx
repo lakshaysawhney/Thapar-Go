@@ -411,7 +411,7 @@ export function CreatePoolForm({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="flex items-center gap-1">
-											<DollarSign size={16} />
+											<span>&#8377;</span>
 											Total Fare
 										</FormLabel>
 										<FormControl>
@@ -432,10 +432,7 @@ export function CreatePoolForm({
 						<div className="bg-white/10 dark:bg-black/10 p-3 rounded-md border border-white/10 dark:border-white/5">
 							<div className="flex justify-between items-center">
 								<Label className="flex items-center gap-1">
-									<DollarSign
-										size={16}
-										className="text-primary"
-									/>
+									<span className="text-primary">&#8377;</span>
 									Fare Per Head
 								</Label>
 								<motion.div
@@ -528,6 +525,7 @@ export function CreatePoolForm({
 						className="bg-primary hover:bg-primary/90"
 						glowColor="rgba(255, 0, 0, 0.3)"
 						disabled={isSubmitting}
+						onClick={() => onSubmit(form.getValues())}
 					>
 						{isSubmitting ? (
 							<div className="h-5 w-5 border-2 border-primary-foreground/50 border-t-transparent rounded-full animate-spin" />

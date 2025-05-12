@@ -321,7 +321,8 @@ export function FilterSidebar({
 								</TooltipProvider>
 							</div>
 							<span className="text-sm text-muted-foreground">
-								${filters.fareRange[0]} - ${filters.fareRange[1]}
+								&#8377;{filters.fareRange[0]} - &#8377;
+								{filters.fareRange[1]}
 							</span>
 						</div>
 						<Slider
