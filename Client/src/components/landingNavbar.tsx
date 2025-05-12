@@ -49,12 +49,7 @@ export function LandingNavbar({ onCreatePool }: NavbarProps) {
 	// Determine if we're on the landing page
 	const isPoolPage = pathname === "/";
 
-	if (isPoolPage) {
-		return null; // Don't render the navbar on the pool page
-	}
-
 	useEffect(() => {
-		// Check if user is authenticated
 		const accessToken = localStorage.getItem("access");
 		setIsAuthenticated(!!accessToken);
 	}, []);
@@ -62,6 +57,10 @@ export function LandingNavbar({ onCreatePool }: NavbarProps) {
 	useEffect(() => {
 		setMounted(true);
 	}, []);
+
+	if (isPoolPage) {
+		return null; // Don't render the navbar on the pool page
+	}
 
 	const currentTheme = mounted ? resolvedTheme : undefined;
 	const logoSrc = currentTheme === "dark" ? thapargodark : thapargo;
@@ -200,10 +199,6 @@ export function LandingNavbar({ onCreatePool }: NavbarProps) {
 							>
 								<DropdownMenuLabel>My Account</DropdownMenuLabel>
 								<DropdownMenuSeparator />
-								<DropdownMenuItem className="flex items-center gap-2 focus:bg-primary/10">
-									<User className="h-4 w-4" />
-									<span>Profile</span>
-								</DropdownMenuItem>
 								<DropdownMenuItem
 									className="flex items-center gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
 									onClick={handleLogout}

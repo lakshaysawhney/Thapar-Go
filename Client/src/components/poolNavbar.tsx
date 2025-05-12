@@ -63,7 +63,7 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 	const handleLogout = async () => {
 		try {
 			// Clear local storage
-			authApi.logout();
+			await authApi.logout();
 
 			// Redirect to login page
 			router.push("/login");
@@ -192,10 +192,7 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 							>
 								<DropdownMenuLabel>My Account</DropdownMenuLabel>
 								<DropdownMenuSeparator />
-								<DropdownMenuItem className="flex items-center gap-2 focus:bg-primary/10">
-									<User className="h-4 w-4" />
-									<span>Profile</span>
-								</DropdownMenuItem>
+
 								<DropdownMenuItem
 									className="flex items-center gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
 									onClick={handleLogout}
@@ -325,7 +322,6 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 										className="flex items-center gap-2 justify-start border-white/20 dark:border-white/10"
 									>
 										<User className="h-4 w-4" />
-										<span>Profile</span>
 									</Button>
 									<Button
 										variant="outline"
