@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "CarPool - Share Your Ride",
+	title: "ThaparGo - Share Your Ride",
 	description: "Find and share rides with others going your way",
 };
 

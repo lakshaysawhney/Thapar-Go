@@ -195,7 +195,7 @@ export default function SignupPage() {
 					>
 						<Car className="h-6 w-6 text-primary" />
 					</motion.div>
-					<span className="text-2xl font-bold text-primary">CarPool</span>
+					<span className="text-2xl font-bold text-primary">ThaparGo</span>
 				</motion.div>
 				<motion.div
 					initial={{ opacity: 0, x: 20 }}
@@ -430,7 +430,7 @@ export default function SignupPage() {
 			</main>
 
 			<footer className="py-6 text-center text-sm text-muted-foreground">
-				<p>© {new Date().getFullYear()} CarPool. All rights reserved.</p>
+				<p>© {new Date().getFullYear()} ThaparGo. All rights reserved.</p>
 			</footer>
 		</AnimatedBackground>
 	);
