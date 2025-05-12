@@ -25,7 +25,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { DollarSign, Clock, MapPin, Users, Car } from "lucide-react";
+import { DollarSign, Clock, MapPin, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createPoolSchema, type CreatePoolFormValues } from "@/schemas/schema";
 import { calculateFormattedFarePerHead } from "@/lib/utils/pool-utils";
@@ -61,27 +61,27 @@ export function EditPoolForm({
 	const form = useForm<CreatePoolFormValues>({
 		resolver: zodResolver(createPoolSchema),
 		defaultValues: {
-			startPoint: pool.start_point || pool.startPoint || "",
-			endPoint: pool.end_point || pool.endPoint || "",
-			departureTime: pool.departure_time || pool.departureTime || "",
-			arrivalTime: pool.arrival_time || pool.arrivalTime || "",
-			transportMode: pool.transport_mode || pool.transportMode || "",
-			totalPersons: pool.total_persons || pool.totalPersons || 1,
-			currentPersons: pool.current_persons || pool.currentPersons || 1,
-			totalFare:
-				pool.totalFare ||
+			start_point: pool.start_point ?? pool.startPoint ?? "",
+			end_point: pool.end_point ?? pool.endPoint ?? "",
+			departure_time: pool.departure_time ?? pool.departureTime ?? "",
+			arrival_time: pool.arrival_time ?? pool.arrivalTime ?? "",
+			transport_mode: pool.transport_mode ?? pool.transportMode ?? "",
+			total_persons: pool.total_persons ?? pool.totalPersons ?? 1,
+			current_persons: pool.current_persons ?? pool.currentPersons ?? 1,
+			total_fare:
+				pool.totalFare ??
 				(pool.fare_per_head
 					? Number.parseFloat(pool.fare_per_head) *
-					  (pool.total_persons || pool.totalPersons || 1)
+					  (pool.total_persons ?? pool.totalPersons ?? 1)
 					: 0),
-			description: pool.description || "",
-			femaleOnly: pool.is_female_only || pool.femaleOnly || false,
+			description: pool.description ?? "",
+			is_female_only: pool.is_female_only ?? pool.femaleOnly ?? false,
 		},
 	});
 
 	// Watch values for live calculations
-	const totalPersons = form.watch("totalPersons");
-	const totalFare = form.watch("totalFare");
+	const totalPersons = form.watch("total_persons");
+	const totalFare = form.watch("total_fare");
 
 	// Calculate fare per head
 	const farePerHead = calculateFormattedFarePerHead(totalFare, totalPersons);
@@ -116,7 +116,7 @@ export function EditPoolForm({
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						<FormField
 							control={form.control}
-							name="startPoint"
+							name="start_point"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel className="flex items-center gap-1">
@@ -163,7 +163,7 @@ export function EditPoolForm({
 
 						<FormField
 							control={form.control}
-							name="endPoint"
+							name="end_point"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel className="flex items-center gap-1">
@@ -226,7 +226,7 @@ export function EditPoolForm({
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						<FormField
 							control={form.control}
-							name="departureTime"
+							name="departure_time"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel className="flex items-center gap-1">
@@ -250,7 +250,7 @@ export function EditPoolForm({
 
 						<FormField
 							control={form.control}
-							name="arrivalTime"
+							name="arrival_time"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel className="flex items-center gap-1">
@@ -275,7 +275,7 @@ export function EditPoolForm({
 
 					<FormField
 						control={form.control}
-						name="transportMode"
+						name="transport_mode"
 						render={({ field }) => (
 							<>
 								{!useCustomLocations ? (
@@ -323,7 +323,7 @@ export function EditPoolForm({
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						<FormField
 							control={form.control}
-							name="totalPersons"
+							name="total_persons"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel className="flex items-center gap-1">
@@ -349,7 +349,7 @@ export function EditPoolForm({
 
 						<FormField
 							control={form.control}
-							name="currentPersons"
+							name="current_persons"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel className="flex items-center gap-1">
@@ -363,12 +363,12 @@ export function EditPoolForm({
 										<Input
 											type="number"
 											min={1}
-											max={form.getValues("totalPersons")}
+											max={form.getValues("total_persons")}
 											{...field}
 											className={cn(
 												"bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10",
 												field.value >
-													form.getValues("totalPersons") &&
+													form.getValues("total_persons") &&
 													"border-red-500 focus-visible:ring-red-500",
 											)}
 										/>
@@ -382,7 +382,7 @@ export function EditPoolForm({
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						<FormField
 							control={form.control}
-							name="totalFare"
+							name="total_fare"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel className="flex items-center gap-1">
@@ -454,7 +454,7 @@ export function EditPoolForm({
 
 					<FormField
 						control={form.control}
-						name="femaleOnly"
+						name="is_female_only"
 						render={({ field }) => (
 							<FormItem className="flex flex-row items-center justify-between rounded-lg border border-white/20 dark:border-white/10 p-4 bg-white/20 dark:bg-black/20">
 								<div className="space-y-0.5">

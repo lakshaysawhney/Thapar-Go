@@ -25,6 +25,7 @@ import { AnimatedBackground } from "@/components/ui/animated-background";
 import { poolApi } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { PoolNavbar } from "@/components/poolNavbar";
+import { calculateFormattedFarePerHead } from "@/lib/utils/pool-utils";
 
 /**
  * Main dashboard component for the car pooling application
@@ -153,6 +154,10 @@ export default function PoolDashboard() {
 	// Handle form submission
 	const handleCreatePool = async (data: CreatePoolFormValues) => {
 		try {
+			data.fare_per_head = calculateFormattedFarePerHead(
+				data.total_fare,
+				data.total_persons,
+			);
 			await poolApi.createPool(data);
 			// Refresh pools after creating a new one
 			const updatedPools = await poolApi.getAllPools();

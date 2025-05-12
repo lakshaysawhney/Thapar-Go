@@ -102,7 +102,10 @@ export function CreatePoolForm({
 	const handleSubmit = async (data: CreatePoolFormValues) => {
 		try {
 			setIsSubmitting(true);
-			data.fare_per_head = fare_per_head;
+			data.fare_per_head = calculateFormattedFarePerHead(
+				data.total_fare,
+				data.total_persons,
+			);
 			await Promise.resolve(onSubmit(data));
 
 			form.reset();
