@@ -3,12 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import PoolDashboard from "@/components/pool/pool-dashboard";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
 
 export default function Home() {
 	const router = useRouter();
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [isAuthenticated, setIsAuthenticated] = useState(true);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isCreatePoolOpen, setIsCreatePoolOpen] = useState(false);
 
@@ -33,11 +31,9 @@ export default function Home() {
 
 	return isAuthenticated ? (
 		<div className="flex flex-col min-h-screen">
-			<Navbar onCreatePool={() => setIsCreatePoolOpen(true)} />
 			<main className="flex-1">
 				<PoolDashboard />
 			</main>
-			<Footer />
 		</div>
 	) : null;
 }

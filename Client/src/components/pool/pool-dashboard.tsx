@@ -21,10 +21,10 @@ import { FilterSidebar } from "@/components/pool/filter-sidebar";
 import { usePoolFilters } from "@/hooks/use-pool-filters";
 import type { CreatePoolFormValues } from "@/schemas/schema";
 import { CreatePoolForm } from "@/components/pool/create-pool-form";
-import { AppHeader } from "@/components/layout/app-header";
 import { AnimatedBackground } from "@/components/ui/animated-background";
 import { poolApi } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { PoolNavbar } from "@/components/poolNavbar";
 
 /**
  * Main dashboard component for the car pooling application
@@ -212,7 +212,7 @@ export default function PoolDashboard() {
 			className="min-h-screen"
 		>
 			{/* Header */}
-			<AppHeader onCreatePool={() => setIsCreatePoolOpen(true)} />
+			<PoolNavbar onCreatePool={() => setIsCreatePoolOpen(true)} />
 
 			{/* Search and Filter Section */}
 			<div className="container mx-auto p-4">

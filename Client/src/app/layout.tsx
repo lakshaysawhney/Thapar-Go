@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "@/components/ui/toaster";
-import { Navbar } from "@/components/layout/navbar";
+import { LandingNavbar } from "@/components/landingNavbar";
 import { Footer } from "@/components/layout/footer";
 import "./globals.css";
 
@@ -46,7 +46,7 @@ export default function RootLayout({
 						disableTransitionOnChange
 					>
 						<div className="flex flex-col min-h-screen">
-							<Navbar />
+							<LandingNavbar />
 							<main className="flex-1">{children}</main>
 							<Footer />
 						</div>

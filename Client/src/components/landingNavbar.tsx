@@ -37,7 +37,7 @@ interface NavLink {
 	isExternal?: boolean;
 }
 
-export function Navbar({ onCreatePool }: NavbarProps) {
+export function LandingNavbar({ onCreatePool }: NavbarProps) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,7 +46,11 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 	const [mounted, setMounted] = useState(false);
 
 	// Determine if we're on the landing page
-	const isLandingPage = pathname === "/landing";
+	const isPoolPage = pathname === "/";
+
+	if (isPoolPage) {
+		return null; // Don't render the navbar on the pool page
+	}
 
 	useEffect(() => {
 		// Check if user is authenticated
@@ -99,7 +103,7 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 	};
 
 	// Landing page navigation links
-	const landingPageLinks: NavLink[] = [
+	const navLinks: NavLink[] = [
 		{ href: "#features", label: "Features" },
 		{ href: "#about", label: "About" },
 		{ href: "#faq", label: "FAQ" },
@@ -110,14 +114,6 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 			isExternal: true,
 		},
 	];
-
-	// App navigation links (when authenticated)
-	const appLinks: NavLink[] = [
-		{ href: "/", label: "Dashboard", icon: <Home size={16} /> },
-	];
-
-	// Determine which links to show based on current page and auth status
-	const navLinks = isLandingPage ? landingPageLinks : appLinks;
 
 	return (
 		<motion.header

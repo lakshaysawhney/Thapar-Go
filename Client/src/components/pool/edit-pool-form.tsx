@@ -277,36 +277,46 @@ export function EditPoolForm({
 						control={form.control}
 						name="transportMode"
 						render={({ field }) => (
-							<FormItem>
-								<FormLabel className="flex items-center gap-1">
-									<Car
-										size={16}
-										className="text-primary"
-									/>
-									Transport Mode
-								</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
-									<FormControl>
-										<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
-											<SelectValue placeholder="Select mode" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
-										{transportModes.map((mode) => (
-											<SelectItem
-												key={mode}
-												value={mode}
-											>
-												{mode}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-								<FormMessage />
-							</FormItem>
+							<>
+								{!useCustomLocations ? (
+									<FormItem>
+										<FormLabel>Transport Mode</FormLabel>
+										<Select
+											onValueChange={field.onChange}
+											defaultValue={field.value}
+										>
+											<FormControl>
+												<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
+													<SelectValue placeholder="Select mode" />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
+												{transportModes.map((mode) => (
+													<SelectItem
+														key={mode}
+														value={mode}
+													>
+														{mode}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+										<FormMessage />
+									</FormItem>
+								) : (
+									<FormItem>
+										<FormLabel>Transport Mode</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="Enter transport mode"
+												{...field}
+												className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10"
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							</>
 						)}
 					/>
 

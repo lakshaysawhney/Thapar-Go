@@ -179,28 +179,26 @@ export function CreatePoolForm({
 									<FormItem>
 										<FormLabel>End Point</FormLabel>
 										{!useCustomLocations ? (
-											<>
-												<Select
-													onValueChange={field.onChange}
-													defaultValue={field.value}
-												>
-													<FormControl>
-														<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
-															<SelectValue placeholder="Select end point" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
-														{endPoints.map((point) => (
-															<SelectItem
-																key={point}
-																value={point}
-															>
-																{point}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-											</>
+											<Select
+												onValueChange={field.onChange}
+												defaultValue={field.value}
+											>
+												<FormControl>
+													<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
+														<SelectValue placeholder="Select end point" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
+													{endPoints.map((point) => (
+														<SelectItem
+															key={point}
+															value={point}
+														>
+															{point}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
 										) : (
 											<FormControl>
 												<Input
@@ -302,30 +300,46 @@ export function CreatePoolForm({
 							control={form.control}
 							name="transportMode"
 							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Transport Mode</FormLabel>
-									<Select
-										onValueChange={field.onChange}
-										defaultValue={field.value}
-									>
-										<FormControl>
-											<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
-												<SelectValue placeholder="Select mode" />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
-											{transportModes.map((mode) => (
-												<SelectItem
-													key={mode}
-													value={mode}
-												>
-													{mode}
-												</SelectItem>
-											))}
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
+								<>
+									{!useCustomLocations ? (
+										<FormItem>
+											<FormLabel>Transport Mode</FormLabel>
+											<Select
+												onValueChange={field.onChange}
+												defaultValue={field.value}
+											>
+												<FormControl>
+													<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
+														<SelectValue placeholder="Select mode" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
+													{transportModes.map((mode) => (
+														<SelectItem
+															key={mode}
+															value={mode}
+														>
+															{mode}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+											<FormMessage />
+										</FormItem>
+									) : (
+										<FormItem>
+											<FormLabel>Transport Mode</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="Enter transport mode"
+													{...field}
+													className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								</>
 							)}
 						/>
 
