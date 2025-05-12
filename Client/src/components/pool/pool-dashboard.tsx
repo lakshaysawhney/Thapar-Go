@@ -26,6 +26,8 @@ import { poolApi } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { PoolNavbar } from "@/components/poolNavbar";
 import { calculateFormattedFarePerHead } from "@/lib/utils/pool-utils";
+import { authApi } from "@/lib";
+import type { CurrentUserDetailsProps } from "@/lib/auth";
 
 /**
  * Main dashboard component for the car pooling application
@@ -54,7 +56,22 @@ export default function PoolDashboard() {
 			}
 		}
 
+		async function fetchUserDetails() {
+			try {
+				setIsLoading(true);
+				const userDetails = await authApi.getCurrentUser();
+				if (userDetails) {
+					localStorage.setItem("user", JSON.stringify(userDetails));
+				}
+			} catch (error) {
+				console.error("Error fetching user details:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+
 		fetchPools();
+		fetchUserDetails();
 	}, []);
 
 	// Dynamically extract unique values from the current pool data
@@ -178,9 +195,10 @@ export default function PoolDashboard() {
 	const isCurrentUserCreator = useMemo(() => {
 		if (!selectedPool) return false;
 
-		// In a real app, you would compare with the current user's ID
-		// For now, we'll assume the user is the creator if they're logged in
-		return true;
+		const user = localStorage.getItem("user");
+		if (!user) return false;
+		const parsedUser = JSON.parse(user) as CurrentUserDetailsProps;
+		return selectedPool.created_by?.full_name === parsedUser.full_name;
 	}, [selectedPool]);
 
 	// Handle pool update

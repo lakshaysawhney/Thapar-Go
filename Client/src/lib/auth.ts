@@ -77,6 +77,13 @@ interface SignupData {
 	gender: string;
 }
 
+export interface CurrentUserDetailsProps {
+	email: string;
+	full_name: string;
+	phone_number: string;
+	gender: string;
+}
+
 /**
  * Authentication API Service
  */
@@ -134,8 +141,17 @@ export const authApi = {
 	},
 
 	/**
-	 * Logout user
+	 * Fetch current logged-in user details
 	 */
+	getCurrentUser: async (): Promise<CurrentUserDetailsProps> => {
+		return apiRequest<CurrentUserDetailsProps>(
+			"/auth/user/profile",
+			{
+				method: "GET",
+			},
+			"Failed to fetch current user details",
+		);
+	},
 	logout: async (): Promise<void> => {
 		// Clear local storage
 		localStorage.removeItem("access");

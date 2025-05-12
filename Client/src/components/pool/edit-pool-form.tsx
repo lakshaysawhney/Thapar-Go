@@ -391,7 +391,7 @@ export function EditPoolForm({
 											style={{ fontSize: "16px", lineHeight: "1" }}
 										>
 											₹
-										</span>
+										</span>{" "}
 										Total Fare
 									</FormLabel>
 									<FormControl>
@@ -494,6 +494,9 @@ export function EditPoolForm({
 						className="bg-primary hover:bg-primary/90"
 						glowColor="rgba(255, 0, 0, 0.3)"
 						disabled={isSubmitting}
+						onClick={() => {
+							handleSubmit(form.getValues());
+						}}
 					>
 						{isSubmitting ? (
 							<div className="h-5 w-5 border-2 border-primary-foreground/50 border-t-transparent rounded-full animate-spin" />

@@ -40,22 +40,22 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 	const rotateY = useTransform(x, [-100, 100], [-10, 10]);
 
 	// Handle both naming conventions
-	const startPoint = pool.start_point || pool.startPoint || "";
-	const endPoint = pool.end_point || pool.endPoint || "";
-	const departureTime = pool.departure_time || pool.departureTime || "";
-	const arrivalTime = pool.arrival_time || pool.arrivalTime || "";
-	const transportMode = pool.transport_mode || pool.transportMode || "";
-	const totalPersons = pool.total_persons || pool.totalPersons || 0;
-	const currentPersons = pool.current_persons || pool.currentPersons || 0;
-	const isFemaleOnly = pool.is_female_only || pool.femaleOnly || false;
+	const startPoint = pool.start_point ?? pool.startPoint ?? "";
+	const endPoint = pool.end_point ?? pool.endPoint ?? "";
+	const departureTime = pool.departure_time ?? pool.departureTime ?? "";
+	const arrivalTime = pool.arrival_time ?? pool.arrivalTime ?? "";
+	const transportMode = pool.transport_mode ?? pool.transportMode ?? "";
+	const totalPersons = pool.total_persons ?? pool.totalPersons ?? 0;
+	const currentPersons = pool.current_persons ?? pool.currentPersons ?? 0;
+	const isFemaleOnly = pool.is_female_only ?? pool.femaleOnly ?? false;
 	const farePerHead =
-		pool.fare_per_head || (pool.totalFare ? formatFarePerHead(pool) : "0.00");
+		pool.fare_per_head ?? (pool.totalFare ? formatFarePerHead(pool) : "0.00");
 
 	// Get creator name
 	const creatorName =
-		pool.created_by?.full_name || pool.createdBy || "Unknown";
-	const creatorPhone = pool.created_by?.phone_number || "";
-	const creatorGender = pool.created_by?.gender || "";
+		pool.created_by?.full_name ?? pool.createdBy ?? "Unknown";
+	const creatorPhone = pool.created_by?.phone_number ?? "";
+	const creatorGender = pool.created_by?.gender ?? "";
 
 	// Calculate available seats
 	const availableSeats = totalPersons - currentPersons;
