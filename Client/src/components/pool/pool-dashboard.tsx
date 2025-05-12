@@ -163,7 +163,9 @@ export default function PoolDashboard() {
 		} catch (error) {
 			console.error("Error creating pool:", error);
 			// Error is already handled in the API service
-			return Promise.reject(error);
+			return Promise.reject(
+				error instanceof Error ? error : new Error(String(error)),
+			);
 		}
 	};
 

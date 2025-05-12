@@ -42,6 +42,23 @@ export const createPoolSchema = z.object({
 		.string()
 		.min(10, "Description must be at least 10 characters"),
 	is_female_only: z.boolean().default(false),
+	fare_per_head: z
+		.number()
+		.optional()
+		.refine(
+			(_, form) => {
+				const totalFare = form?.data?.total_fare;
+				const currentPersons = form?.data?.current_persons;
+				if (totalFare && currentPersons) {
+					return totalFare / currentPersons > 0;
+				}
+				return true;
+			},
+			{
+				message: "Fare per head must be a positive value",
+				path: ["fare_per_head"],
+			},
+		),
 });
 
 export type CreatePoolFormValues = z.infer<typeof createPoolSchema>;

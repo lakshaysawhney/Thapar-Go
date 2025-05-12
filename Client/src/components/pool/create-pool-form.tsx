@@ -75,6 +75,7 @@ export function CreatePoolForm({
 			total_fare: 0,
 			description: "",
 			is_female_only: false,
+			fare_per_head: 0,
 		},
 		mode: "onChange",
 	});
@@ -101,6 +102,7 @@ export function CreatePoolForm({
 	const handleSubmit = async (data: CreatePoolFormValues) => {
 		try {
 			setIsSubmitting(true);
+			data.fare_per_head = fare_per_head;
 			await Promise.resolve(onSubmit(data));
 
 			form.reset();
@@ -213,7 +215,7 @@ export function CreatePoolForm({
 								)}
 							/>
 						</div>
-						<div className="flex items-center justify-end mt-2">
+						<div className="flex items-center justify-start mt-2">
 							<Button
 								type="button"
 								variant="outline"
@@ -224,7 +226,7 @@ export function CreatePoolForm({
 								className="text-xs border-white/20 dark:border-white/10"
 							>
 								{useCustomLocations
-									? "Use dropdown locations"
+									? "Use dropdown locations and Transport Mode"
 									: "Enter custom locations and Transport Mode"}
 							</Button>
 						</div>
