@@ -15,11 +15,11 @@ export default function Home() {
 	useEffect(() => {
 		// Check if user is authenticated
 		const accessToken = localStorage.getItem("access");
-		if (!accessToken) {
-			router.push("/landing");
-		} else {
-			setIsAuthenticated(true);
-		}
+		// if (!accessToken) {
+		// 	router.push("/landing");
+		// } else {
+		// 	setIsAuthenticated(true);
+		// }
 		setIsLoading(false);
 	}, [router]);
 

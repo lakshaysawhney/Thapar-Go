@@ -60,6 +60,7 @@ export function CreatePoolForm({
 }: Readonly<CreatePoolFormProps>) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const { toast } = useToast();
+	const [useCustomLocations, setUseCustomLocations] = useState(false);
 
 	// Initialize the form
 	const form = useForm<CreatePoolFormValues>({
@@ -134,26 +135,38 @@ export function CreatePoolForm({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Start Point</FormLabel>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={field.value}
-										>
+										{!useCustomLocations ? (
+											<>
+												<Select
+													onValueChange={field.onChange}
+													defaultValue={field.value}
+												>
+													<FormControl>
+														<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
+															<SelectValue placeholder="Select start point" />
+														</SelectTrigger>
+													</FormControl>
+													<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
+														{startPoints.map((point) => (
+															<SelectItem
+																key={point}
+																value={point}
+															>
+																{point}
+															</SelectItem>
+														))}
+													</SelectContent>
+												</Select>
+											</>
+										) : (
 											<FormControl>
-												<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
-													<SelectValue placeholder="Select start point" />
-												</SelectTrigger>
+												<Input
+													placeholder="Enter start point"
+													{...field}
+													className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10"
+												/>
 											</FormControl>
-											<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
-												{startPoints.map((point) => (
-													<SelectItem
-														key={point}
-														value={point}
-													>
-														{point}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
+										)}
 										<FormMessage />
 									</FormItem>
 								)}
@@ -165,30 +178,57 @@ export function CreatePoolForm({
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>End Point</FormLabel>
-										<Select
-											onValueChange={field.onChange}
-											defaultValue={field.value}
-										>
+										{!useCustomLocations ? (
+											<>
+												<Select
+													onValueChange={field.onChange}
+													defaultValue={field.value}
+												>
+													<FormControl>
+														<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
+															<SelectValue placeholder="Select end point" />
+														</SelectTrigger>
+													</FormControl>
+													<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
+														{endPoints.map((point) => (
+															<SelectItem
+																key={point}
+																value={point}
+															>
+																{point}
+															</SelectItem>
+														))}
+													</SelectContent>
+												</Select>
+											</>
+										) : (
 											<FormControl>
-												<SelectTrigger className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10">
-													<SelectValue placeholder="Select end point" />
-												</SelectTrigger>
+												<Input
+													placeholder="Enter end point"
+													{...field}
+													className="bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10"
+												/>
 											</FormControl>
-											<SelectContent className="bg-background/80 backdrop-blur-lg border-white/20 dark:border-white/10">
-												{endPoints.map((point) => (
-													<SelectItem
-														key={point}
-														value={point}
-													>
-														{point}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
+										)}
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
+						</div>
+						<div className="flex items-center justify-end mt-2">
+							<Button
+								type="button"
+								variant="outline"
+								size="sm"
+								onClick={() =>
+									setUseCustomLocations(!useCustomLocations)
+								}
+								className="text-xs border-white/20 dark:border-white/10"
+							>
+								{useCustomLocations
+									? "Use dropdown locations"
+									: "Enter custom locations"}
+							</Button>
 						</div>
 					</div>
 

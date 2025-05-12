@@ -46,7 +46,7 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 	const [mounted, setMounted] = useState(false);
 
 	// Determine if we're on the landing page
-	const isLandingPage = pathname === "/" || pathname === "/landing";
+	const isLandingPage = pathname === "/landing";
 
 	useEffect(() => {
 		// Check if user is authenticated
@@ -114,12 +114,6 @@ export function Navbar({ onCreatePool }: NavbarProps) {
 	// App navigation links (when authenticated)
 	const appLinks: NavLink[] = [
 		{ href: "/", label: "Dashboard", icon: <Home size={16} /> },
-		{
-			href: "#",
-			label: "Create Pool",
-			icon: <PlusCircle size={16} />,
-			onClick: onCreatePool,
-		},
 	];
 
 	// Determine which links to show based on current page and auth status

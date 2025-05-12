@@ -177,35 +177,6 @@ export default function SignupPage() {
 			variant="paths"
 			className="min-h-screen"
 		>
-			<header className="container flex justify-between items-center p-4">
-				<motion.div
-					className="flex items-center gap-2"
-					initial={{ opacity: 0, x: -20 }}
-					animate={{ opacity: 1, x: 0 }}
-					transition={{ duration: 0.5 }}
-				>
-					<motion.div
-						initial={{ rotate: -10 }}
-						animate={{ rotate: 10 }}
-						transition={{
-							repeat: Number.POSITIVE_INFINITY,
-							repeatType: "reverse",
-							duration: 1.5,
-						}}
-					>
-						<Car className="h-6 w-6 text-primary" />
-					</motion.div>
-					<span className="text-2xl font-bold text-primary">ThaparGo</span>
-				</motion.div>
-				<motion.div
-					initial={{ opacity: 0, x: 20 }}
-					animate={{ opacity: 1, x: 0 }}
-					transition={{ duration: 0.5 }}
-				>
-					<ThemeToggle />
-				</motion.div>
-			</header>
-
 			<main className="flex-1 flex items-center justify-center p-4">
 				<AnimatePresence mode="wait">
 					{step === "initial" ? (
