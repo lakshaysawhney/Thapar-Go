@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -25,7 +24,6 @@ import thapargo from "@/../public/thapargo.png";
 import thapargodark from "@/../public/thapargo_white.png";
 import { authApi } from "@/lib";
 
-// Define the type for navigation links
 interface NavLink {
 	href: string;
 	label: string;
@@ -42,66 +40,55 @@ export function LandingNavbar() {
 	const { resolvedTheme } = useTheme();
 	const [mounted, setMounted] = useState(false);
 
-	// Determine if we're on the landing page
 	const isPoolPage = pathname === "/pools";
+	const isAuthPage = pathname === "/login" || pathname === "/signup";
 
 	useEffect(() => {
-		const accessToken = localStorage.getItem("access");
-		setIsAuthenticated(!!accessToken);
+		setIsAuthenticated(!!localStorage.getItem("access"));
 	}, []);
 
 	useEffect(() => {
 		setMounted(true);
 	}, []);
 
-	if (isPoolPage) {
-		return null; // Don't render the navbar on the pool page
-	}
+	if (isPoolPage) return null;
 
 	const currentTheme = mounted ? resolvedTheme : undefined;
 	const logoSrc = currentTheme === "dark" ? thapargodark : thapargo;
 
-	const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+	const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
 	const handleLogout = async () => {
 		try {
-			// Clear local storage
 			await authApi.logout();
-
-			// Redirect to login page
 			router.push("/login");
 		} catch (error) {
 			console.error("Logout error:", error);
 		}
 	};
 
-	// Get user initials for avatar fallback
-	const getInitials = () => {
-		return "U";
+	const getInitials = () => "U";
+
+	const handleSectionNavigate = (hash: string) => {
+		if (isAuthPage) {
+			router.push(`/#${hash}`);
+		} else {
+			const el = document.getElementById(hash);
+			if (el) el.scrollIntoView({ behavior: "smooth" });
+			else router.push(`/#${hash}`);
+		}
 	};
 
-	// Logo component with theme awareness and improved visibility
-	const Logo = () => {
-		return (
-			<Link
-				href={isAuthenticated ? "/pools" : "/"}
-				className="flex items-center justify-center"
-			>
-				<Image
-					src={logoSrc}
-					alt="ThaparGoLogo"
-					width={110}
-					height={110}
-				/>
-			</Link>
-		);
-	};
+	const Logo = () => (
+		<Link href={isAuthenticated ? "/pools" : "/"} className="flex items-center justify-center">
+			<Image src={logoSrc} alt="ThaparGoLogo" width={110} height={110} />
+		</Link>
+	);
 
-	// Landing page navigation links
 	const navLinks: NavLink[] = [
-		{ href: "#features", label: "Features" },
-		{ href: "#about", label: "About" },
-		{ href: "#faq", label: "FAQ" },
+		{ href: "features", label: "Features" },
+		{ href: "about", label: "About" },
+		{ href: "faq", label: "FAQ" },
 		{
 			href: "https://github.com/himanishpuri/Thapar-Go",
 			label: "GitHub",
@@ -120,48 +107,32 @@ export function LandingNavbar() {
 			<div className="container mx-auto flex justify-between items-center p-4 py-0">
 				<Logo />
 
-				{/* Desktop Navigation */}
+				{/* Desktop Nav */}
 				<div className="hidden md:flex items-center gap-4">
 					<nav className="flex items-center gap-6 mr-4">
-						{navLinks.map((link) => {
-							if (link.isExternal) {
-								return (
-									<Link
-										key={link.label}
-										href={link.href}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
-									>
-										{link.icon}
-										{link.label}
-									</Link>
-								);
-							} else if (link.onClick) {
-								return (
-									<Button
-										key={link.label}
-										variant="ghost"
-										onClick={link.onClick}
-										className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
-									>
-										{link.icon}
-										{link.label}
-									</Button>
-								);
-							} else {
-								return (
-									<Link
-										key={link.label}
-										href={link.href}
-										className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
-									>
-										{link.icon}
-										{link.label}
-									</Link>
-								);
-							}
-						})}
+						{navLinks.map((link) =>
+							link.isExternal ? (
+								<Link
+									key={link.label}
+									href={link.href}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
+								>
+									{link.icon}
+									{link.label}
+								</Link>
+							) : (
+								<button
+									key={link.label}
+									onClick={() => handleSectionNavigate(link.href)}
+									className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
+								>
+									{link.icon}
+									{link.label}
+								</button>
+							)
+						)}
 					</nav>
 
 					<ThemeToggle />
@@ -173,15 +144,9 @@ export function LandingNavbar() {
 									variant="ghost"
 									className="relative h-10 w-10 rounded-full overflow-hidden p-0"
 								>
-									<motion.div
-										whileHover={{ scale: 1.1 }}
-										whileTap={{ scale: 0.95 }}
-									>
+									<motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
 										<Avatar className="h-10 w-10 border-2 border-primary/20">
-											<AvatarImage
-												src={""}
-												alt={"User"}
-											/>
+											<AvatarImage src={""} alt="User" />
 											<AvatarFallback className="bg-primary/10 text-primary">
 												{getInitials()}
 											</AvatarFallback>
@@ -206,11 +171,7 @@ export function LandingNavbar() {
 						</DropdownMenu>
 					) : (
 						<div className="flex items-center gap-2">
-							<Button
-								variant="ghost"
-								onClick={() => router.push("/login")}
-								className="bg-white/10 dark:bg-black/10"
-							>
+							<Button variant="ghost" onClick={() => router.push("/login")} className="bg-white/10 dark:bg-black/10">
 								Login
 							</Button>
 							<Button
@@ -227,31 +188,14 @@ export function LandingNavbar() {
 				{/* Mobile Menu Button */}
 				<div className="md:hidden flex items-center gap-2">
 					<ThemeToggle />
-					<Button
-						variant="ghost"
-						size="icon"
-						onClick={toggleMenu}
-						className="relative"
-					>
+					<Button variant="ghost" size="icon" onClick={toggleMenu} className="relative">
 						<AnimatePresence mode="wait">
 							{isMenuOpen ? (
-								<motion.div
-									key="close"
-									initial={{ opacity: 0, rotate: -90 }}
-									animate={{ opacity: 1, rotate: 0 }}
-									exit={{ opacity: 0, rotate: 90 }}
-									transition={{ duration: 0.2 }}
-								>
+								<motion.div key="close" initial={{ opacity: 0, rotate: -90 }} animate={{ opacity: 1, rotate: 0 }} exit={{ opacity: 0, rotate: 90 }} transition={{ duration: 0.2 }}>
 									<X className="h-6 w-6" />
 								</motion.div>
 							) : (
-								<motion.div
-									key="menu"
-									initial={{ opacity: 0, rotate: 90 }}
-									animate={{ opacity: 1, rotate: 0 }}
-									exit={{ opacity: 0, rotate: -90 }}
-									transition={{ duration: 0.2 }}
-								>
+								<motion.div key="menu" initial={{ opacity: 0, rotate: 90 }} animate={{ opacity: 1, rotate: 0 }} exit={{ opacity: 0, rotate: -90 }} transition={{ duration: 0.2 }}>
 									<Menu className="h-6 w-6" />
 								</motion.div>
 							)}
@@ -271,54 +215,38 @@ export function LandingNavbar() {
 						className="md:hidden backdrop-blur-md border-b border-white/10 dark:border-white/5"
 					>
 						<div className="container mx-auto p-4 flex flex-col gap-3">
-							{navLinks.map((link) => {
-								if (link.isExternal) {
-									return (
-										<Link
-											key={link.label}
-											href={link.href}
-											target="_blank"
-											rel="noopener noreferrer"
-											className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
-											onClick={toggleMenu}
-										>
-											{link.icon}
-											{link.label}
-										</Link>
-									);
-								} else if (link.onClick) {
-									return (
-										<Button
-											key={link.label}
-											variant="ghost"
-											onClick={() => {
-												link.onClick?.();
-												toggleMenu();
-											}}
-											className="justify-start p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
-										>
-											{link.icon}
-											{link.label}
-										</Button>
-									);
-								} else {
-									return (
-										<Link
-											key={link.label}
-											href={link.href}
-											className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
-											onClick={toggleMenu}
-										>
-											{link.icon}
-											{link.label}
-										</Link>
-									);
-								}
-							})}
+							{navLinks.map((link) =>
+								link.isExternal ? (
+									<Link
+										key={link.label}
+										href={link.href}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
+										onClick={toggleMenu}
+									>
+										{link.icon}
+										{link.label}
+									</Link>
+								) : (
+									<button
+										key={link.label}
+										onClick={() => {
+											handleSectionNavigate(link.href);
+											toggleMenu();
+										}}
+										className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2 text-left"
+									>
+										{link.icon}
+										{link.label}
+									</button>
+								)
+							)}
+
+							<div className="border-t border-white/10 dark:border-white/5 my-2 pt-2" />
 
 							{isAuthenticated ? (
 								<>
-									<div className="border-t border-white/10 dark:border-white/5 my-2 pt-2"></div>
 									<Button
 										variant="outline"
 										className="flex items-center gap-2 justify-start border-white/20 dark:border-white/10"
@@ -337,12 +265,7 @@ export function LandingNavbar() {
 								</>
 							) : (
 								<>
-									<div className="border-t border-white/10 dark:border-white/5 my-2 pt-2"></div>
-									<Button
-										variant="outline"
-										className="w-full"
-										onClick={() => router.push("/login")}
-									>
+									<Button variant="outline" className="w-full" onClick={() => router.push("/login")}>
 										Login
 									</Button>
 									<Button
