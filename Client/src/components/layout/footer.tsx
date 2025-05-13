@@ -45,7 +45,7 @@ export function Footer() {
 						<p className="text-md text-muted-foreground text-center md:text-right">
 							Created by{" "}
 							<Link
-								href="https://github.com/himanishpuri"
+								href="https://www.linkedin.com/in/himanish-puri-hk108/"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="font-medium underline hover:no-underline"
@@ -54,7 +54,7 @@ export function Footer() {
 							</Link>{" "}
 							and{" "}
 							<Link
-								href="https://github.com/lakshaysawhney"
+								href="https://www.linkedin.com/in/lakshay-sawhney/"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="font-medium underline hover:no-underline"

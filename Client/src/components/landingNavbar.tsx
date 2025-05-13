@@ -43,7 +43,7 @@ export function LandingNavbar() {
 	const [mounted, setMounted] = useState(false);
 
 	// Determine if we're on the landing page
-	const isPoolPage = pathname === "/";
+	const isPoolPage = pathname === "/pools";
 
 	useEffect(() => {
 		const accessToken = localStorage.getItem("access");
@@ -84,7 +84,7 @@ export function LandingNavbar() {
 	const Logo = () => {
 		return (
 			<Link
-				href={isAuthenticated ? "/" : "/landing"}
+				href={isAuthenticated ? "/pools" : "/"}
 				className="flex items-center justify-center"
 			>
 				<Image

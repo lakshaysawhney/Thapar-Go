@@ -81,7 +81,7 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 	const Logo = () => {
 		return (
 			<Link
-				href={isAuthenticated ? "/" : "/landing"}
+				href={isAuthenticated ? "/pools" : "/"}
 				className="flex items-center justify-center"
 			>
 				<Image
