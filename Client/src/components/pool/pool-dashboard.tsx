@@ -337,7 +337,7 @@ export default function PoolDashboard() {
 							animate={{ opacity: 1 }}
 							transition={{ delay: 0.2 }}
 						>
-							You haven't created any pools yet
+							You haven&apos;t created any pools yet
 						</motion.div>
 					</TabsContent>
 				</Tabs>

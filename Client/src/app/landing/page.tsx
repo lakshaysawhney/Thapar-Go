@@ -11,7 +11,6 @@ import { Car, Users, Clock, MapPin, ChevronRight } from "lucide-react";
 
 export default function LandingPage() {
 	const router = useRouter();
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const { scrollYProgress } = useScroll();
 	const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
@@ -29,8 +28,6 @@ export default function LandingPage() {
 			router.push("/login");
 		}
 	};
-
-	const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
 	return (
 		<AnimatedBackground
@@ -263,10 +260,10 @@ export default function LandingPage() {
 									share rides and split costs.
 								</p>
 								<p className="text-lg mb-6 text-muted-foreground">
-									Whether you're commuting to campus daily, heading
-									home for the weekend, or planning a trip to the city,
-									our platform makes it easy to find travel companions
-									and save money.
+									Whether you&apos;re commuting to campus daily,
+									heading home for the weekend, or planning a trip to
+									the city, our platform makes it easy to find travel
+									companions and save money.
 								</p>
 								<div className="space-y-4">
 									{[

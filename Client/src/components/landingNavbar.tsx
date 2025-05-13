@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Github, LogOut, User, Home, PlusCircle } from "lucide-react";
+import { Menu, X, Github, LogOut, User } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -25,10 +25,6 @@ import thapargo from "@/../public/thapargo.png";
 import thapargodark from "@/../public/thapargo_white.png";
 import { authApi } from "@/lib";
 
-interface NavbarProps {
-	onCreatePool?: () => void;
-}
-
 // Define the type for navigation links
 interface NavLink {
 	href: string;
@@ -38,7 +34,7 @@ interface NavLink {
 	isExternal?: boolean;
 }
 
-export function LandingNavbar({ onCreatePool }: NavbarProps) {
+export function LandingNavbar() {
 	const router = useRouter();
 	const pathname = usePathname();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -127,7 +123,7 @@ export function LandingNavbar({ onCreatePool }: NavbarProps) {
 				{/* Desktop Navigation */}
 				<div className="hidden md:flex items-center gap-4">
 					<nav className="flex items-center gap-6 mr-4">
-						{navLinks.map((link, index) => {
+						{navLinks.map((link) => {
 							if (link.isExternal) {
 								return (
 									<Link
@@ -275,7 +271,7 @@ export function LandingNavbar({ onCreatePool }: NavbarProps) {
 						className="md:hidden backdrop-blur-md border-b border-white/10 dark:border-white/5"
 					>
 						<div className="container mx-auto p-4 flex flex-col gap-3">
-							{navLinks.map((link, index) => {
+							{navLinks.map((link) => {
 								if (link.isExternal) {
 									return (
 										<Link

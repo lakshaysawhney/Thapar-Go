@@ -26,8 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Car, LogIn, Phone } from "lucide-react";
+import { LogIn, Phone } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatedBackground } from "@/components/ui/animated-background";
@@ -325,8 +324,8 @@ export default function SignupPage() {
 																/>
 															</FormControl>
 															<FormDescription>
-																We'll use this to contact you
-																about rides
+																We&apos;ll use this to contact
+																you about rides
 															</FormDescription>
 															<FormMessage />
 														</FormItem>

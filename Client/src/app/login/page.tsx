@@ -13,8 +13,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Car, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatedBackground } from "@/components/ui/animated-background";

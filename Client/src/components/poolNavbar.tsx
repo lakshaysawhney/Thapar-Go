@@ -5,11 +5,11 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Github, LogOut, User, Home, PlusCircle } from "lucide-react";
+import { Menu, X, LogOut, User, Home, PlusCircle } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -120,7 +120,7 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 				{/* Desktop Navigation */}
 				<div className="hidden md:flex items-center gap-4">
 					<nav className="flex items-center gap-6 mr-4">
-						{navLinks.map((link, index) => {
+						{navLinks.map((link) => {
 							if (link.isExternal) {
 								return (
 									<Link
@@ -269,7 +269,7 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 						className="md:hidden backdrop-blur-md border-b border-white/10 dark:border-white/5"
 					>
 						<div className="container mx-auto p-4 flex flex-col gap-3">
-							{navLinks.map((link, index) => {
+							{navLinks.map((link) => {
 								if (link.isExternal) {
 									return (
 										<Link
