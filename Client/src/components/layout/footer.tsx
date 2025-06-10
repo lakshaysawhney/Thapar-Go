@@ -51,7 +51,7 @@ export function Footer() {
 								className="font-medium underline hover:no-underline"
 							>
 								Lakshay Sawhney
-							</Link>
+							</Link>{" "}
 							and{" "}
 							<Link
 								href="https://www.linkedin.com/in/himanish-puri-hk108/"
@@ -60,7 +60,7 @@ export function Footer() {
 								className="font-medium underline hover:no-underline"
 							>
 								Himanish Puri
-							</Link>{" "}
+							</Link>
 						</p>
 
 						<motion.div
