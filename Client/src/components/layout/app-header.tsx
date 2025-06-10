@@ -11,8 +11,6 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -121,8 +119,6 @@ export function AppHeader({ onCreatePool }: AppHeaderProps) {
 							className="w-56 mt-1 backdrop-blur-md bg-white/80 dark:bg-black/80 border border-white/20 dark:border-white/10"
 							align="end"
 						>
-							
-
 							<DropdownMenuItem
 								className="flex items-center gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
 								onClick={handleLogout}
