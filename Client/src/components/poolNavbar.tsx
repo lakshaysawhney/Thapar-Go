@@ -73,14 +73,8 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 	};
 
 	// Get user initials for avatar fallback
-	const getInitials = async () => {
-		authApi.getCurrentUser().then((user) => {
-			if (user?.full_name) {
-				return user.full_name.charAt(0).toUpperCase();
-			}
-			return "U"; // Default fallback
-		});
-		return "U"; // Default fallback if user data is not available
+	const getInitials = () => {
+		return "U";
 	};
 
 	// Logo component with theme awareness and improved visibility

@@ -159,10 +159,9 @@ export const authApi = {
 	logout: async (): Promise<void> => {
 		try {
 			// Get tokens from local storage
-			const accessToken = localStorage.getItem("access");
 			const refreshToken = localStorage.getItem("refresh");
 
-			if (!accessToken || !refreshToken) {
+			if (!refreshToken) {
 				throw new Error("No tokens found for logout");
 			}
 

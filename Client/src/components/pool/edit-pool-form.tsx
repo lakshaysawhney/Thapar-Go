@@ -90,6 +90,7 @@ export function EditPoolForm({
 	const handleSubmit = async (data: CreatePoolFormValues) => {
 		try {
 			setIsSubmitting(true);
+			data.fare_per_head = farePerHead;
 			await poolApi.updatePool(pool.id, data);
 
 			toast({
