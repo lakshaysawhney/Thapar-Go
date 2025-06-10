@@ -94,7 +94,7 @@ export default function LandingPage() {
 								<Button
 									variant="outline"
 									size="lg"
-									className="bg-gray-50 px-8 py-6 text-lg border-white/20 dark:border-white/10"
+									className="bg-gray-50 dark:bg-black hover:dark:bg-gray-900 px-8 py-6 text-lg border-white/20 dark:border-white/10"
 									onClick={() => {
 										const aboutSection =
 											document.getElementById("about");
