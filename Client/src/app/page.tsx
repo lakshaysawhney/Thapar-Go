@@ -57,20 +57,20 @@ export default function LandingPage() {
 								transition={{ duration: 0.5 }}
 								className="mb-6"
 							>
-								<span className="px-4 py-1.5 text-xs font-medium rounded-full bg-primary/10 text-primary inline-block mb-4">
-									Thapar University Student Portal
-								</span>
-								<h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-									Share Your Ride, <br />
+								<h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+									Let&apos;s Go <br />
 									<motion.span
 										className="text-primary"
 										initial={{ opacity: 0 }}
 										animate={{ opacity: 1 }}
 										transition={{ delay: 0.5, duration: 0.5 }}
 									>
-										Save Your Money
+										On ThaparGo!
 									</motion.span>
 								</h1>
+								<span className="px-8 py-1.5 text-base font-medium rounded-full bg-primary/10 text-primary inline-block mb-4">
+									Share your ride, Save your money
+								</span>
 								<p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
 									Connect with fellow students for convenient and
 									cost-effective transportation to and from campus,
