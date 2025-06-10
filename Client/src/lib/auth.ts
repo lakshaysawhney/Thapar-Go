@@ -1,7 +1,7 @@
 import { toast } from "@/hooks/use-toast";
 
-// const API_BASE_URL = "http://127.0.0.1:8000";
-const API_BASE_URL = "https://api.thapargo.com";
+const API_BASE_URL = "http://127.0.0.1:8000";
+// const API_BASE_URL = "https://api.thapargo.com";
 
 /**
  * Generic API request handler with error handling
@@ -174,9 +174,6 @@ export const authApi = {
 					body: JSON.stringify({
 						refresh_token: refreshToken,
 					}),
-					headers: {
-						Authorization: `Bearer ${accessToken}`,
-					},
 				},
 				"Failed to logout",
 			);
