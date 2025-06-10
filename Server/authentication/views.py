@@ -14,7 +14,6 @@ from rest_framework.authentication import SessionAuthentication
 from datetime import timedelta
 from rest_framework_simplejwt.exceptions import TokenError
 
-
 # dj_rest_auth -> extension of DRF - provides out of box authentication solns. like Social Login
 import logging
 logger = logging.getLogger('google_oauth')
@@ -138,7 +137,7 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
 
-            return Response({"message": "Logout successful."}, status=status.HTTP_205_RESET_CONTENT)
+            return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)  # <-- changed to 200
 
         except TokenError:
             return Response({"error": "Invalid or expired refresh token."}, status=status.HTTP_400_BAD_REQUEST)
