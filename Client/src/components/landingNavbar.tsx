@@ -13,8 +13,6 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -80,8 +78,16 @@ export function LandingNavbar() {
 	};
 
 	const Logo = () => (
-		<Link href={isAuthenticated ? "/pools" : "/"} className="flex items-center justify-center">
-			<Image src={logoSrc} alt="ThaparGoLogo" width={110} height={110} />
+		<Link
+			href={isAuthenticated ? "/pools" : "/"}
+			className="flex items-center justify-center"
+		>
+			<Image
+				src={logoSrc}
+				alt="ThaparGoLogo"
+				width={110}
+				height={110}
+			/>
 		</Link>
 	);
 
@@ -131,7 +137,7 @@ export function LandingNavbar() {
 									{link.icon}
 									{link.label}
 								</button>
-							)
+							),
 						)}
 					</nav>
 
@@ -144,9 +150,15 @@ export function LandingNavbar() {
 									variant="ghost"
 									className="relative h-10 w-10 rounded-full overflow-hidden p-0"
 								>
-									<motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+									<motion.div
+										whileHover={{ scale: 1.1 }}
+										whileTap={{ scale: 0.95 }}
+									>
 										<Avatar className="h-10 w-10 border-2 border-primary/20">
-											<AvatarImage src={""} alt="User" />
+											<AvatarImage
+												src={""}
+												alt="User"
+											/>
 											<AvatarFallback className="bg-primary/10 text-primary">
 												{getInitials()}
 											</AvatarFallback>
@@ -158,7 +170,6 @@ export function LandingNavbar() {
 								className="w-56 mt-1 backdrop-blur-md bg-white/80 dark:bg-black/80 border border-white/20 dark:border-white/10"
 								align="end"
 							>
-							
 								<DropdownMenuItem
 									className="flex items-center gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
 									onClick={handleLogout}
@@ -170,7 +181,11 @@ export function LandingNavbar() {
 						</DropdownMenu>
 					) : (
 						<div className="flex items-center gap-2">
-							<Button variant="ghost" onClick={() => router.push("/login")} className="bg-white/10 dark:bg-black/10">
+							<Button
+								variant="ghost"
+								onClick={() => router.push("/login")}
+								className="bg-white/10 dark:bg-black/10"
+							>
 								Login
 							</Button>
 							<Button
@@ -187,14 +202,31 @@ export function LandingNavbar() {
 				{/* Mobile Menu Button */}
 				<div className="md:hidden flex items-center gap-2">
 					<ThemeToggle />
-					<Button variant="ghost" size="icon" onClick={toggleMenu} className="relative">
+					<Button
+						variant="ghost"
+						size="icon"
+						onClick={toggleMenu}
+						className="relative"
+					>
 						<AnimatePresence mode="wait">
 							{isMenuOpen ? (
-								<motion.div key="close" initial={{ opacity: 0, rotate: -90 }} animate={{ opacity: 1, rotate: 0 }} exit={{ opacity: 0, rotate: 90 }} transition={{ duration: 0.2 }}>
+								<motion.div
+									key="close"
+									initial={{ opacity: 0, rotate: -90 }}
+									animate={{ opacity: 1, rotate: 0 }}
+									exit={{ opacity: 0, rotate: 90 }}
+									transition={{ duration: 0.2 }}
+								>
 									<X className="h-6 w-6" />
 								</motion.div>
 							) : (
-								<motion.div key="menu" initial={{ opacity: 0, rotate: 90 }} animate={{ opacity: 1, rotate: 0 }} exit={{ opacity: 0, rotate: -90 }} transition={{ duration: 0.2 }}>
+								<motion.div
+									key="menu"
+									initial={{ opacity: 0, rotate: 90 }}
+									animate={{ opacity: 1, rotate: 0 }}
+									exit={{ opacity: 0, rotate: -90 }}
+									transition={{ duration: 0.2 }}
+								>
 									<Menu className="h-6 w-6" />
 								</motion.div>
 							)}
@@ -239,7 +271,7 @@ export function LandingNavbar() {
 										{link.icon}
 										{link.label}
 									</button>
-								)
+								),
 							)}
 
 							<div className="border-t border-white/10 dark:border-white/5 my-2 pt-2" />
@@ -264,7 +296,11 @@ export function LandingNavbar() {
 								</>
 							) : (
 								<>
-									<Button variant="outline" className="w-full" onClick={() => router.push("/login")}>
+									<Button
+										variant="outline"
+										className="w-full"
+										onClick={() => router.push("/login")}
+									>
 										Login
 									</Button>
 									<Button
