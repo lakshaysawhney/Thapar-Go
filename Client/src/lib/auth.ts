@@ -181,6 +181,7 @@ export const authApi = {
 			// Clear local storage
 			localStorage.removeItem("access");
 			localStorage.removeItem("refresh");
+			localStorage.removeItem("user");
 		} catch (error) {
 			console.error("Logout Error:", error);
 			throw error;

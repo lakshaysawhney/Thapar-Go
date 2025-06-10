@@ -1,1 +1,1 @@
-# Thapar RideConnect
+# Thapar Go

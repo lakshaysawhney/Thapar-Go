@@ -1,4 +1,13 @@
 // Define the pool type
+
+interface PoolMembers {
+	full_name: string;
+	phone_number: number;
+	gender: "Male" | "Female" | "Others";
+	is_creator: boolean;
+	pool: number;
+}
+
 export interface Pool {
 	id: string | number;
 	created_by?: {
@@ -7,7 +16,7 @@ export interface Pool {
 		gender: string;
 	};
 	createdBy?: string; // Keep for backward compatibility
-	members?: any[];
+	members?: PoolMembers[];
 	start_point?: string;
 	startPoint?: string; // Keep for backward compatibility
 	end_point?: string;

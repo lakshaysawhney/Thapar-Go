@@ -42,7 +42,7 @@ export const formatFarePerHead = (pool: Pool): string => {
 export const calculateFormattedFarePerHead = (
 	totalFare: number,
 	totalPersons: number,
-): string => {
-	if (totalPersons <= 0) return "$0.00";
-	return `${(totalFare / totalPersons).toFixed(2)}`;
+): number => {
+	if (totalPersons <= 0) return 0.0;
+	return Number.parseFloat((totalFare / totalPersons).toFixed(2));
 };

@@ -5,11 +5,11 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Github, LogOut, User, Home, PlusCircle } from "lucide-react";
+import { Menu, X, LogOut, User, Home, PlusCircle } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -73,15 +73,21 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 	};
 
 	// Get user initials for avatar fallback
-	const getInitials = () => {
-		return "U";
+	const getInitials = async () => {
+		authApi.getCurrentUser().then((user) => {
+			if (user?.full_name) {
+				return user.full_name.charAt(0).toUpperCase();
+			}
+			return "U"; // Default fallback
+		});
+		return "U"; // Default fallback if user data is not available
 	};
 
 	// Logo component with theme awareness and improved visibility
 	const Logo = () => {
 		return (
 			<Link
-				href={isAuthenticated ? "/" : "/landing"}
+				href={isAuthenticated ? "/pools" : "/"}
 				className="flex items-center justify-center"
 			>
 				<Image
@@ -120,7 +126,7 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 				{/* Desktop Navigation */}
 				<div className="hidden md:flex items-center gap-4">
 					<nav className="flex items-center gap-6 mr-4">
-						{navLinks.map((link, index) => {
+						{navLinks.map((link) => {
 							if (link.isExternal) {
 								return (
 									<Link
@@ -190,9 +196,6 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 								className="w-56 mt-1 backdrop-blur-md bg-white/80 dark:bg-black/80 border border-white/20 dark:border-white/10"
 								align="end"
 							>
-								<DropdownMenuLabel>My Account</DropdownMenuLabel>
-								<DropdownMenuSeparator />
-
 								<DropdownMenuItem
 									className="flex items-center gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
 									onClick={handleLogout}
@@ -269,7 +272,7 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 						className="md:hidden backdrop-blur-md border-b border-white/10 dark:border-white/5"
 					>
 						<div className="container mx-auto p-4 flex flex-col gap-3">
-							{navLinks.map((link, index) => {
+							{navLinks.map((link) => {
 								if (link.isExternal) {
 									return (
 										<Link
