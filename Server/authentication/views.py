@@ -12,6 +12,8 @@ from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_framework.authentication import SessionAuthentication
 from datetime import timedelta
+from rest_framework_simplejwt.exceptions import TokenError
+
 
 # dj_rest_auth -> extension of DRF - provides out of box authentication solns. like Social Login
 import logging
@@ -125,12 +127,20 @@ class AllUsersView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class LogoutView(APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = [AllowAny]
+
     def post(self, request):
         try:
-            refresh_token = request.data['refresh_token']
+            refresh_token = request.data.get('refresh_token')
+            if not refresh_token:
+                return Response({"error": "Refresh token missing."}, status=status.HTTP_400_BAD_REQUEST)
+
             token = RefreshToken(refresh_token)
-            token.blacklist() #invalidates the previous token while logging out
+            token.blacklist()
+
             return Response({"message": "Logout successful."}, status=status.HTTP_205_RESET_CONTENT)
+
+        except TokenError:
+            return Response({"error": "Invalid or expired refresh token."}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response({"error": "Invalid token or token is missing."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

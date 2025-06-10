@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',   
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
     'django_filters',
     'corsheaders',
     'authentication',
