@@ -56,7 +56,7 @@ export default function LoginPage() {
 				localStorage.setItem("refresh", response.refresh);
 
 				// Redirect to the pools page
-				router.push("/");
+				router.push("/pools");
 			} catch (error) {
 				console.error("Login error:", error);
 				toast({
