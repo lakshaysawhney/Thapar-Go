@@ -86,7 +86,7 @@ class GoogleLoginView(SocialLoginView):
         except Exception as e:
             logger.exception(f"Unexpected error during login: {str(e)}")
             return Response(
-                {"error": "An unexpected error occurred. Please try again later."},
+                {"error": f"{str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
