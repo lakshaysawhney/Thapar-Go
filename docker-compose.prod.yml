@@ -1,9 +1,28 @@
+version: "3.9"
+
 services:
   db:
-    env_file:
-      - .env.prod   
-
-  web:
+    image: postgres:14
+    container_name: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
     env_file:
       - .env.prod
+
+  web:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    container_name: transport_pool_web
     command: gunicorn Transport_Pool.wsgi:application --bind 0.0.0.0:8000
+    env_file:
+      - .env.prod
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
