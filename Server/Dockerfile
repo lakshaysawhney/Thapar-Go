@@ -1,24 +1,27 @@
 # Base image
 FROM python:3.13-slim
 
-# Setting ENV variables
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
-# ^Prevents Python from writing .pyc files to disk.
 ENV PYTHONUNBUFFERED=1
-# ^Logs output directly to console
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy the requirements file to the working directory
-COPY requirements.txt /app/
+# Install OS-level dependencies for HTTPS (Google OAuth fix)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
+# Copy and install Python dependencies
+COPY requirements.txt /app/
 RUN pip install --upgrade pip
-RUN pip install wheel           # 🔧 Added this to fix the 'bdist_wheel' issue
+RUN pip install wheel
 RUN pip install -r requirements.txt
 
-# Copy the entire Django project into the working directory
+# Copy your project into the image
 COPY . /app/
 
+# Default command
 CMD ["gunicorn", "Transport_Pool.wsgi:application", "--bind", "0.0.0.0:8000"]
