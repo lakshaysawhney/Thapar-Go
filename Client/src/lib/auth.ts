@@ -10,16 +10,15 @@ async function apiRequest<T>(
 	endpoint: string,
 	options: RequestInit = {},
 	errorMessage = "An error occurred",
+	includeAuthHeader: boolean = true  // 🔧 New flag
 ): Promise<T> {
 	try {
-		// Get access token from localStorage
 		const accessToken =
 			typeof window !== "undefined" ? localStorage.getItem("access") : null;
 
-		// Set default headers
 		const headers = {
 			"Content-Type": "application/json",
-			...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+			...(includeAuthHeader && accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
 			...options.headers,
 		};
 
@@ -28,7 +27,6 @@ async function apiRequest<T>(
 			headers,
 		});
 
-		// Handle non-2xx responses
 		if (!response.ok) {
 			const errorData = await response.json().catch(() => ({}));
 			const message = errorData.detail ?? errorData.message ?? errorMessage;
@@ -36,13 +34,11 @@ async function apiRequest<T>(
 			throw new Error(message);
 		}
 
-		// Parse JSON response
 		const data = await response.json();
 		return data as T;
 	} catch (error) {
 		console.error("API Request Error:", error);
 
-		// Show toast notification
 		toast({
 			title: "Error",
 			description: error instanceof Error ? error.message : errorMessage,
@@ -52,6 +48,7 @@ async function apiRequest<T>(
 		throw error;
 	}
 }
+
 
 interface GoogleAuthResponse {
 	access: string;
@@ -96,13 +93,13 @@ export const authApi = {
 			"/auth/google/",
 			{
 				method: "POST",
-				body: JSON.stringify({
-					access_token: accessToken,
-				}),
+				body: JSON.stringify({ access_token: accessToken }),
 			},
 			"Failed to login with Google",
+			false  // ❌ No Authorization header
 		);
 	},
+
 
 	/**
 	 * Get user info from Google token
@@ -115,14 +112,13 @@ export const authApi = {
 				body: JSON.stringify({
 					access_token: accessToken,
 				}),
-				headers: {
-					Authorization: `Bearer ${accessToken}`,
-				},
 			},
 			"Failed to get user info from Google",
+			false
 		);
 	},
 
+	
 	/**
 	 * Complete signup with additional user details
 	 */
