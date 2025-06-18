@@ -1,4 +1,5 @@
 from rest_framework.views import APIView 
+from rest_framework.decorators import api_view
 from rest_framework.response import Response 
 from rest_framework import status  
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
@@ -23,7 +24,7 @@ logger = logging.getLogger('google_oauth')
 @api_view(["GET"])
 def lakshay_test_view(request):
     return Response({"message": "working"})
-    
+
 class GoogleLoginView(SocialLoginView):
     """
     Custom Google OAuth Login view with thapar.edu domain validation.
