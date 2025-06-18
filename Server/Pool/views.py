@@ -11,6 +11,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class PoolViewSet(viewsets.ModelViewSet):
     queryset = Pool.objects.all()
     serializer_class = PoolSerializer

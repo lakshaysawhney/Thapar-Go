@@ -20,6 +20,10 @@ logger = logging.getLogger('google_oauth')
 
 # Customised Google OAuth Login handling thapar.edu users only logic
 
+@api_view(["GET"])
+def lakshay_test_view(request):
+    return Response({"message": "working"})
+    
 class GoogleLoginView(SocialLoginView):
     """
     Custom Google OAuth Login view with thapar.edu domain validation.
