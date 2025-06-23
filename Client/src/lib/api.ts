@@ -14,14 +14,18 @@ async function apiRequest<T>(
 	errorMessage = "An error occurred",
 ): Promise<T> {
 	try {
-		// Get access token from localStorage
 		const accessToken =
 			typeof window !== "undefined" ? localStorage.getItem("access") : null;
 
-		// Set default headers
+		// Only add Authorization header if accessToken exists and endpoint is not /pools/
+		const isPoolsList = endpoint === "/pools/" || endpoint.startsWith("/pools/?");
 		const headers = {
 			"Content-Type": "application/json",
-			...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+			...(
+				accessToken && !isPoolsList
+					? { Authorization: `Bearer ${accessToken}` }
+					: {}
+			),
 			...options.headers,
 		};
 
