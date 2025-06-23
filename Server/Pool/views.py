@@ -8,6 +8,7 @@ from rest_framework import filters
 from .models import Pool, PoolMember
 from .serializers import PoolSerializer
 import logging
+from rest_framework.permissions import AllowAny
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,7 @@ logger = logging.getLogger(__name__)
 class PoolViewSet(viewsets.ModelViewSet):
     queryset = Pool.objects.all()
     serializer_class = PoolSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['start_point', 'end_point', 'is_female_only', 'departure_time', 'arrival_time', 'fare_per_head']
     search_fields = ['start_point', 'end_point']
