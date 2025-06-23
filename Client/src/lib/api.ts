@@ -17,15 +17,10 @@ async function apiRequest<T>(
 		const accessToken =
 			typeof window !== "undefined" ? localStorage.getItem("access") : null;
 
-		// Only add Authorization header if accessToken exists and endpoint is not /pools/
-		const isPoolsList = endpoint === "/pools/" || endpoint.startsWith("/pools/?");
+		// Set default headers
 		const headers = {
 			"Content-Type": "application/json",
-			...(
-				accessToken && !isPoolsList
-					? { Authorization: `Bearer ${accessToken}` }
-					: {}
-			),
+			...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
 			...options.headers,
 		};
 
