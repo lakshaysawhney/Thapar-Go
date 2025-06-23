@@ -8,7 +8,6 @@ from rest_framework import filters
 from .models import Pool, PoolMember
 from .serializers import PoolSerializer
 import logging
-from rest_framework.permissions import AllowAny
 
 logger = logging.getLogger(__name__)
 
