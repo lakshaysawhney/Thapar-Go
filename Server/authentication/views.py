@@ -25,6 +25,10 @@ logger = logging.getLogger('google_oauth')
 def lakshay_test_view(request):
     return Response({"message": "working"})
 
+@api_view(["GET"])
+def trigger_error(request):
+    raise Exception("Intentional test error from Lakshay")
+
 class GoogleLoginView(SocialLoginView):
     """
     Custom Google OAuth Login view with thapar.edu domain validation.
