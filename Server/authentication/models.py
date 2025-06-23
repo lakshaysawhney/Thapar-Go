@@ -22,7 +22,7 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
     
-    def create_superuser(self, email, full_name, **extra_fields):
+    def create_superuser(self, email, full_name, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -30,8 +30,9 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
-        
-        return self.create_user(email=email, full_name=full_name, **extra_fields)
+
+        return self.create_user(email=email, full_name=full_name, password=password, **extra_fields)
+
 
 # Custom User Model using AbstractBaseUser class i.e. defining all fields from scratch
 class CustomUser(AbstractBaseUser, PermissionsMixin):
