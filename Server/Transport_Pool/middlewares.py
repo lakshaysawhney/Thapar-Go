@@ -1,23 +1,21 @@
 import logging
 
-logger = logging.getLogger("django")
+logger = logging.getLogger("django") 
 
 class LogRequestMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        # Only log if an exception occurs
         try:
-            response = self.get_response(request)
-            return response
+            logger.info(f"Request: {request.method} {request.get_full_path()} | IP: {get_client_ip(request)}")
         except Exception as e:
-            logger.error(
-                f"Exception caught on request:\n"
-                f"Path: {request.path}\n"
-                f"Method: {request.method}\n"
-                f"Headers: {dict(request.headers)}\n"
-                f"Body: {request.body.decode('utf-8', errors='ignore')}\n"
-                f"Exception: {str(e)}"
-            )
-            raise
+            logger.error(f"Request logging failed: {e}")
+        return self.get_response(request)
+
+def get_client_ip(request):
+    # Handles cases behind proxy/load balancer
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        return x_forwarded_for.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR")
