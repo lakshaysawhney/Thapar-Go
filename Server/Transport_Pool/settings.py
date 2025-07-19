@@ -30,29 +30,19 @@ else:
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-# DEBUG = os.getenv("DEBUG") == "True"
-DEBUG = True
+DEBUG = os.getenv("DEBUG") == "True"
+
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
-    # CORS_ALLOWED_ORIGINS = [
-    #     "https://api.thapargo.com",
-    #     "https://www.api.thapargo.com",
-    #     "http://localhost:3000",
-    #     "http://127.0.0.1:3000",
-    # ]
     CORS_ALLOWED_ORIGINS = [
         "https://api.thapargo.com",
-        "http://api.thapargo.com",
         "https://www.api.thapargo.com",
-        "http://www.api.thapargo.com",
-        "https://thapargo.com",
-        "http://thapargo.com",
-        "https://www.thapargo.com",
-        "http://www.thapargo.com",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
     ]
 else:
-    # ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "").split(",")]
+    ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "").split(",")]
     CORS_ALLOWED_ORIGINS = [
         "https://api.thapargo.com",
         "http://api.thapargo.com",

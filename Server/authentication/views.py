@@ -21,13 +21,13 @@ logger = logging.getLogger('google_oauth')
 
 # Customised Google OAuth Login handling thapar.edu users only logic
 
-@api_view(["GET"])
-def lakshay_test_view(request):
-    return Response({"message": "working"})
+# @api_view(["GET"])
+# def lakshay_test_view(request):
+#     return Response({"message": "working"})
 
-@api_view(["GET"])
-def trigger_error(request):
-    raise Exception("Intentional test error from Lakshay")
+# @api_view(["GET"])
+# def trigger_error(request):
+#     raise Exception("Intentional test error from Lakshay")
 
 class GoogleLoginView(SocialLoginView):
     """
