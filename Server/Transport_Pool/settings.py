@@ -53,7 +53,7 @@ else:
     # ]
 
 
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = False
 
 
 # Application definition
