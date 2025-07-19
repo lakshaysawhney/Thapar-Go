@@ -41,15 +41,16 @@ if DEBUG:
         "http://127.0.0.1:3000",
     ]
 else:
-    ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "").split(",")]
-    CORS_ALLOWED_ORIGINS = [
-        "https://api.thapargo.com",
-        "https://www.api.thapargo.com",
-        "https://thapargo.com",
-        "https://www.thapargo.com",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ]
+    # ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "").split(",")]
+    CORS_ALLOW_ALL_ORIGINS = True
+    # CORS_ALLOWED_ORIGINS = [
+    #     "https://api.thapargo.com",
+    #     "https://www.api.thapargo.com",
+    #     "https://thapargo.com",
+    #     "https://www.thapargo.com",
+    #     "http://localhost:3000",
+    #     "http://127.0.0.1:3000",
+    # ]
 
 
 CORS_ALLOW_CREDENTIALS = True
