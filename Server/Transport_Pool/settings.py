@@ -42,7 +42,8 @@ if DEBUG:
         "http://127.0.0.1:3000",
     ]
 else:
-    ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "").split(",")]
+    # ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "").split(",")]
+    ALLOWED_HOSTS = ['*']
     CORS_ALLOWED_ORIGINS = [
         "https://api.thapargo.com",
         "http://api.thapargo.com",
