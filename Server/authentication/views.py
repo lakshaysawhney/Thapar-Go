@@ -42,6 +42,25 @@ class GoogleLoginView(SocialLoginView):
         logger.debug("Starting Google OAuth login process.")
         logger.debug(f"Redirect URI being sent: {self.request.build_absolute_uri()}")
 
+        # Check if user already signed up
+        email = request.data.get("email")
+        if email:
+            try:
+                existing_user = CustomUser.objects.get(email=email)
+                logger.info(f"Signup blocked: User {email} already exists.")
+                
+                # Redirect or send error response
+                return Response(
+                    {
+                        "error": "You have already signed up. Please log in.",
+                        "login_url": "/auth/google/"
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            except CustomUser.DoesNotExist:
+                # No existing user → proceed to normal signup flow
+                logger.debug(f"No existing user found for {email}, proceeding.")
+
         response = super().post(request, *args, **kwargs)
         logger.info(f"Google OAuth login successful for user: {request.user.email}")
 
@@ -80,7 +99,7 @@ class GoogleLoginView(SocialLoginView):
                     "access": str(refresh.access_token),
                     "refresh": str(refresh)
                 }, status=status.HTTP_200_OK)
-
+    
             # Else: profile incomplete → send temporary token
             temp_token = AccessToken.for_user(user)
             temp_token.set_exp(lifetime=timedelta(minutes=5))
