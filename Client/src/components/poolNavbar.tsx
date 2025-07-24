@@ -18,10 +18,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
-
-import thapargo from "@/../public/thapargo.png";
-import thapargodark from "@/../public/thapargo_white.png";
 import { authApi } from "@/lib";
+import { siteConfig } from "@/lib/config";
 
 interface NavbarProps {
 	onCreatePool?: () => void;
@@ -36,7 +34,7 @@ interface NavLink {
 	isExternal?: boolean;
 }
 
-export function PoolNavbar({ onCreatePool }: NavbarProps) {
+export function PoolNavbar({ onCreatePool }: Readonly<NavbarProps>) {
 	const router = useRouter();
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -53,8 +51,10 @@ export function PoolNavbar({ onCreatePool }: NavbarProps) {
 		setMounted(true);
 	}, []);
 
+	const { dark, light } = siteConfig.projectLogo;
+	// Use resolvedTheme which gives the actual theme currently shown to the user
 	const currentTheme = mounted ? resolvedTheme : undefined;
-	const logoSrc = currentTheme === "dark" ? thapargodark : thapargo;
+	const logoSrc = currentTheme === "dark" ? dark : light;
 
 	const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
