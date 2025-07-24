@@ -40,26 +40,7 @@ class GoogleLoginView(SocialLoginView):
     def post(self, request, *args, **kwargs):
         print("DEBUG: GoogleLoginView post method called")
         logger.debug("Starting Google OAuth login process.")
-        logger.debug(f"Redirect URI being sent: {self.request.build_absolute_uri()}")
-
-        # Check if user already signed up
-        email = request.data.get("email")
-        if email:
-            try:
-                existing_user = CustomUser.objects.get(email=email)
-                logger.info(f"Signup blocked: User {email} already exists.")
-                
-                # Redirect or send error response
-                return Response(
-                    {
-                        "error": "You have already signed up. Please log in.",
-                        "login_url": "/auth/google/"
-                    },
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            except CustomUser.DoesNotExist:
-                # No existing user → proceed to normal signup flow
-                logger.debug(f"No existing user found for {email}, proceeding.")
+        logger.debug(f"Redirect URI being sent: {self.request.build_absolute_uri()}")   
 
         response = super().post(request, *args, **kwargs)
         logger.info(f"Google OAuth login successful for user: {request.user.email}")
@@ -72,6 +53,23 @@ class GoogleLoginView(SocialLoginView):
                     {"error": "Social account not found. Login failed."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+            
+            email = social_user.user.email
+            # Check if user already signed up
+            if email:
+                try:
+                    existing_user = CustomUser.objects.get(email=email)
+                    if existing_user:
+                        logger.info(f"Signup blocked: User {email} already exists.")
+                        
+                        # Redirect or send error response
+                        return Response(
+                            {"error": "You have already signed up. Please log in."},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+                except CustomUser.DoesNotExist:
+                    # No existing user → proceed to normal signup flow
+                    logger.debug(f"No existing user found for {email}, proceeding.")
 
             email_domain = social_user.user.email.split('@')[-1]
             if email_domain != "thapar.edu":
