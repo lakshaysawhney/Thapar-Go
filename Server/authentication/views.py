@@ -30,40 +30,16 @@ logger = logging.getLogger('google_oauth')
 #     raise Exception("Intentional test error from Lakshay")
 
 class GoogleLoginView(SocialLoginView):
-    """
-    Custom Google OAuth Login view with thapar.edu domain validation.
-    """
     authentication_classes = [SessionAuthentication]
     adapter_class = GoogleOAuth2Adapter
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        print("DEBUG: GoogleLoginView post method called")
         logger.debug("Starting Google OAuth login process.")
-        logger.debug(f"Redirect URI being sent: {self.request.build_absolute_uri()}")
 
-        # Check if user already signed up
-        email = request.data.get("email")
-        if email:
-            try:
-                existing_user = CustomUser.objects.get(email=email)
-                logger.info(f"Signup blocked: User {email} already exists.")
-                
-                # Redirect or send error response
-                return Response(
-                    {
-                        "error": "You have already signed up. Please log in.",
-                        "login_url": "/auth/google/"
-                    },
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            except CustomUser.DoesNotExist:
-                # No existing user → proceed to normal signup flow
-                logger.debug(f"No existing user found for {email}, proceeding.")
-
+        # Call the base logic to handle login/signup
         response = super().post(request, *args, **kwargs)
-        logger.info(f"Google OAuth login successful for user: {request.user.email}")
-
+        
         try:
             social_user = SocialAccount.objects.filter(user=request.user).first()
             if not social_user:
@@ -73,42 +49,46 @@ class GoogleLoginView(SocialLoginView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            email_domain = social_user.user.email.split('@')[-1]
+            email = social_user.user.email
+            email_domain = email.split('@')[-1]
+
             if email_domain != "thapar.edu":
-                logger.warning(f"Non-thapar.edu email detected: {social_user.user.email}")
+                logger.warning(f"Non-thapar.edu email detected: {email}")
                 request.user.delete()
                 return Response(
                     {"error": "Only thapar.edu emails are allowed."},
                     status=status.HTTP_403_FORBIDDEN,
                 )
-            
-            # setting google_authenticated boolean field to true
+
+            # Determine if user is new by checking if they already had a google_authenticated record
             user = CustomUser.objects.get(id=request.user.id)
+            is_new_user = not user.google_authenticated  # If it's False → must be a new signup
+
+            # Set flag for future logins
             user.google_authenticated = True
             user.save()
 
-            logger.info(f"User {social_user.user.email} successfully logged in.")
+            logger.info(f"User {email} successfully logged in.")
 
-            # Check if user profile is complete
-            if user.phone_number and user.gender:
-                refresh = RefreshToken.for_user(user)
+            # NEW USER → profile incomplete
+            if is_new_user and (not user.phone_number or not user.gender):
+                temp_token = AccessToken.for_user(user)
+                temp_token.set_exp(lifetime=timedelta(minutes=5))
                 return Response({
-                    "message": "Login successful.",
+                    "message": "Google signup successful. Please complete your profile.",
                     "email": user.email,
                     "name": user.full_name,
-                    "access": str(refresh.access_token),
-                    "refresh": str(refresh)
+                    "temp_token": str(temp_token)
                 }, status=status.HTTP_200_OK)
-    
-            # Else: profile incomplete → send temporary token
-            temp_token = AccessToken.for_user(user)
-            temp_token.set_exp(lifetime=timedelta(minutes=5))
 
+            # EXISTING USER → full login
+            refresh = RefreshToken.for_user(user)
             return Response({
-                "message": "Google login successful. Please complete your profile.",
+                "message": "Login successful.",
                 "email": user.email,
                 "name": user.full_name,
-                "temp_token": str(temp_token)
+                "access": str(refresh.access_token),
+                "refresh": str(refresh)
             }, status=status.HTTP_200_OK)
 
         except Exception as e:
