@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Github } from "lucide-react";
+import { Github, Shield } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -45,36 +45,44 @@ export function Footer() {
 						<p className="text-md text-muted-foreground text-center md:text-right">
 							Created by{" "}
 							<Link
-								href="https://www.linkedin.com/in/lakshay-sawhney/"
-								target="_blank"
-								rel="noopener noreferrer"
-								className="font-medium underline hover:no-underline"
-							>
-								Lakshay Sawhney
-							</Link>{" "}
-							and{" "}
-							<Link
 								href="https://www.linkedin.com/in/himanish-puri-hk108/"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="font-medium underline hover:no-underline"
 							>
 								Himanish Puri
+							</Link>{" "}
+							and{" "}
+							<Link
+								href="https://www.linkedin.com/in/lakshay-sawhney/"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="font-medium underline hover:no-underline"
+							>
+								Lakshay Sawhney
 							</Link>
 						</p>
 
 						<motion.div
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
+							className="flex items-center"
 						>
 							<Link
-								href="https://github.com/himanishpuri/Thapar-Go"
+								href="https://github.com/lakshaysawhney/Thapar-Go"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 transition-colors"
 							>
 								<Github size={16} />
 								<span className="text-sm font-medium">GitHub</span>
+							</Link>
+							<Link
+								href="/privacypolicy"
+								className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 transition-colors"
+							>
+								<Shield size={16} />
+								<span className="text-sm font-medium">Privacy Policy</span>
 							</Link>
 						</motion.div>
 					</div>
