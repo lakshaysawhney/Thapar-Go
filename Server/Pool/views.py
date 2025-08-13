@@ -50,31 +50,31 @@ class PoolViewSet(viewsets.ModelViewSet):
         return super().partial_update(request, *args, **kwargs) 
 
     def destroy(self, request, *args, **kwargs):
-        return Response({'error' : 'Delete operation is not allowed,'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        return Response({'detail' : 'Delete operation is not allowed,'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
-    @action(error=True, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def join(self, request, pk=None):
         pool = self.get_object()
 
         # Check if the requester is the creator of the pool 
         if pool.created_by == request.user:
-            return Response({'error': 'Creators cannot join their own pool.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'Creators cannot join their own pool.'}, status=status.HTTP_400_BAD_REQUEST)
         
         # Checking if already member of pool 
         if PoolMember.objects.filter(pool = pool, user = request.user).exists():
-            return Response({'error': 'Already a member of this pool.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'Already a member of this pool.'}, status=status.HTTP_400_BAD_REQUEST)
         
         #Checking if pool has reached its capacity 
         if pool.current_persons >= pool.total_persons:
-            return Response({'error': 'This pool is already full.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'This pool is already full.'}, status=status.HTTP_400_BAD_REQUEST)
         
         # Check if the pool is female-only and the user is not female 
         if pool.is_female_only and request.user.gender != 'Female':
-            return Response({'error': 'Only female users can join this pool.'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Only female users can join this pool.'}, status=status.HTTP_403_FORBIDDEN)
         
         # Add the user to the pool 
         PoolMember.objects.create(pool=pool, user=request.user)
         pool.current_persons += 1
         pool.save()
 
-        return Response({'error': 'Joined the pool successfully.'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Joined the pool successfully.'}, status=status.HTTP_200_OK)
