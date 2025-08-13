@@ -118,7 +118,7 @@ export function CreatePoolForm({
 			console.error("Error creating pool:", error);
 			toast({
 				title: "Create Pool Failed",
-				description: (error as { error: string }).error,
+				description: error instanceof Error ? error.message : String(error),
 				variant: "destructive",
 			});
 		} finally {

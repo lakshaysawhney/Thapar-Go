@@ -103,7 +103,7 @@ export function EditPoolForm({
 			console.error("Error updating pool:", error);
 			toast({
 				title: "Edit Pool Failed",
-				description: (error as { error: string }).error,
+				description: error instanceof Error ? error.message : String(error),
 				variant: "destructive",
 			});
 		} finally {

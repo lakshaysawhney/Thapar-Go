@@ -96,7 +96,7 @@ export function PoolDetails({
 			console.error("Error joining pool:", error);
 			toast({
 				title: "Join Pool Failed",
-				description: (error as { error: string }).error,
+				description: error instanceof Error ? error.message : String(error),
 				variant: "destructive",
 			});
 		} finally {

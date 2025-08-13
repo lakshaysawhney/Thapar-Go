@@ -179,8 +179,8 @@ export const authApi = {
 		} catch (error) {
 			console.error("Logout Error:", error);
 			toast({
-				title: "Error",
-				description: (error as { error: string }).error,
+				title: "Logout Error",
+				description: error instanceof Error ? error.message : String(error),
 				variant: "destructive",
 			});
 			throw error;

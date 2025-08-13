@@ -163,7 +163,7 @@ export default function SignupPage() {
 			console.error("Signup error:", error);
 			toast({
 				title: "Signup Failed",
-				description: (error as {error: string}).error,
+				description: error instanceof Error ? error.message : String(error),
 				variant: "destructive",
 			});
 		} finally {

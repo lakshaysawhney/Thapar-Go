@@ -52,7 +52,7 @@ export default function PoolDashboard() {
 				console.error("Error fetching pools:", error);
 				toast({
 					title: "Pool Data Fetch Failed",
-					description: (error as { error: string }).error,
+					description: error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
 			} finally {
@@ -71,7 +71,7 @@ export default function PoolDashboard() {
 				console.error("Error fetching user details:", error);
 				toast({
 					title: "User Data Fetch Failed",
-					description: (error as { error: string }).error,
+					description: error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
 			} finally {
@@ -195,7 +195,7 @@ export default function PoolDashboard() {
 			console.error("Error creating pool:", error);
 			toast({
 				title: "Get All Pool Fetch",
-				description: (error as { error: string }).error,
+				description: error instanceof Error ? error.message : String(error),
 				variant: "destructive",
 			});
 			return Promise.reject(
@@ -227,7 +227,7 @@ export default function PoolDashboard() {
 			console.error("Error refreshing pools:", error);
 			toast({
 				title: "Get All Pool Fetch Failed",
-				description: (error as { error: string }).error,
+				description: error instanceof Error ? error.message : String(error),
 				variant: "destructive",
 			});
 		}
