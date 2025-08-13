@@ -7,8 +7,7 @@ import { Github, Shield } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-import thapargo from "@/../public/thapargo.png";
-import thapargodark from "@/../public/thapargo_white.png";
+import { siteConfig } from "@/lib/config";
 
 export function Footer() {
 	const { resolvedTheme } = useTheme();
@@ -20,8 +19,9 @@ export function Footer() {
 	}, []);
 
 	// Use resolvedTheme which gives the actual theme currently shown to the user
+	const { dark, light } = siteConfig.projectLogo;
 	const currentTheme = mounted ? resolvedTheme : undefined;
-	const logoSrc = currentTheme === "dark" ? thapargodark : thapargo;
+	const logoSrc = currentTheme === "dark" ? dark : light;
 
 	return (
 		<footer className="bg-white/5 dark:bg-black/5 backdrop-blur-sm border-t border-white/10 dark:border-white/5 py-6">
@@ -45,21 +45,21 @@ export function Footer() {
 						<p className="text-md text-muted-foreground text-center md:text-right">
 							Created by{" "}
 							<Link
-								href="https://www.linkedin.com/in/himanish-puri-hk108/"
+								href={siteConfig.creators.himanishPuri.linkedInUrl}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="font-medium underline hover:no-underline"
 							>
-								Himanish Puri
+								{siteConfig.creators.himanishPuri.name}
 							</Link>{" "}
 							and{" "}
 							<Link
-								href="https://www.linkedin.com/in/lakshay-sawhney/"
+								href={siteConfig.creators.lakshaySawhney.linkedInUrl}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="font-medium underline hover:no-underline"
 							>
-								Lakshay Sawhney
+								{siteConfig.creators.lakshaySawhney.name}
 							</Link>
 						</p>
 
@@ -69,7 +69,7 @@ export function Footer() {
 							className="flex items-center"
 						>
 							<Link
-								href="https://github.com/lakshaysawhney/Thapar-Go"
+								href={siteConfig.projectSrc}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 transition-colors"
@@ -82,7 +82,9 @@ export function Footer() {
 								className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 transition-colors"
 							>
 								<Shield size={16} />
-								<span className="text-sm font-medium">Privacy Policy</span>
+								<span className="text-sm font-medium">
+									Privacy Policy
+								</span>
 							</Link>
 						</motion.div>
 					</div>

@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { siteConfig } from "@/lib/config";
 import { Shield, Mail, MapPin, Calendar } from "lucide-react";
 
 export default function PrivacyPolicy() {
@@ -45,7 +46,7 @@ export default function PrivacyPolicy() {
 						</h2>
 						<div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
 							<p>
-								Welcome to <strong>thapargo.com</strong>.
+								Welcome to <strong className="text-red-600 hover:underline hover:text-red-700 cursor-default">thapargo.com</strong>.
 								We are committed to protecting your privacy and ensuring
 								that your personal information is handled in a safe and
 								responsible manner. This Privacy Policy outlines the
@@ -270,10 +271,17 @@ export default function PrivacyPolicy() {
 						<p className="text-gray-700 mt-6 leading-relaxed">
 							To exercise these rights, please contact us at{" "}
 							<a
-								href="mailto:lsawhney_be23@thapar.edu"
+								href={`mailto:${siteConfig.creators.lakshaySawhney.email}`}
 								className="text-red-600 hover:text-red-700 font-medium"
 							>
-								lsawhney_be23@thapar.edu
+								{siteConfig.creators.lakshaySawhney.email}
+							</a>
+							{' '} or {' '}
+							<a
+								href={`mailto:${siteConfig.creators.himanishPuri.email}`}
+								className="text-red-600 hover:text-red-700 font-medium"
+							>
+								{siteConfig.creators.himanishPuri.email}
 							</a>
 							.
 						</p>
@@ -316,10 +324,17 @@ export default function PrivacyPolicy() {
 										</h3>
 									</div>
 									<a
-										href="mailto:lsawhney_be23@thapar.edu"
+										href={`mailto:${siteConfig.creators.lakshaySawhney.email}`}
 										className="text-red-600 hover:text-red-700 font-medium"
 									>
-										lsawhney_be23@thapar.edu
+										{siteConfig.creators.lakshaySawhney.email}
+									</a>
+									<br />
+									<a
+										href={`mailto:${siteConfig.creators.himanishPuri.email}`}
+										className="text-red-600 hover:text-red-700 font-medium"
+									>
+										{siteConfig.creators.himanishPuri.email}
 									</a>
 								</CardContent>
 							</Card>

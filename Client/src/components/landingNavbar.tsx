@@ -17,10 +17,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
-
-import thapargo from "@/../public/thapargo.png";
-import thapargodark from "@/../public/thapargo_white.png";
 import { authApi } from "@/lib";
+import { siteConfig } from "@/lib/config";
 
 interface NavLink {
 	href: string;
@@ -51,8 +49,9 @@ export function LandingNavbar() {
 
 	if (isPoolPage) return null;
 
+	const { dark, light } = siteConfig.projectLogo;
 	const currentTheme = mounted ? resolvedTheme : undefined;
-	const logoSrc = currentTheme === "dark" ? thapargodark : thapargo;
+	const logoSrc = currentTheme === "dark" ? dark : light;
 
 	const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
@@ -96,7 +95,7 @@ export function LandingNavbar() {
 		{ href: "about", label: "About" },
 		{ href: "faq", label: "FAQ" },
 		{
-			href: "https://github.com/himanishpuri/Thapar-Go",
+			href: siteConfig.projectSrc,
 			label: "GitHub",
 			icon: <Github size={16} />,
 			isExternal: true,
