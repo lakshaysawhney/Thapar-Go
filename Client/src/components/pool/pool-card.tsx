@@ -438,24 +438,30 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 																		className="text-primary"
 																	/>
 																	<span className="text-[10px] text-foreground/60">
-																		{member.phone_number}
+																		{member?.phone_number ? (
+																			member.phone_number
+																		) : (
+																			<span className="text-foreground/60">
+																				No phone number
+																			</span>
+																		)}
 																	</span>
 																</div>
 															</div>
 														</div>
 														<Badge
 															className={`text-[10px] ${
-																member.gender.toLowerCase() ===
+																member.gender?.toLowerCase() ===
 																"female"
 																	? "bg-pink-500/20 text-pink-700 dark:text-pink-400"
-																	: member.gender.toLowerCase() ===
+																	: member.gender?.toLowerCase() ===
 																	  "male"
 																	? "bg-blue-500/20 text-blue-700 dark:text-blue-400"
 																	: "bg-gray-500/20 text-gray-700 dark:text-gray-400"
 															}`}
 															variant="outline"
 														>
-															{member.gender}
+															{member.gender ? member.gender : "Unknown"}
 														</Badge>
 													</motion.div>
 												))}
