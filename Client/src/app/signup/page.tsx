@@ -106,7 +106,7 @@ export default function SignupPage() {
 				console.error("Google auth error:", error);
 				setIsLoading(false);
 				toast({
-					title: "Error",
+					title: "Sign Up Error",
 					description: error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
@@ -116,8 +116,8 @@ export default function SignupPage() {
 			console.error("Google login error:", errorResponse);
 			setIsLoading(false);
 			toast({
-				title: "Error",
-				description: (errorResponse as {error: string}).error,
+				title: "Sign Up Error",
+				description: errorResponse instanceof Error ? errorResponse.message : String(errorResponse),
 				variant: "destructive",
 			});
 		},
