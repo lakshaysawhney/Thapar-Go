@@ -30,17 +30,22 @@ logger = logging.getLogger('google_oauth')
 #     raise Exception("Intentional test error from Lakshay")
 
 class GoogleLoginView(SocialLoginView):
+    """
+    Custom Google OAuth Login view with thapar.edu domain validation.
+    """
     authentication_classes = [SessionAuthentication]
     adapter_class = GoogleOAuth2Adapter
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         logger.debug("Starting Google OAuth login process.")
+        logger.debug(f"signup_intent = {request.data.get('signup_intent')}")
 
-        # Call the base logic to handle login/signup
+        # Step 1: Complete OAuth login/signup via dj-rest-auth
         response = super().post(request, *args, **kwargs)
-        
+
         try:
+            # Step 2: Get the social user
             social_user = SocialAccount.objects.filter(user=request.user).first()
             if not social_user:
                 logger.error("Social account not found during login.")
@@ -52,6 +57,7 @@ class GoogleLoginView(SocialLoginView):
             email = social_user.user.email
             email_domain = email.split('@')[-1]
 
+            # Step 3: Enforce thapar.edu domain
             if email_domain != "thapar.edu":
                 logger.warning(f"Non-thapar.edu email detected: {email}")
                 request.user.delete()
@@ -60,17 +66,24 @@ class GoogleLoginView(SocialLoginView):
                     status=status.HTTP_403_FORBIDDEN,
                 )
 
-            # Determine if user is new by checking if they already had a google_authenticated record
+            # Step 4: Load user and detect whether already signed up
             user = CustomUser.objects.get(id=request.user.id)
-            is_new_user = not user.google_authenticated  # If it's False → must be a new signup
+            is_new_user = not user.google_authenticated  # signed in for first time
 
-            # Set flag for future logins
+            # Step 5: If this is a signup intent, and user is not new - block it
+            if request.data.get("signup_intent") is True and not is_new_user:
+                return Response(
+                    {"error": "You have already signed up. Please log in instead."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Step 6: Mark user as authenticated via Google
             user.google_authenticated = True
             user.save()
 
             logger.info(f"User {email} successfully logged in.")
 
-            # NEW USER → profile incomplete
+            # Step 7: If new user profile is incomplete → send temp token
             if is_new_user and (not user.phone_number or not user.gender):
                 temp_token = AccessToken.for_user(user)
                 temp_token.set_exp(lifetime=timedelta(minutes=5))
@@ -81,7 +94,7 @@ class GoogleLoginView(SocialLoginView):
                     "temp_token": str(temp_token)
                 }, status=status.HTTP_200_OK)
 
-            # EXISTING USER → full login
+            # Step 8: Full login response
             refresh = RefreshToken.for_user(user)
             return Response({
                 "message": "Login successful.",
