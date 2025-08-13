@@ -94,7 +94,11 @@ export function PoolDetails({
 			onOpenChange(false);
 		} catch (error) {
 			console.error("Error joining pool:", error);
-			// Error is already handled in the API service
+			toast({
+				title: "Join Pool Failed",
+				description: error instanceof Error ? error.message : String(error),
+				variant: "destructive",
+			});
 		} finally {
 			setIsJoining(false);
 		}

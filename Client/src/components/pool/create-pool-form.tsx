@@ -116,7 +116,11 @@ export function CreatePoolForm({
 			});
 		} catch (error) {
 			console.error("Error creating pool:", error);
-			// Error is already handled in the API service
+			toast({
+				title: "Create Pool Failed",
+				description: error instanceof Error ? error.message : String(error),
+				variant: "destructive",
+			});
 		} finally {
 			setIsSubmitting(false);
 		}

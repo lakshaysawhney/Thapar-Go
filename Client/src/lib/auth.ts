@@ -10,7 +10,7 @@ async function apiRequest<T>(
 	endpoint: string,
 	options: RequestInit = {},
 	errorMessage = "An error occurred",
-	includeAuthHeader: boolean = true  // 🔧 New flag
+	includeAuthHeader: boolean = true, // 🔧 New flag
 ): Promise<T> {
 	try {
 		const accessToken =
@@ -18,7 +18,9 @@ async function apiRequest<T>(
 
 		const headers = {
 			"Content-Type": "application/json",
-			...(includeAuthHeader && accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+			...(includeAuthHeader && accessToken
+				? { Authorization: `Bearer ${accessToken}` }
+				: {}),
 			...options.headers,
 		};
 
@@ -31,7 +33,7 @@ async function apiRequest<T>(
 			const errorData = await response.json().catch(() => ({}));
 			const message = errorData.detail ?? errorData.message ?? errorMessage;
 			console.error(`API Error (${response.status}):`, message, errorData);
-			throw new Error(message);
+			throw new Error(errorData.error);
 		}
 
 		const data = await response.json();
@@ -41,14 +43,13 @@ async function apiRequest<T>(
 
 		toast({
 			title: "Error",
-			description: error instanceof Error ? error.message : errorMessage,
+			description: error instanceof Error ? error.message : String(error),
 			variant: "destructive",
 		});
 
 		throw error;
 	}
 }
-
 
 interface GoogleAuthResponse {
 	access: string;
@@ -93,13 +94,12 @@ export const authApi = {
 			"/auth/google/",
 			{
 				method: "POST",
-				body: JSON.stringify({ access_token: accessToken }),
+				body: JSON.stringify({ access_token: accessToken, signup_intent: false }),
 			},
 			"Failed to login with Google",
-			false  // ❌ No Authorization header
+			false, // ❌ No Authorization header
 		);
 	},
-
 
 	/**
 	 * Get user info from Google token
@@ -111,14 +111,14 @@ export const authApi = {
 				method: "POST",
 				body: JSON.stringify({
 					access_token: accessToken,
+					signup_intent: true,
 				}),
 			},
 			"Failed to get user info from Google",
-			false
+			false,
 		);
 	},
 
-	
 	/**
 	 * Complete signup with additional user details
 	 */
@@ -179,6 +179,11 @@ export const authApi = {
 			localStorage.removeItem("user");
 		} catch (error) {
 			console.error("Logout Error:", error);
+			toast({
+				title: "Logout Error",
+				description: error instanceof Error ? error.message : String(error),
+				variant: "destructive",
+			});
 			throw error;
 		}
 	},

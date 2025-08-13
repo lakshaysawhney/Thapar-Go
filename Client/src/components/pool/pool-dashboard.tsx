@@ -50,7 +50,11 @@ export default function PoolDashboard() {
 				setPools(poolData);
 			} catch (error) {
 				console.error("Error fetching pools:", error);
-				// Error is already handled in the API service
+				toast({
+					title: "Pool Data Fetch Failed",
+					description: error instanceof Error ? error.message : String(error),
+					variant: "destructive",
+				});
 			} finally {
 				setIsLoading(false);
 			}
@@ -65,6 +69,11 @@ export default function PoolDashboard() {
 				}
 			} catch (error) {
 				console.error("Error fetching user details:", error);
+				toast({
+					title: "User Data Fetch Failed",
+					description: error instanceof Error ? error.message : String(error),
+					variant: "destructive",
+				});
 			} finally {
 				setIsLoading(false);
 			}
@@ -72,7 +81,7 @@ export default function PoolDashboard() {
 
 		fetchPools();
 		fetchUserDetails();
-	}, []);
+	}, [toast]);
 
 	// Dynamically extract unique values from the current pool data
 	const dynamicFilterOptions = useMemo(() => {
@@ -184,7 +193,11 @@ export default function PoolDashboard() {
 			return true;
 		} catch (error) {
 			console.error("Error creating pool:", error);
-			// Error is already handled in the API service
+			toast({
+				title: "Get All Pool Fetch",
+				description: error instanceof Error ? error.message : String(error),
+				variant: "destructive",
+			});
 			return Promise.reject(
 				error instanceof Error ? error : new Error(String(error)),
 			);
@@ -212,6 +225,11 @@ export default function PoolDashboard() {
 			});
 		} catch (error) {
 			console.error("Error refreshing pools:", error);
+			toast({
+				title: "Get All Pool Fetch Failed",
+				description: error instanceof Error ? error.message : String(error),
+				variant: "destructive",
+			});
 		}
 	}, [toast]);
 

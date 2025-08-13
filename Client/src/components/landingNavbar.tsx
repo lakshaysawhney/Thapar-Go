@@ -9,13 +9,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Github, LogOut, User } from "lucide-react";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "next-themes";
 import { authApi } from "@/lib";
 import { siteConfig } from "@/lib/config";
@@ -63,8 +56,6 @@ export function LandingNavbar() {
 			console.error("Logout error:", error);
 		}
 	};
-
-	const getInitials = () => "U";
 
 	const handleSectionNavigate = (hash: string) => {
 		if (isAuthPage) {
@@ -143,41 +134,14 @@ export function LandingNavbar() {
 					<ThemeToggle />
 
 					{isAuthenticated ? (
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button
-									variant="ghost"
-									className="relative h-10 w-10 rounded-full overflow-hidden p-0"
-								>
-									<motion.div
-										whileHover={{ scale: 1.1 }}
-										whileTap={{ scale: 0.95 }}
-									>
-										<Avatar className="h-10 w-10 border-2 border-primary/20">
-											<AvatarImage
-												src={""}
-												alt="User"
-											/>
-											<AvatarFallback className="bg-primary/10 text-primary">
-												{getInitials()}
-											</AvatarFallback>
-										</Avatar>
-									</motion.div>
-								</Button>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent
-								className="w-56 mt-1 backdrop-blur-md bg-white/80 dark:bg-black/80 border border-white/20 dark:border-white/10"
-								align="end"
-							>
-								<DropdownMenuItem
-									className="flex items-center gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
-									onClick={handleLogout}
-								>
-									<LogOut className="h-4 w-4" />
-									<span>Log out</span>
-								</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
+						<Button
+							variant="ghost"
+							className="flex items-center gap-2"
+							onClick={handleLogout}
+						>
+							<LogOut className="h-4 w-4" />
+							<span>Log out</span>
+						</Button>
 					) : (
 						<div className="flex items-center gap-2">
 							<Button

@@ -34,7 +34,7 @@ async function apiRequest<T>(
 			const errorData = await response.json().catch(() => ({}));
 			const message = errorData.detail ?? errorData.message ?? errorMessage;
 			console.error(`API Error (${response.status}):`, message, errorData);
-			throw new Error(message);
+			throw new Error(errorData.error);
 		}
 
 		// Parse JSON response
@@ -46,7 +46,7 @@ async function apiRequest<T>(
 		// Show toast notification
 		toast({
 			title: "Error",
-			description: error instanceof Error ? error.message : errorMessage,
+			description: error instanceof Error ? error.message : String(error),
 			variant: "destructive",
 		});
 

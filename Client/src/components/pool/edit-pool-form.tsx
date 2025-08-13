@@ -101,7 +101,11 @@ export function EditPoolForm({
 			onSuccess();
 		} catch (error) {
 			console.error("Error updating pool:", error);
-			// Error is already handled in the API service
+			toast({
+				title: "Edit Pool Failed",
+				description: error instanceof Error ? error.message : String(error),
+				variant: "destructive",
+			});
 		} finally {
 			setIsSubmitting(false);
 		}
