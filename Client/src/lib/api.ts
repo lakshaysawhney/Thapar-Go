@@ -34,7 +34,7 @@ async function apiRequest<T>(
 			const errorData = await response.json().catch(() => ({}));
 			const message = errorData.detail ?? errorData.message ?? errorMessage;
 			console.error(`API Error (${response.status}):`, message, errorData);
-			throw new Error(errorData.error);
+			throw new Error(errorData.detail);
 		}
 
 		// Parse JSON response
