@@ -107,7 +107,7 @@ export default function SignupPage() {
 				setIsLoading(false);
 				toast({
 					title: "Error",
-					description: "Failed to sign in with Google.",
+					description: error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
 			}

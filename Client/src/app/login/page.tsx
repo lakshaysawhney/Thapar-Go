@@ -61,7 +61,7 @@ export default function LoginPage() {
 				console.error("Login error:", error);
 				toast({
 					title: "Login Failed",
-					description: (error as {error: string}).error,
+					description: (error as { error: string }).error,
 					variant: "destructive",
 				});
 			} finally {
@@ -73,7 +73,10 @@ export default function LoginPage() {
 			setIsLoading(false);
 			toast({
 				title: "Error",
-				description: "Failed to sign in with Google.",
+				description:
+					errorResponse instanceof Error
+						? errorResponse.message
+						: String(errorResponse),
 				variant: "destructive",
 			});
 		},
