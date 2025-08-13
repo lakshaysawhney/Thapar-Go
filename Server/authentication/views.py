@@ -158,7 +158,7 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
 
-            return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)  # <-- changed to 200
+            return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)
 
         except TokenError:
             return Response({"error": "Invalid or expired refresh token."}, status=status.HTTP_400_BAD_REQUEST)
