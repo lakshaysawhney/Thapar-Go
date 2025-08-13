@@ -45,21 +45,21 @@ export function Footer() {
 						<p className="text-md text-muted-foreground text-center md:text-right">
 							Created by{" "}
 							<Link
-								href={siteConfig.creators.himanishPuri.linkedInUrl}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="font-medium underline hover:no-underline"
-							>
-								{siteConfig.creators.himanishPuri.name}
-							</Link>{" "}
-							and{" "}
-							<Link
 								href={siteConfig.creators.lakshaySawhney.linkedInUrl}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="font-medium underline hover:no-underline"
 							>
 								{siteConfig.creators.lakshaySawhney.name}
+							</Link>{" "}
+							and{" "}
+							<Link
+								href={siteConfig.creators.himanishPuri.linkedInUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="font-medium underline hover:no-underline"
+							>
+								{siteConfig.creators.himanishPuri.name}
 							</Link>
 						</p>
 
