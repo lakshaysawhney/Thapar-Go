@@ -16,6 +16,8 @@ import {
 	MapPin,
 	ArrowRight,
 	Phone,
+	ChevronDown,
+	User,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -30,10 +32,11 @@ interface PoolCardProps {
 }
 
 /**
- * Enhanced pool card component with advanced animations and glassmorphism
+ * Enhanced pool card component with advanced animations, glassmorphism, and member details
  */
 export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 	const [isHovered, setIsHovered] = useState(false);
+	const [showMembers, setShowMembers] = useState(false);
 	const x = useMotionValue(0);
 	const y = useMotionValue(0);
 	const rotateX = useTransform(y, [-100, 100], [10, -10]);
@@ -56,6 +59,9 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 		pool.created_by?.full_name ?? pool.createdBy ?? "Unknown";
 	const creatorPhone = pool.created_by?.phone_number ?? "";
 	const creatorGender = pool.created_by?.gender ?? "";
+
+	// Get members
+	const members = pool.members ?? [];
 
 	// Calculate available seats
 	const availableSeats = totalPersons - currentPersons;
@@ -80,6 +86,12 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 		setIsHovered(false);
 	};
 
+	// Toggle members visibility
+	const toggleMembers = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		setShowMembers(!showMembers);
+	};
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
@@ -100,6 +112,7 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 					transformStyle: "preserve-3d",
 				}}
 				transition={{ type: "spring", stiffness: 400, damping: 30 }}
+				layout
 			>
 				<GlassCard
 					variant={isFemaleOnly ? "female" : "default"}
@@ -278,7 +291,7 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 						</div>
 
 						{/* Stats grid */}
-						<div className="grid grid-cols-3 gap-2 mt-auto">
+						<div className="grid grid-cols-3 gap-2 mb-4">
 							<motion.div
 								className="flex flex-col items-center p-2 rounded-md bg-foreground/5"
 								whileHover={{
@@ -354,9 +367,108 @@ export function PoolCard({ pool, onClick }: Readonly<PoolCardProps>) {
 							</motion.div>
 						</div>
 
+						{/* Members section */}
+						{members.length > 0 && (
+							<motion.div
+								className="mb-4"
+								layout
+							>
+								<motion.button
+									className="w-full flex items-center justify-between p-2 rounded-md bg-foreground/5 hover:bg-foreground/10 transition-colors text-sm font-medium"
+									onClick={toggleMembers}
+									whileHover={{ scale: 1.02 }}
+									whileTap={{ scale: 0.98 }}
+								>
+									<span className="flex items-center gap-2">
+										<User
+											size={16}
+											className="text-primary"
+										/>
+										Pool Members ({members.length})
+									</span>
+									<motion.div
+										animate={{ rotate: showMembers ? 180 : 0 }}
+										transition={{ duration: 0.2 }}
+									>
+										<ChevronDown size={16} />
+									</motion.div>
+								</motion.button>
+
+								<AnimatePresence>
+									{showMembers && (
+										<motion.div
+											initial={{ height: 0, opacity: 0 }}
+											animate={{ height: "auto", opacity: 1 }}
+											exit={{ height: 0, opacity: 0 }}
+											transition={{
+												duration: 0.3,
+												ease: "easeInOut",
+											}}
+											className="overflow-hidden"
+										>
+											<div className="pt-2 space-y-2 max-h-32 overflow-y-auto">
+												{members.map((member, index) => (
+													<motion.div
+														key={index}
+														initial={{ x: -20, opacity: 0 }}
+														animate={{ x: 0, opacity: 1 }}
+														transition={{ delay: index * 0.1 }}
+														className="flex items-center justify-between p-2 rounded-md bg-foreground/5 border border-foreground/10"
+													>
+														<div className="flex items-center gap-2">
+															<div
+																className={`w-2 h-2 rounded-full ${
+																	member.is_creator
+																		? "bg-yellow-500"
+																		: "bg-green-500"
+																}`}
+															/>
+															<div className="flex flex-col">
+																<span className="text-xs font-medium">
+																	{member.full_name}
+																	{member.is_creator && (
+																		<Badge className="ml-1 text-[10px] py-0 px-1 bg-yellow-500/20 text-yellow-700 dark:text-yellow-400">
+																			Creator
+																		</Badge>
+																	)}
+																</span>
+																<div className="flex items-center gap-1">
+																	<Phone
+																		size={10}
+																		className="text-primary"
+																	/>
+																	<span className="text-[10px] text-foreground/60">
+																		{member.phone_number}
+																	</span>
+																</div>
+															</div>
+														</div>
+														<Badge
+															className={`text-[10px] ${
+																member.gender.toLowerCase() ===
+																"female"
+																	? "bg-pink-500/20 text-pink-700 dark:text-pink-400"
+																	: member.gender.toLowerCase() ===
+																	  "male"
+																	? "bg-blue-500/20 text-blue-700 dark:text-blue-400"
+																	: "bg-gray-500/20 text-gray-700 dark:text-gray-400"
+															}`}
+															variant="outline"
+														>
+															{member.gender}
+														</Badge>
+													</motion.div>
+												))}
+											</div>
+										</motion.div>
+									)}
+								</AnimatePresence>
+							</motion.div>
+						)}
+
 						{/* Available seats indicator */}
 						<motion.div
-							className={`mt-4 p-2 rounded-md text-center text-sm font-medium ${
+							className={`mt-auto p-2 rounded-md text-center text-sm font-medium ${
 								availableSeats > 0
 									? "bg-green-500/10 text-green-600 dark:text-green-400"
 									: "bg-red-500/10 text-red-600 dark:text-red-400"
