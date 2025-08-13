@@ -94,7 +94,10 @@ export const authApi = {
 			"/auth/google/",
 			{
 				method: "POST",
-				body: JSON.stringify({ access_token: accessToken, signup_intent: false }),
+				body: JSON.stringify({
+					access_token: accessToken,
+					signup_intent: false,
+				}),
 			},
 			"Failed to login with Google",
 			false, // ❌ No Authorization header
@@ -172,11 +175,6 @@ export const authApi = {
 				},
 				"Failed to logout",
 			);
-
-			// Clear local storage
-			localStorage.removeItem("access");
-			localStorage.removeItem("refresh");
-			localStorage.removeItem("user");
 		} catch (error) {
 			console.error("Logout Error:", error);
 			toast({
@@ -184,7 +182,11 @@ export const authApi = {
 				description: error instanceof Error ? error.message : String(error),
 				variant: "destructive",
 			});
+
 			throw error;
 		}
+		localStorage.removeItem("access");
+		localStorage.removeItem("refresh");
+		localStorage.removeItem("user");
 	},
 };
