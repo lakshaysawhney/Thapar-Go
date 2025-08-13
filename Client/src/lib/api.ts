@@ -46,7 +46,7 @@ async function apiRequest<T>(
 		// Show toast notification
 		toast({
 			title: "Error",
-			description: error instanceof Error ? error.message : errorMessage,
+			description: (error as {error: string}).error,
 			variant: "destructive",
 		});
 
