@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { AnimatedBackground } from "@/components/ui/animated-background";
 import { Car, Users, Clock, MapPin, ChevronRight } from "lucide-react";
+import thapargo_landing from "@/../public/thapargo2.jpg";
+import thapargo2_landing from "@/../public/thapargo3.jpg";
 
 export default function LandingPage() {
 	const router = useRouter();
@@ -114,33 +116,15 @@ export default function LandingPage() {
 								transition={{ delay: 0.6, duration: 0.8 }}
 							>
 								<div className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/20 dark:border-white/10 shadow-2xl">
-									<div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent" />
+									<div className="absolute inset-0" />
 									<Image
-										src="/placeholder.svg?height=720&width=1280"
+										src={thapargo2_landing}
 										alt="Thapar University ThaparGo Dashboard"
 										width={1280}
 										height={720}
 										className="w-full h-full object-cover"
 									/>
-									<div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-										<Button
-											variant="default"
-											size="lg"
-											className="bg-primary/90 hover:bg-primary rounded-full w-16 h-16 flex items-center justify-center"
-										>
-											<motion.div
-												animate={{
-													scale: [1, 1.1, 1],
-												}}
-												transition={{
-													duration: 2,
-													repeat: Number.POSITIVE_INFINITY,
-												}}
-											>
-												<ChevronRight size={24} />
-											</motion.div>
-										</Button>
-									</div>
+									
 								</div>
 							</motion.div>
 						</div>
@@ -303,9 +287,9 @@ export default function LandingPage() {
 								transition={{ duration: 0.6 }}
 							>
 								<div className="relative rounded-xl overflow-hidden border border-white/20 dark:border-white/10">
-									<div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent z-10" />
+									<div className="absolute inset-0 z-10" />
 									<Image
-										src="/placeholder.svg?height=600&width=800"
+										src={thapargo_landing}
 										alt="Students carpooling"
 										width={800}
 										height={600}
