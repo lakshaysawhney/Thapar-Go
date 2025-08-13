@@ -31,13 +31,23 @@ class PoolViewSet(viewsets.ModelViewSet):
         pool = self.get_object()
         if pool.created_by != request.user:
             raise PermissionDenied("You do not have permission to update this pool.")
+
+        # Check for is_female_only change
+        if request.data.get('is_female_only') == True and request.user.gender != 'Female':
+            raise PermissionDenied("Only female users can create or modify a pool to be female-only.")
+
         return super().update(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
         pool = self.get_object()
         if pool.created_by != request.user:
             raise PermissionDenied("You do not have permission to update this pool.")
-        return super().partial_update(request, *args, **kwargs)
+
+        # Check for is_female_only change
+        if request.data.get('is_female_only') == True and request.user.gender != 'Female':
+            raise PermissionDenied("Only female users can create or modify a pool to be female-only.")
+
+        return super().partial_update(request, *args, **kwargs) 
 
     def destroy(self, request, *args, **kwargs):
         return Response({'detail' : 'Delete operation is not allowed,'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
