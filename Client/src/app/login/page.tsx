@@ -61,7 +61,7 @@ export default function LoginPage() {
 				console.error("Login error:", error);
 				toast({
 					title: "Login Failed",
-					description: "Unable to sign in with Google. Please try again.",
+					description: (error as {error: string}).error,
 					variant: "destructive",
 				});
 			} finally {

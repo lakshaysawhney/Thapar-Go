@@ -117,7 +117,7 @@ export default function SignupPage() {
 			setIsLoading(false);
 			toast({
 				title: "Error",
-				description: "Failed to sign in with Google.",
+				description: (errorResponse as {error: string}).error,
 				variant: "destructive",
 			});
 		},
@@ -163,7 +163,7 @@ export default function SignupPage() {
 			console.error("Signup error:", error);
 			toast({
 				title: "Signup Failed",
-				description: "Unable to complete signup. Please try again.",
+				description: (error as {error: string}).error,
 				variant: "destructive",
 			});
 		} finally {
