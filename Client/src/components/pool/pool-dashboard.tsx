@@ -81,7 +81,7 @@ export default function PoolDashboard() {
 
 		fetchPools();
 		fetchUserDetails();
-	}, []);
+	}, [toast]);
 
 	// Dynamically extract unique values from the current pool data
 	const dynamicFilterOptions = useMemo(() => {

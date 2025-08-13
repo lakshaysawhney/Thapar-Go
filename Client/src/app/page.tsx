@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { AnimatedBackground } from "@/components/ui/animated-background";
-import { Car, Users, Clock, MapPin, ChevronRight } from "lucide-react";
+import { Car, Users, Clock, MapPin } from "lucide-react";
 import thapargo_landing from "@/../public/thapargo2.jpg";
 import thapargo2_landing from "@/../public/thapargo3.jpg";
 
@@ -124,7 +124,6 @@ export default function LandingPage() {
 										height={720}
 										className="w-full h-full object-cover"
 									/>
-									
 								</div>
 							</motion.div>
 						</div>
@@ -297,7 +296,8 @@ export default function LandingPage() {
 									/>
 								</div>
 							</motion.div>
-						</div>w
+						</div>
+						w
 					</div>
 				</section>
 
