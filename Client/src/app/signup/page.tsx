@@ -225,13 +225,20 @@ export default function SignupPage() {
 										)}
 									</AnimatedButton>
 								</CardContent>
-								<CardFooter className="flex flex-col items-center justify-center gap-2">
+								<CardFooter className="flex flex-col items-center gap-3">
+									<p className="text-center text-sm font-semibold">
+										Only{" "}
+										<span className="text-primary">@thapar.edu</span>{" "}
+										email users allowed
+									</p>
+
 									<p className="text-sm text-muted-foreground">
 										Already have an account?
 									</p>
+
 									<Link
 										href="/login"
-										className="flex items-center gap-1 text-sm text-primary hover:underline"
+										className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
 									>
 										<LogIn className="h-4 w-4" />
 										Sign in

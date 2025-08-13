@@ -9,8 +9,8 @@ export const siteConfig = {
 		},
 		lakshaySawhney: {
 			name: "Lakshay Sawhney",
-			profileUrl: "https://www.linkedin.com/in/lakshay-sawhney/",
-			linkedInUrl: "https://github.com/lakshaysawhney",
+			linkedInUrl: "https://www.linkedin.com/in/lakshay-sawhney/",
+			githubUrl: "https://github.com/lakshaysawhney",
 			email: "lsawhney_be23@thapar.edu",
 		},
 	},
