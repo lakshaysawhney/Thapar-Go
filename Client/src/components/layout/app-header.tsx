@@ -7,15 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Car, Menu, X, LogOut, User } from "lucide-react";
-import { GlassCard } from "@/components/ui/glass-card";
+import { Car, Menu, X, LogOut } from "lucide-react";
 import { authApi } from "@/lib/index";
 import { useToast } from "@/hooks/use-toast";
 
