@@ -94,7 +94,7 @@ export const authApi = {
 			"/auth/google/",
 			{
 				method: "POST",
-				body: JSON.stringify({ access_token: accessToken }),
+				body: JSON.stringify({ access_token: accessToken, signup_intent: false }),
 			},
 			"Failed to login with Google",
 			false, // ❌ No Authorization header
@@ -111,6 +111,7 @@ export const authApi = {
 				method: "POST",
 				body: JSON.stringify({
 					access_token: accessToken,
+					signup_intent: true,
 				}),
 			},
 			"Failed to get user info from Google",
