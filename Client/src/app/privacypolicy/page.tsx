@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { siteConfig } from "@/lib/config";
-import { Shield, Mail, MapPin, Calendar } from "lucide-react";
+import { Shield, Mail, MapPin, Calendar, Camera, IdCard } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 
@@ -169,7 +169,7 @@ export default function PrivacyPolicy() {
 												isDark ? "bg-red-900/30" : "bg-red-100"
 											}`}
 										>
-											<span className="font-bold">N</span>
+											<IdCard className="h-5 w-5" />
 										</div>
 									</div>
 									<h3
@@ -245,7 +245,7 @@ export default function PrivacyPolicy() {
 												isDark ? "bg-red-900/30" : "bg-red-100"
 											}`}
 										>
-											<span className="font-bold">📷</span>
+											<Camera className="h-5 w-5" />
 										</div>
 									</div>
 									<h3
