@@ -7,9 +7,38 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { AnimatedBackground } from "@/components/ui/animated-background";
-import { Car, Users, Clock, MapPin } from "lucide-react";
+import { Car, Users, Venus, MapPin, IndianRupee } from "lucide-react";
 import thapargo_landing from "@/../public/thapargo2.jpg";
 import thapargo2_landing from "@/../public/thapargo3.jpg";
+
+const features = [
+	{
+		icon: <Car className="h-10 w-10 text-primary" />,
+		title: "Create Pools",
+		description:
+			"Easily create ride pools for your trips to and from campus, home, or anywhere else.",
+	},
+	{
+		icon: <Users className="h-10 w-10 text-primary" />,
+		title: "Find Companions",
+		description:
+			"Connect with fellow students who are traveling in the same direction.",
+	},
+	{
+		icon: (
+			<IndianRupee className="h-10 w-10 text-primary" />
+		),
+		title: "Save Money",
+		description:
+			"Split transportation costs and save money on your regular commutes.",
+	},
+	{
+		icon: <Venus className="h-10 w-10 text-primary" />,
+		title: "Female-Only Pools",
+		description:
+			"Safe and comfortable ride-sharing options exclusively for women.",
+	},
+];
 
 export default function LandingPage() {
 	const router = useRouter();
@@ -161,36 +190,7 @@ export default function LandingPage() {
 						</div>
 
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-							{[
-								{
-									icon: <Car className="h-10 w-10 text-primary" />,
-									title: "Create Pools",
-									description:
-										"Easily create ride pools for your trips to and from campus, home, or anywhere else.",
-								},
-								{
-									icon: <Users className="h-10 w-10 text-primary" />,
-									title: "Find Companions",
-									description:
-										"Connect with fellow students who are traveling in the same direction.",
-								},
-								{
-									icon: (
-										<span className="h-10 w-10 text-primary text-3xl font-bold">
-											₹
-										</span>
-									),
-									title: "Save Money",
-									description:
-										"Split transportation costs and save money on your regular commutes.",
-								},
-								{
-									icon: <Clock className="h-10 w-10 text-primary" />,
-									title: "Flexible Scheduling",
-									description:
-										"Find rides that match your schedule or create your own at your convenience.",
-								},
-							].map((feature, index) => (
+							{features.map((feature, index) => (
 								<motion.div
 									key={index}
 									className="bg-white/10 dark:bg-black/10 backdrop-blur-md rounded-xl p-6 border border-white/20 dark:border-white/10"
