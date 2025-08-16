@@ -1,15 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { AnimatedBackground } from "@/components/ui/animated-background";
-import { Car, Users, Venus, MapPin, IndianRupee } from "lucide-react";
-import thapargo_landing from "@/../public/thapargo2.jpg";
-import thapargo2_landing from "@/../public/thapargo3.jpg";
+import {
+	Car,
+	Users,
+	MoonIcon as Venus,
+	MapPin,
+	IndianRupee,
+} from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollToPlugin);
 
 const features = [
 	{
@@ -25,9 +33,7 @@ const features = [
 			"Connect with fellow students who are traveling in the same direction.",
 	},
 	{
-		icon: (
-			<IndianRupee className="h-10 w-10 text-primary" />
-		),
+		icon: <IndianRupee className="h-10 w-10 text-primary" />,
 		title: "Save Money",
 		description:
 			"Split transportation costs and save money on your regular commutes.",
@@ -52,11 +58,33 @@ export default function LandingPage() {
 		setIsAuthenticated(!!accessToken);
 	}, []);
 
+	useEffect(() => {
+		// Enable smooth scrolling for the entire page
+		gsap.set("html", { scrollBehavior: "auto" });
+
+		// Add smooth scroll to body
+		gsap.to("body", {
+			duration: 0,
+			ease: "none",
+		});
+	}, []);
+
 	const handleGetStarted = () => {
 		if (isAuthenticated) {
 			router.push("/pools");
 		} else {
 			router.push("/login");
+		}
+	};
+
+	const smoothScrollTo = (elementId: string) => {
+		const element = document.getElementById(elementId);
+		if (element) {
+			gsap.to(window, {
+				duration: 0.2,
+				scrollTo: { y: element, offsetY: 80 },
+				ease: "power2.inOut",
+			});
 		}
 	};
 
@@ -126,13 +154,7 @@ export default function LandingPage() {
 									variant="outline"
 									size="lg"
 									className="bg-gray-50 dark:bg-black hover:dark:bg-gray-900 px-8 py-6 text-lg border-white/20 dark:border-white/10"
-									onClick={() => {
-										const aboutSection =
-											document.getElementById("about");
-										aboutSection?.scrollIntoView({
-											behavior: "smooth",
-										});
-									}}
+									onClick={() => smoothScrollTo("about")}
 								>
 									Learn More
 								</Button>
@@ -147,7 +169,7 @@ export default function LandingPage() {
 								<div className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/20 dark:border-white/10 shadow-2xl">
 									<div className="absolute inset-0" />
 									<Image
-										src={thapargo2_landing}
+										src="/thapargo3.jpg"
 										alt="Thapar University ThaparGo Dashboard"
 										width={1280}
 										height={720}
@@ -288,7 +310,7 @@ export default function LandingPage() {
 								<div className="relative rounded-xl overflow-hidden border border-white/20 dark:border-white/10">
 									<div className="absolute inset-0 z-10" />
 									<Image
-										src={thapargo_landing}
+										src="/thapargo2.jpg"
 										alt="Students carpooling"
 										width={800}
 										height={600}
