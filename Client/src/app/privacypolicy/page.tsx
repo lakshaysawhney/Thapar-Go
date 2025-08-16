@@ -2,22 +2,12 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/config";
-import {
-	Shield,
-	Mail,
-	MapPin,
-	Calendar,
-	Github,
-	ArrowLeft,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Shield, Mail, MapPin, Calendar } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 
 export default function PrivacyPolicy() {
-	const router = useRouter();
 	const { theme } = useTheme();
 	const [mounted, setMounted] = useState(false);
 
