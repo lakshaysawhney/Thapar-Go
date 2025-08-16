@@ -10,7 +10,7 @@ import { AnimatedBackground } from "@/components/ui/animated-background";
 import {
 	Car,
 	Users,
-	MoonIcon as Venus,
+	Venus,
 	MapPin,
 	IndianRupee,
 } from "lucide-react";
