@@ -89,7 +89,7 @@ export default function PoolDashboard() {
 
 		fetchPools();
 		fetchUserDetails();
-	}, [toast]);
+	}, [toast, router]);
 
 	const myPools = useMemo(() => {
 		const user = sessionStorage.getItem("user");

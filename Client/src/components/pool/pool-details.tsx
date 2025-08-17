@@ -57,6 +57,7 @@ export function PoolDetails({
 	const [isJoining, setIsJoining] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
 	const { toast } = useToast();
+	const router = useRouter();
 
 	if (!pool) return null;
 
@@ -79,7 +80,6 @@ export function PoolDetails({
 		pool.created_by?.full_name ?? pool.createdBy ?? "Unknown";
 	const creatorPhone = pool.created_by?.phone_number ?? "";
 	const creatorGender = pool.created_by?.gender ?? "";
-	const router = useRouter();
 
 	const handleJoinPool = async () => {
 		if (!pool) return;

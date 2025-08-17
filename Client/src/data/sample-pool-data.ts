@@ -8,6 +8,7 @@ export const samplePoolData: Pool[] = [
 			full_name: "testuser34",
 			phone_number: "9876543210",
 			gender: "Female",
+			email: "testuser34@thapar.edu",
 		},
 		members: [],
 		start_point: "Chandigarh",
@@ -27,6 +28,7 @@ export const samplePoolData: Pool[] = [
 			full_name: "John Smith",
 			phone_number: "9876543211",
 			gender: "Male",
+			email: "johnsmith@thapar.edu"
 		},
 		members: [],
 		start_point: "Delhi",
@@ -46,6 +48,7 @@ export const samplePoolData: Pool[] = [
 			full_name: "Sarah Johnson",
 			phone_number: "9876543212",
 			gender: "Female",
+			email: "sarahjohnson@thapar.edu"
 		},
 		members: [],
 		start_point: "Mohali",
@@ -65,6 +68,7 @@ export const samplePoolData: Pool[] = [
 			full_name: "Michael Brown",
 			phone_number: "9876543213",
 			gender: "Male",
+			email: "michaelbrown@thapar.edu"
 		},
 		members: [],
 		start_point: "Chandigarh",
@@ -84,6 +88,7 @@ export const samplePoolData: Pool[] = [
 			full_name: "Emily Davis",
 			phone_number: "9876543214",
 			gender: "Female",
+			email: "emilydavis@thapar.edu"
 		},
 		members: [],
 		start_point: "Panchkula",
