@@ -7,13 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { AnimatedBackground } from "@/components/ui/animated-background";
-import {
-	Car,
-	Users,
-	Venus,
-	MapPin,
-	IndianRupee,
-} from "lucide-react";
+import { Car, Users, Venus, MapPin, IndianRupee } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
@@ -54,7 +48,7 @@ export default function LandingPage() {
 
 	useEffect(() => {
 		// Check if user is authenticated //!TO CHANGE
-		const accessToken = localStorage.getItem("access");
+		const accessToken = sessionStorage.getItem("access");
 		setIsAuthenticated(!!accessToken);
 	}, []);
 

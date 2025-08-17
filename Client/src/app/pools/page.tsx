@@ -11,7 +11,7 @@ export default function Home() {
 
 	useEffect(() => {
 		// Check if user is authenticated
-		const accessToken = localStorage.getItem("access");
+		const accessToken = sessionStorage.getItem("access");
 		if (!accessToken) {
 			router.push("/");
 		} else {

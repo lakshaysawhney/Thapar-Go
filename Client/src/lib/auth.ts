@@ -14,7 +14,9 @@ async function apiRequest<T>(
 ): Promise<T> {
 	try {
 		const accessToken =
-			typeof window !== "undefined" ? localStorage.getItem("access") : null;
+			typeof window !== "undefined"
+				? sessionStorage.getItem("access")
+				: null;
 
 		const headers = {
 			"Content-Type": "application/json",
@@ -158,7 +160,7 @@ export const authApi = {
 	logout: async (): Promise<void> => {
 		try {
 			// Get tokens from local storage
-			const refreshToken = localStorage.getItem("refresh");
+			const refreshToken = sessionStorage.getItem("refresh");
 
 			if (!refreshToken) {
 				throw new Error("No tokens found for logout");
@@ -185,8 +187,8 @@ export const authApi = {
 
 			throw error;
 		}
-		localStorage.removeItem("access");
-		localStorage.removeItem("refresh");
-		localStorage.removeItem("user");
+		sessionStorage.removeItem("access");
+		sessionStorage.removeItem("refresh");
+		sessionStorage.removeItem("user");
 	},
 };

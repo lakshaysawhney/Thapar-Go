@@ -37,7 +37,7 @@ export function LandingNavbar() {
 	const isAuthPage = pathname === "/login" || pathname === "/signup";
 
 	useEffect(() => {
-		setIsAuthenticated(!!localStorage.getItem("access"));
+		setIsAuthenticated(!!sessionStorage.getItem("access"));
 	}, []);
 
 	useEffect(() => {
