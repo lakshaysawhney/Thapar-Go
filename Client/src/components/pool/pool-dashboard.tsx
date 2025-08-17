@@ -41,6 +41,7 @@ export default function PoolDashboard() {
 	const [pools, setPools] = useState<Pool[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const { toast } = useToast();
+	const router = useRouter();
 
 	// Load pool data on component mount
 	useEffect(() => {
@@ -58,7 +59,7 @@ export default function PoolDashboard() {
 					variant: "destructive",
 				});
 				authApi.logout();
-				useRouter().push("/login");
+				router.push("/login");
 			} finally {
 				setIsLoading(false);
 			}
@@ -80,7 +81,7 @@ export default function PoolDashboard() {
 					variant: "destructive",
 				});
 				authApi.logout();
-				useRouter().push("/login");
+				router.push("/login");
 			} finally {
 				setIsLoading(false);
 			}

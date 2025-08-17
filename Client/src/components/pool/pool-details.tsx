@@ -79,6 +79,7 @@ export function PoolDetails({
 		pool.created_by?.full_name ?? pool.createdBy ?? "Unknown";
 	const creatorPhone = pool.created_by?.phone_number ?? "";
 	const creatorGender = pool.created_by?.gender ?? "";
+	const router = useRouter();
 
 	const handleJoinPool = async () => {
 		if (!pool) return;
@@ -102,7 +103,7 @@ export function PoolDetails({
 				variant: "destructive",
 			});
 			authApi.logout();
-			useRouter().push("/login");
+			router.push("/login");
 		} finally {
 			setIsJoining(false);
 		}
