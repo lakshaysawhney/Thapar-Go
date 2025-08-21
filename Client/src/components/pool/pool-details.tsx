@@ -28,7 +28,7 @@ import { EditPoolForm } from "@/components/pool/edit-pool-form";
 import { poolApi } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { authApi } from "@/lib";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface PoolDetailsProps {
 	pool: Pool | null;
