@@ -1,2 +1,1 @@
 # Thapar Go
-push
