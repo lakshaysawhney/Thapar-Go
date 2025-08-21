@@ -28,7 +28,7 @@ import { PoolNavbar } from "@/components/poolNavbar";
 import { calculateFormattedFarePerHead } from "@/lib/utils/pool-utils";
 import { authApi } from "@/lib";
 import type { CurrentUserDetailsProps } from "@/lib/auth";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 /**
  * Main dashboard component for the car pooling application
