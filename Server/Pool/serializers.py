@@ -5,7 +5,7 @@ from authentication.models import CustomUser
 class CustomUserLimitedSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['full_name', 'phone_number', 'gender']
+        fields = ['full_name', 'phone_number', 'gender', 'email']
 
 class PoolMemberSerializer(serializers.ModelSerializer):
     full_name = serializers.ReadOnlyField(source='user.full_name')
