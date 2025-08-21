@@ -51,9 +51,9 @@ export default function LoginPage() {
 					tokenResponse.access_token,
 				);
 
-				// Store auth tokens in localStorage
-				localStorage.setItem("access", response.access);
-				localStorage.setItem("refresh", response.refresh);
+				// Store auth tokens in sessionStorage
+				sessionStorage.setItem("access", response.access);
+				sessionStorage.setItem("refresh", response.refresh);
 
 				// Redirect to the pools page
 				router.push("/pools");
@@ -61,7 +61,8 @@ export default function LoginPage() {
 				console.error("Login error:", error);
 				toast({
 					title: "Login Failed",
-					description: error instanceof Error ? error.message : String(error),
+					description:
+						error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
 			} finally {

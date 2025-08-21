@@ -12,6 +12,10 @@ import { Menu, X, Github, LogOut, User } from "lucide-react";
 import { useTheme } from "next-themes";
 import { authApi } from "@/lib";
 import { siteConfig } from "@/lib/config";
+import { gsap } from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
+gsap.registerPlugin(ScrollToPlugin);
 
 interface NavLink {
 	href: string;
@@ -33,7 +37,7 @@ export function LandingNavbar() {
 	const isAuthPage = pathname === "/login" || pathname === "/signup";
 
 	useEffect(() => {
-		setIsAuthenticated(!!localStorage.getItem("access"));
+		setIsAuthenticated(!!sessionStorage.getItem("access"));
 	}, []);
 
 	useEffect(() => {
@@ -62,8 +66,15 @@ export function LandingNavbar() {
 			router.push(`/#${hash}`);
 		} else {
 			const el = document.getElementById(hash);
-			if (el) el.scrollIntoView({ behavior: "smooth" });
-			else router.push(`/#${hash}`);
+			if (el) {
+				gsap.to(window, {
+					duration: 1.5,
+					scrollTo: { y: el, offsetY: 80 },
+					ease: "power2.inOut",
+				});
+			} else {
+				router.push(`/#${hash}`);
+			}
 		}
 	};
 
@@ -73,7 +84,7 @@ export function LandingNavbar() {
 			className="flex items-center justify-center"
 		>
 			<Image
-				src={logoSrc}
+				src={logoSrc || "/placeholder.svg"}
 				alt="ThaparGoLogo"
 				width={110}
 				height={110}
@@ -113,7 +124,7 @@ export function LandingNavbar() {
 									href={link.href}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
+									className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1 hover:scale-105 transform duration-200"
 								>
 									{link.icon}
 									{link.label}
@@ -122,7 +133,7 @@ export function LandingNavbar() {
 								<button
 									key={link.label}
 									onClick={() => handleSectionNavigate(link.href)}
-									className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1"
+									className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1 hover:scale-105 transform duration-200"
 								>
 									{link.icon}
 									{link.label}
@@ -136,7 +147,7 @@ export function LandingNavbar() {
 					{isAuthenticated ? (
 						<Button
 							variant="ghost"
-							className="flex items-center gap-2"
+							className="flex items-center gap-2 hover:scale-105 transform transition-all duration-200"
 							onClick={handleLogout}
 						>
 							<LogOut className="h-4 w-4" />
@@ -147,13 +158,13 @@ export function LandingNavbar() {
 							<Button
 								variant="ghost"
 								onClick={() => router.push("/login")}
-								className="bg-white/10 dark:bg-black/10"
+								className="bg-white/10 dark:bg-black/10 hover:scale-105 transform transition-all duration-200"
 							>
 								Login
 							</Button>
 							<Button
 								variant="default"
-								className="bg-primary hover:bg-primary/90"
+								className="bg-primary hover:bg-primary/90 hover:scale-105 transform transition-all duration-200"
 								onClick={() => router.push("/signup")}
 							>
 								Sign Up
@@ -243,14 +254,14 @@ export function LandingNavbar() {
 								<>
 									<Button
 										variant="outline"
-										className="flex items-center gap-2 justify-start border-white/20 dark:border-white/10"
+										className="flex items-center gap-2 justify-start border-white/20 dark:border-white/10 bg-transparent"
 									>
 										<User className="h-4 w-4" />
 										<span>Profile</span>
 									</Button>
 									<Button
 										variant="outline"
-										className="flex items-center gap-2 justify-start text-destructive border-white/20 dark:border-white/10"
+										className="flex items-center gap-2 justify-start text-destructive border-white/20 dark:border-white/10 bg-transparent"
 										onClick={handleLogout}
 									>
 										<LogOut className="h-4 w-4" />
@@ -261,7 +272,7 @@ export function LandingNavbar() {
 								<>
 									<Button
 										variant="outline"
-										className="w-full"
+										className="w-full bg-transparent"
 										onClick={() => router.push("/login")}
 									>
 										Login

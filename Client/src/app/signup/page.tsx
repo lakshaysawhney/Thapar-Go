@@ -107,7 +107,8 @@ export default function SignupPage() {
 				setIsLoading(false);
 				toast({
 					title: "Sign Up Error",
-					description: error instanceof Error ? error.message : String(error),
+					description:
+						error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
 			}
@@ -117,7 +118,10 @@ export default function SignupPage() {
 			setIsLoading(false);
 			toast({
 				title: "Sign Up Error",
-				description: errorResponse instanceof Error ? errorResponse.message : String(errorResponse),
+				description:
+					errorResponse instanceof Error
+						? errorResponse.message
+						: String(errorResponse),
 				variant: "destructive",
 			});
 		},
@@ -144,8 +148,8 @@ export default function SignupPage() {
 			});
 
 			// Store auth tokens
-			localStorage.setItem("access", response.access);
-			localStorage.setItem("refresh", response.refresh);
+			sessionStorage.setItem("access", response.access);
+			sessionStorage.setItem("refresh", response.refresh);
 
 			setGoogleUserInfo((prev) => ({
 				...prev,

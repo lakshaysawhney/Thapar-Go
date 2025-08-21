@@ -14,6 +14,7 @@ export interface Pool {
 		full_name: string;
 		phone_number: string;
 		gender: string;
+		email: string;
 	};
 	createdBy?: string; // Keep for backward compatibility
 	members?: PoolMembers[];

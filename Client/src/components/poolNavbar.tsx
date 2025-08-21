@@ -36,7 +36,7 @@ export function PoolNavbar({ onCreatePool }: Readonly<NavbarProps>) {
 
 	useEffect(() => {
 		// Check if user is authenticated
-		const accessToken = localStorage.getItem("access");
+		const accessToken = sessionStorage.getItem("access");
 		setIsAuthenticated(!!accessToken);
 	}, []);
 

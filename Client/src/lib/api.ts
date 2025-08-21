@@ -15,7 +15,9 @@ async function apiRequest<T>(
 ): Promise<T> {
 	try {
 		const accessToken =
-			typeof window !== "undefined" ? localStorage.getItem("access") : null;
+			typeof window !== "undefined"
+				? sessionStorage.getItem("access")
+				: null;
 
 		// Set default headers
 		const headers = {

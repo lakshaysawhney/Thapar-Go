@@ -28,6 +28,7 @@ import { PoolNavbar } from "@/components/poolNavbar";
 import { calculateFormattedFarePerHead } from "@/lib/utils/pool-utils";
 import { authApi } from "@/lib";
 import type { CurrentUserDetailsProps } from "@/lib/auth";
+import { useRouter } from "next/router";
 
 /**
  * Main dashboard component for the car pooling application
@@ -40,6 +41,7 @@ export default function PoolDashboard() {
 	const [pools, setPools] = useState<Pool[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const { toast } = useToast();
+	const router = useRouter();
 
 	// Load pool data on component mount
 	useEffect(() => {
@@ -52,9 +54,12 @@ export default function PoolDashboard() {
 				console.error("Error fetching pools:", error);
 				toast({
 					title: "Pool Data Fetch Failed",
-					description: error instanceof Error ? error.message : String(error),
+					description:
+						error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
+				authApi.logout();
+				router.push("/login");
 			} finally {
 				setIsLoading(false);
 			}
@@ -65,15 +70,18 @@ export default function PoolDashboard() {
 				setIsLoading(true);
 				const userDetails = await authApi.getCurrentUser();
 				if (userDetails) {
-					localStorage.setItem("user", JSON.stringify(userDetails));
+					sessionStorage.setItem("user", JSON.stringify(userDetails));
 				}
 			} catch (error) {
 				console.error("Error fetching user details:", error);
 				toast({
 					title: "User Data Fetch Failed",
-					description: error instanceof Error ? error.message : String(error),
+					description:
+						error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
+				authApi.logout();
+				router.push("/login");
 			} finally {
 				setIsLoading(false);
 			}
@@ -81,7 +89,15 @@ export default function PoolDashboard() {
 
 		fetchPools();
 		fetchUserDetails();
-	}, [toast]);
+	}, [toast, router]);
+
+	const myPools = useMemo(() => {
+		const user = sessionStorage.getItem("user");
+		if (!user) return [];
+
+		const parsedUser = JSON.parse(user) as CurrentUserDetailsProps;
+		return pools.filter((pool) => pool.created_by?.email === parsedUser.email);
+	}, [pools]);
 
 	// Dynamically extract unique values from the current pool data
 	const dynamicFilterOptions = useMemo(() => {
@@ -208,7 +224,7 @@ export default function PoolDashboard() {
 	const isCurrentUserCreator = useMemo(() => {
 		if (!selectedPool) return false;
 
-		const user = localStorage.getItem("user");
+		const user = sessionStorage.getItem("user");
 		if (!user) return false;
 		const parsedUser = JSON.parse(user) as CurrentUserDetailsProps;
 		return selectedPool.created_by?.full_name === parsedUser.full_name;
@@ -349,14 +365,33 @@ export default function PoolDashboard() {
 						)}
 					</TabsContent>
 					<TabsContent value="my">
-						<motion.div
-							className="text-center py-10 text-muted-foreground"
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							transition={{ delay: 0.2 }}
-						>
-							You haven&apos;t created any pools yet
-						</motion.div>
+						{isLoading ? (
+							<div className="flex justify-center items-center py-20">
+								<div className="h-10 w-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+							</div>
+						) : myPools.length > 0 ? (
+							<motion.div
+								className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
+								variants={container}
+								initial="hidden"
+								animate="show"
+							>
+								{myPools.map((pool) => (
+									<motion.div key={pool.id} variants={item}>
+										<PoolCard pool={pool} onClick={() => handlePoolSelect(pool)} />
+									</motion.div>
+								))}
+							</motion.div>
+						) : (
+							<motion.div
+								className="text-center py-10 text-muted-foreground"
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								transition={{ delay: 0.2 }}
+							>
+								You haven&apos;t created any pools yet
+							</motion.div>
+						)}
 					</TabsContent>
 				</Tabs>
 			</div>

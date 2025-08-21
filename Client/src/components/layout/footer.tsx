@@ -63,30 +63,36 @@ export function Footer() {
 							</Link>
 						</p>
 
-						<motion.div
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}
-							className="flex items-center"
-						>
-							<Link
-								href={siteConfig.projectSrc}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 transition-colors"
+						<div className="flex items-center">
+							<motion.div
+								whileHover={{ scale: 1.05 }}
+								whileTap={{ scale: 0.95 }}
 							>
-								<Github size={16} />
-								<span className="text-sm font-medium">GitHub</span>
-							</Link>
-							<Link
-								href="/privacypolicy"
-								className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 transition-colors"
+								<Link
+									href={siteConfig.projectSrc}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 transition-colors"
+								>
+									<Github size={16} />
+									<span className="text-sm font-medium">GitHub</span>
+								</Link>
+							</motion.div>
+							<motion.div
+								whileHover={{ scale: 1.05 }}
+								whileTap={{ scale: 0.95 }}
 							>
-								<Shield size={16} />
-								<span className="text-sm font-medium">
-									Privacy Policy
-								</span>
-							</Link>
-						</motion.div>
+								<Link
+									href="/privacypolicy"
+									className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 transition-colors"
+								>
+									<Shield size={16} />
+									<span className="text-sm font-medium">
+										Privacy Policy
+									</span>
+								</Link>
+							</motion.div>
+						</div>
 					</div>
 				</div>
 
