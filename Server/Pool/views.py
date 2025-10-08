@@ -7,6 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from .models import Pool, PoolMember
 from .serializers import PoolSerializer
+from authentication.permissions import IsProfileComplete
 import logging
 
 logger = logging.getLogger(__name__)
