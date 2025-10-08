@@ -41,60 +41,54 @@ class GoogleLoginView(SocialLoginView):
         logger.debug("Starting Google OAuth login process.")
         logger.debug(f"signup_intent = {request.data.get('signup_intent')}")
 
-        # Step 1: Complete OAuth login/signup via dj-rest-auth
+        # 1) Let dj-rest-auth complete Google OAuth (creates/attaches user)
         response = super().post(request, *args, **kwargs)
 
         try:
-            # Step 2: Get the social user
+            # 2) Validate social user
             social_user = SocialAccount.objects.filter(user=request.user).first()
             if not social_user:
-                logger.error("Social account not found during login.")
-                return Response(
-                    {"error": "Social account not found. Login failed."},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+                return Response({"error": "Social account not found. Login failed."},
+                                status=status.HTTP_400_BAD_REQUEST)
 
             email = social_user.user.email
             email_domain = email.split('@')[-1]
 
-            # Step 3: Enforce thapar.edu domain
+            # 3) Domain guard
             if email_domain != "thapar.edu":
-                logger.warning(f"Non-thapar.edu email detected: {email}")
                 request.user.delete()
-                return Response(
-                    {"error": "Only thapar.edu emails are allowed."},
-                    status=status.HTTP_403_FORBIDDEN,
-                )
+                return Response({"error": "Only thapar.edu emails are allowed."},
+                                status=status.HTTP_403_FORBIDDEN)
 
-            # Step 4: Load user and detect whether already signed up
+            # 4) Load user & detect existing signup
             user = CustomUser.objects.get(id=request.user.id)
-            is_new_user = not user.google_authenticated  # signed in for first time
+            already_signed_up = bool(user.google_authenticated)
 
-            # Step 5: If this is a signup intent, and user is not new - block it
-            if request.data.get("signup_intent") is True and not is_new_user:
+            # 5) If this request is a SIGNUP attempt but user already exists -> block
+            if request.data.get("signup_intent") is True and already_signed_up:
                 return Response(
                     {"error": "You have already signed up. Please log in instead."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Step 6: Mark user as authenticated via Google
-            user.google_authenticated = True
-            user.save()
+            # 6) Mark Google-authenticated (enables /user/register-info/ with temp token)
+            if not already_signed_up:
+                user.google_authenticated = True
+                user.save()
 
-            logger.info(f"User {email} successfully logged in.")
-
-            # Step 7: If new user profile is incomplete → send temp token
-            if is_new_user and (not user.phone_number or not user.gender):
+            # 7) Enforce profile completeness for everyone (new or returning)
+            profile_complete = bool(user.phone_number and user.gender)
+            if not profile_complete:
                 temp_token = AccessToken.for_user(user)
                 temp_token.set_exp(lifetime=timedelta(minutes=5))
                 return Response({
-                    "message": "Google signup successful. Please complete your profile.",
+                    "message": "Google auth successful. Please complete your profile.",
                     "email": user.email,
                     "name": user.full_name,
-                    "temp_token": str(temp_token)
+                    "temp_token": str(temp_token),
                 }, status=status.HTTP_200_OK)
 
-            # Step 8: Full login response
+            # 8) Full login only when profile is complete
             refresh = RefreshToken.for_user(user)
             return Response({
                 "message": "Login successful.",
@@ -106,11 +100,7 @@ class GoogleLoginView(SocialLoginView):
 
         except Exception as e:
             logger.exception(f"Unexpected error during login: {str(e)}")
-            return Response(
-                {"error": f"{str(e)}"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-
+            return Response({"error": f"{str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # View for adding additional user information (phone_number, gender)
 class UserAdditionalInfoView(APIView):

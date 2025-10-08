@@ -22,7 +22,7 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
 #     """
 #     Custom Adapter to validate email domain during Google OAuth login.
 #     """
-#     print("✅ CustomGoogleOAuth2Adapter class loaded")
+#     print("CustomGoogleOAuth2Adapter class loaded")
 #     def save_user(self, request, sociallogin: SocialLogin, form=None):
 #         """
 #         This is called after populate_user — reliable for both token and code flows.

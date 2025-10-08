@@ -41,7 +41,7 @@ export function Footer() {
 						)}
 					</div>
 
-					{/* <div className="flex flex-col md:flex-row items-center gap-4">
+					<div className="flex flex-col md:flex-row items-center gap-4">
 						<p className="text-md text-muted-foreground text-center md:text-right">
 							Created by{" "}
 							<Link
@@ -61,7 +61,7 @@ export function Footer() {
 							>
 								{siteConfig.creators.himanishPuri.name}
 							</Link>
-						</p> */}
+						</p>
 
 						<div className="flex items-center">
 							<motion.div
