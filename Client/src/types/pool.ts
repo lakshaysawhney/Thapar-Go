@@ -1,6 +1,6 @@
 // Define the pool type
 
-interface PoolMembers {
+export interface PoolMembers {
 	full_name: string;
 	phone_number: number;
 	gender: "Male" | "Female" | "Others";

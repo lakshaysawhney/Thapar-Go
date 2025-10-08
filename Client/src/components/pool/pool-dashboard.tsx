@@ -14,7 +14,7 @@ import {
 	DialogDescription,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { Pool } from "@/types/pool";
+import type { Pool, PoolMembers } from "@/types/pool";
 import { PoolCard } from "@/components/pool/pool-card";
 import { PoolDetails } from "@/components/pool/pool-details";
 import { FilterSidebar } from "@/components/pool/filter-sidebar";
@@ -40,6 +40,8 @@ export default function PoolDashboard() {
 	const [isCreatePoolOpen, setIsCreatePoolOpen] = useState(false);
 	const [pools, setPools] = useState<Pool[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [currentUser, setCurrentUser] =
+		useState<CurrentUserDetailsProps | null>(null);
 	const { toast } = useToast();
 	const router = useRouter();
 
@@ -71,6 +73,7 @@ export default function PoolDashboard() {
 				const userDetails = await authApi.getCurrentUser();
 				if (userDetails) {
 					sessionStorage.setItem("user", JSON.stringify(userDetails));
+					setCurrentUser(userDetails);
 				}
 			} catch (error) {
 				console.error("Error fetching user details:", error);
@@ -91,13 +94,75 @@ export default function PoolDashboard() {
 		fetchUserDetails();
 	}, [toast, router]);
 
-	const myPools = useMemo(() => {
-		const user = sessionStorage.getItem("user");
-		if (!user) return [];
+	// Failsafe effect to check and fetch user details if needed
+	useEffect(() => {
+		const ensureUserInState = async () => {
+			// Check if user is in session storage but not in state
+			const userFromStorage = sessionStorage.getItem("user");
+			if (userFromStorage && !currentUser) {
+				try {
+					const parsedUser = JSON.parse(
+						userFromStorage,
+					) as CurrentUserDetailsProps;
+					setCurrentUser(parsedUser);
+				} catch (error) {
+					console.error("Error parsing user from session storage:", error);
+					// If parsing fails, fetch fresh user data
+					try {
+						const userDetails = await authApi.getCurrentUser();
+						if (userDetails) {
+							sessionStorage.setItem(
+								"user",
+								JSON.stringify(userDetails),
+							);
+							setCurrentUser(userDetails);
+						}
+					} catch (fetchError) {
+						console.error("Error fetching user details:", fetchError);
+					}
+				}
+			} else if (!userFromStorage && !currentUser) {
+				// Neither in storage nor state, fetch from API
+				try {
+					const userDetails = await authApi.getCurrentUser();
+					if (userDetails) {
+						sessionStorage.setItem("user", JSON.stringify(userDetails));
+						setCurrentUser(userDetails);
+					}
+				} catch (error) {
+					console.error("Error fetching user details:", error);
+				}
+			}
+		};
 
-		const parsedUser = JSON.parse(user) as CurrentUserDetailsProps;
-		return pools.filter((pool) => pool.created_by?.email === parsedUser.email);
-	}, [pools]);
+		ensureUserInState();
+	}, [currentUser]);
+
+	const myPools = useMemo(() => {
+		if (!currentUser) return [];
+
+		return pools.filter(
+			(pool: Pool) => pool.created_by?.email === currentUser.email,
+		);
+	}, [pools, currentUser]);
+
+	const joinedPools = useMemo(() => {
+		if (!currentUser) return [];
+
+		return pools.filter((pool: Pool) => {
+			// Check if the current user exists in the members array
+			return (
+				pool.members?.some(
+					(member: PoolMembers) =>
+						// Compare by full_name or email if available
+						member.full_name === currentUser.full_name ||
+						// Also check if the pool creator matches (in case they're also a member)
+						(pool.created_by?.email === currentUser.email &&
+							member.is_creator),
+				) && pool.created_by?.email !== currentUser.email
+			); // Exclude pools created by the user (those are in "My Pools")
+		});
+	}, [pools, currentUser]);
 
 	// Dynamically extract unique values from the current pool data
 	const dynamicFilterOptions = useMemo(() => {
@@ -222,13 +287,10 @@ export default function PoolDashboard() {
 
 	// Check if user is creator of selected pool
 	const isCurrentUserCreator = useMemo(() => {
-		if (!selectedPool) return false;
+		if (!selectedPool || !currentUser) return false;
 
-		const user = sessionStorage.getItem("user");
-		if (!user) return false;
-		const parsedUser = JSON.parse(user) as CurrentUserDetailsProps;
-		return selectedPool.created_by?.full_name === parsedUser.full_name;
-	}, [selectedPool]);
+		return selectedPool.created_by?.full_name === currentUser.full_name;
+	}, [selectedPool, currentUser]);
 
 	// Handle pool update
 	const handlePoolUpdated = useCallback(async () => {
@@ -324,6 +386,12 @@ export default function PoolDashboard() {
 						>
 							My Pools
 						</TabsTrigger>
+						<TabsTrigger
+							value="joined"
+							className="flex-1 sm:flex-initial data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+						>
+							Joined by Me
+						</TabsTrigger>
 					</TabsList>
 					<TabsContent
 						value="all"
@@ -377,8 +445,14 @@ export default function PoolDashboard() {
 								animate="show"
 							>
 								{myPools.map((pool) => (
-									<motion.div key={pool.id} variants={item}>
-										<PoolCard pool={pool} onClick={() => handlePoolSelect(pool)} />
+									<motion.div
+										key={pool.id}
+										variants={item}
+									>
+										<PoolCard
+											pool={pool}
+											onClick={() => handlePoolSelect(pool)}
+										/>
 									</motion.div>
 								))}
 							</motion.div>
@@ -390,6 +464,41 @@ export default function PoolDashboard() {
 								transition={{ delay: 0.2 }}
 							>
 								You haven&apos;t created any pools yet
+							</motion.div>
+						)}
+					</TabsContent>
+					<TabsContent value="joined">
+						{isLoading ? (
+							<div className="flex justify-center items-center py-20">
+								<div className="h-10 w-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+							</div>
+						) : joinedPools.length > 0 ? (
+							<motion.div
+								className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
+								variants={container}
+								initial="hidden"
+								animate="show"
+							>
+								{joinedPools.map((pool: Pool) => (
+									<motion.div
+										key={pool.id}
+										variants={item}
+									>
+										<PoolCard
+											pool={pool}
+											onClick={() => handlePoolSelect(pool)}
+										/>
+									</motion.div>
+								))}
+							</motion.div>
+						) : (
+							<motion.div
+								className="text-center py-10 text-muted-foreground"
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								transition={{ delay: 0.2 }}
+							>
+								You haven&apos;t joined any pools yet
 							</motion.div>
 						)}
 					</TabsContent>

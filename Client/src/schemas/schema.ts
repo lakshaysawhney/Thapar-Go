@@ -12,7 +12,7 @@ export const createPoolSchema = z.object({
 		.min(1, "Must have at least 1 person")
 		.max(20, "Maximum 20 persons"),
 	current_persons: z.coerce.number().min(1, "Must have at least 1 person"),
-	total_fare: z.coerce.number().min(1, "Total fare must be at least $1"),
+	total_fare: z.coerce.number().min(1, "Total fare must be at least ₹1"),
 	description: z
 		.string()
 		.min(10, "Description must be at least 10 characters"),
