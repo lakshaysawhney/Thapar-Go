@@ -4,8 +4,9 @@ import type React from "react";
 
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, PlusCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -60,7 +61,6 @@ export default function PoolDashboard() {
 						error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
-				
 			} finally {
 				setIsLoading(false);
 			}
@@ -82,7 +82,6 @@ export default function PoolDashboard() {
 						error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
-				
 			} finally {
 				setIsLoading(false);
 			}
@@ -353,17 +352,29 @@ export default function PoolDashboard() {
 							onChange={handleSearchChange}
 						/>
 					</div>
-					<FilterSidebar
-						open={isFilterOpen}
-						onOpenChange={setIsFilterOpen}
-						filters={filters}
-						onUpdateFilter={updateFilter}
-						onResetFilters={resetFilters}
-						startPoints={dynamicFilterOptions.startPoints}
-						endPoints={dynamicFilterOptions.endPoints}
-						transportModes={dynamicFilterOptions.transportModes}
-						fareRange={dynamicFilterOptions.fareRange}
-					/>
+					<div className="flex gap-2">
+						{/* Create Pool button for mobile - hidden on desktop since it's in navbar */}
+						<Button
+							onClick={() => setIsCreatePoolOpen(true)}
+							className="bg-primary hover:bg-primary/90 flex items-center gap-2 md:hidden whitespace-nowrap flex-[2]"
+						>
+							<PlusCircle size={18} />
+							Create Pool
+						</Button>
+						<div className="flex-[1] md:flex-none">
+							<FilterSidebar
+								open={isFilterOpen}
+								onOpenChange={setIsFilterOpen}
+								filters={filters}
+								onUpdateFilter={updateFilter}
+								onResetFilters={resetFilters}
+								startPoints={dynamicFilterOptions.startPoints}
+								endPoints={dynamicFilterOptions.endPoints}
+								transportModes={dynamicFilterOptions.transportModes}
+								fareRange={dynamicFilterOptions.fareRange}
+							/>
+						</div>
+					</div>
 				</motion.div>
 
 				{/* View Tabs */}

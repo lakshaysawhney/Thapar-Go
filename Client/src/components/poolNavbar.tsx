@@ -25,6 +25,7 @@ interface NavLink {
 	icon?: React.ReactNode;
 	onClick?: () => void;
 	isExternal?: boolean;
+	hideOnMobile?: boolean;
 }
 
 export function PoolNavbar({ onCreatePool }: Readonly<NavbarProps>) {
@@ -88,6 +89,8 @@ export function PoolNavbar({ onCreatePool }: Readonly<NavbarProps>) {
 			label: "Create Pool",
 			icon: <PlusCircle size={16} />,
 			onClick: onCreatePool,
+			// Hide on mobile since it's now in the dashboard
+			hideOnMobile: true,
 		},
 	];
 
@@ -225,50 +228,52 @@ export function PoolNavbar({ onCreatePool }: Readonly<NavbarProps>) {
 						className="md:hidden backdrop-blur-md border-b border-white/10 dark:border-white/5"
 					>
 						<div className="container mx-auto p-4 flex flex-col gap-3">
-							{navLinks.map((link) => {
-								if (link.isExternal) {
-									return (
-										<Link
-											key={link.label}
-											href={link.href}
-											target="_blank"
-											rel="noopener noreferrer"
-											className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
-											onClick={toggleMenu}
-										>
-											{link.icon}
-											{link.label}
-										</Link>
-									);
-								} else if (link.onClick) {
-									return (
-										<Button
-											key={link.label}
-											variant="ghost"
-											onClick={() => {
-												link.onClick?.();
-												toggleMenu();
-											}}
-											className="justify-start p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
-										>
-											{link.icon}
-											{link.label}
-										</Button>
-									);
-								} else {
-									return (
-										<Link
-											key={link.label}
-											href={link.href}
-											className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
-											onClick={toggleMenu}
-										>
-											{link.icon}
-											{link.label}
-										</Link>
-									);
-								}
-							})}
+							{navLinks
+								.filter((link) => !link.hideOnMobile)
+								.map((link) => {
+									if (link.isExternal) {
+										return (
+											<Link
+												key={link.label}
+												href={link.href}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
+												onClick={toggleMenu}
+											>
+												{link.icon}
+												{link.label}
+											</Link>
+										);
+									} else if (link.onClick) {
+										return (
+											<Button
+												key={link.label}
+												variant="ghost"
+												onClick={() => {
+													link.onClick?.();
+													toggleMenu();
+												}}
+												className="justify-start p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
+											>
+												{link.icon}
+												{link.label}
+											</Button>
+										);
+									} else {
+										return (
+											<Link
+												key={link.label}
+												href={link.href}
+												className="p-2 hover:bg-white/10 dark:hover:bg-black/10 rounded-md transition-colors flex items-center gap-2"
+												onClick={toggleMenu}
+											>
+												{link.icon}
+												{link.label}
+											</Link>
+										);
+									}
+								})}
 
 							{isAuthenticated ? (
 								<>
