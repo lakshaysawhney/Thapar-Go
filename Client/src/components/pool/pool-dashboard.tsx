@@ -347,7 +347,7 @@ export default function PoolDashboard() {
 						/>
 						<Input
 							placeholder="Search by creator..."
-							className="pl-10 bg-white/20 dark:bg-black/20 border-white/20 dark:border-white/10 backdrop-blur-md ring-primary placeholder:text-black text-foreground"
+							className="pl-10 bg-white/20 dark:bg-black/20 dark:border-white/10 backdrop-blur-md border-red-500 border-2 placeholder:text-black text-foreground"
 							value={filters.searchQuery}
 							onChange={handleSearchChange}
 						/>
