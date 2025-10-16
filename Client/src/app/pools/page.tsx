@@ -13,7 +13,7 @@ export default function Home() {
 		// Check if user is authenticated
 		const accessToken = sessionStorage.getItem("access");
 		if (!accessToken) {
-			router.push("/");
+			router.push("/login");
 		} else {
 			setIsAuthenticated(true);
 		}
