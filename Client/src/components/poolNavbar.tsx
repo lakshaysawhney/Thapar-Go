@@ -278,12 +278,7 @@ export function PoolNavbar({ onCreatePool }: Readonly<NavbarProps>) {
 							{isAuthenticated ? (
 								<>
 									<div className="border-t border-white/10 dark:border-white/5 my-2 pt-2"></div>
-									<Button
-										variant="outline"
-										className="flex items-center gap-2 justify-start border-white/20 dark:border-white/10"
-									>
-										<User className="h-4 w-4" />
-									</Button>
+									
 									<Button
 										variant="outline"
 										className="flex items-center gap-2 justify-start text-destructive border-white/20 dark:border-white/10"
