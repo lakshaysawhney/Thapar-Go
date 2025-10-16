@@ -31,54 +31,66 @@ logger = logging.getLogger('google_oauth')
 
 class GoogleLoginView(SocialLoginView):
     """
-    One-button Google sign-in: new users get temp token to complete profile,
-    existing users get access+refresh immediately.
+    Custom Google OAuth Login view with thapar.edu domain validation.
     """
     authentication_classes = [SessionAuthentication]
     adapter_class = GoogleOAuth2Adapter
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
-        logger.debug("Starting Google OAuth login process (single-button flow).")
+        logger.debug("Starting Google OAuth login process.")
+        logger.debug(f"signup_intent = {request.data.get('signup_intent')}")
 
-        # 1) Let dj-rest-auth + allauth complete Google login/signup
+        # 1) Let dj-rest-auth complete Google OAuth (creates/attaches user)
         response = super().post(request, *args, **kwargs)
 
         try:
-            # 2) Get social user and enforce domain
+            # 2) Validate social user
             social_user = SocialAccount.objects.filter(user=request.user).first()
             if not social_user:
                 return Response({"error": "Social account not found. Login failed."},
                                 status=status.HTTP_400_BAD_REQUEST)
 
             email = social_user.user.email
-            if email.split('@')[-1] != "thapar.edu":
+            email_domain = email.split('@')[-1]
+
+            # 3) Domain guard
+            if email_domain != "thapar.edu":
                 request.user.delete()
                 return Response({"error": "Only thapar.edu emails are allowed."},
                                 status=status.HTTP_403_FORBIDDEN)
 
-            # 3) Ensure the user is marked Google-authenticated
+            # 4) Load user & detect existing signup
             user = CustomUser.objects.get(id=request.user.id)
-            if not user.google_authenticated:
-                user.google_authenticated = True
-                user.save(update_fields=["google_authenticated"])
+            already_signed_up = bool(user.google_authenticated)
 
-            # 4) Gate on profile completeness
-            if not (user.phone_number and user.gender):
+            # 5) If this request is a SIGNUP attempt but user already exists -> block
+            if request.data.get("signup_intent") is True and already_signed_up:
+                return Response(
+                    {"error": "You have already signed up. Please log in instead."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # 6) Mark Google-authenticated (enables /user/register-info/ with temp token)
+            if not already_signed_up:
+                user.google_authenticated = True
+                user.save()
+
+            # 7) Enforce profile completeness for everyone (new or returning)
+            profile_complete = bool(user.phone_number and user.gender)
+            if not profile_complete:
                 temp_token = AccessToken.for_user(user)
                 temp_token.set_exp(lifetime=timedelta(minutes=5))
                 return Response({
-                    "status": "profile_required",
                     "message": "Google auth successful. Please complete your profile.",
                     "email": user.email,
                     "name": user.full_name,
                     "temp_token": str(temp_token),
                 }, status=status.HTTP_200_OK)
 
-            # 5) Full login
+            # 8) Full login only when profile is complete
             refresh = RefreshToken.for_user(user)
             return Response({
-                "status": "ok",
                 "message": "Login successful.",
                 "email": user.email,
                 "name": user.full_name,
