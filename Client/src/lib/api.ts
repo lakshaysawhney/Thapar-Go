@@ -2,8 +2,8 @@ import { toast } from "@/hooks/use-toast";
 import type { Pool } from "@/types/pool";
 import type { CreatePoolFormValues } from "@/schemas/schema";
 
-// const API_BASE_URL = "https://api.thapargo.com";
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://api.thapargo.com";
+// const API_BASE_URL = "http://127.0.0.1:8000";
 
 /**
  * Generic API request handler with error handling
