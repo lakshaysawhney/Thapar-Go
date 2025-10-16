@@ -162,7 +162,7 @@ export default function SignupPage() {
 			});
 
 			// Redirect to the pools page
-			router.push("/");
+			router.push("/pools");
 		} catch (error) {
 			console.error("Signup error:", error);
 			toast({
