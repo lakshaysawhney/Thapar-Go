@@ -60,8 +60,7 @@ export default function PoolDashboard() {
 						error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
-				authApi.logout();
-				router.push("/login");
+				
 			} finally {
 				setIsLoading(false);
 			}
@@ -83,8 +82,7 @@ export default function PoolDashboard() {
 						error instanceof Error ? error.message : String(error),
 					variant: "destructive",
 				});
-				authApi.logout();
-				router.push("/login");
+				
 			} finally {
 				setIsLoading(false);
 			}

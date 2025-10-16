@@ -102,8 +102,7 @@ export function PoolDetails({
 				description: error instanceof Error ? error.message : String(error),
 				variant: "destructive",
 			});
-			authApi.logout();
-			router.push("/login");
+			
 		} finally {
 			setIsJoining(false);
 		}

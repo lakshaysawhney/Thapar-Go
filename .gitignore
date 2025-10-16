@@ -3,3 +3,5 @@ secrets.py
 .env.prod
 .env.dev
 db.sqlite3
+venv
+*.pyc

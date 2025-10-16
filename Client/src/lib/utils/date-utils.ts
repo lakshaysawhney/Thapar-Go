@@ -5,7 +5,10 @@
  */
 export const formatTime = (dateString: string): string => {
 	const date = new Date(dateString);
-	return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+	return date.toLocaleTimeString("en-IN", {
+		hour: "2-digit",
+		minute: "2-digit",
+	});
 };
 
 /**
@@ -15,7 +18,10 @@ export const formatTime = (dateString: string): string => {
  */
 export const formatDate = (dateString: string): string => {
 	const date = new Date(dateString);
-	return date.toLocaleDateString([], { month: "short", day: "numeric" });
+	return date.toLocaleDateString("en-IN", {
+		month: "short",
+		day: "numeric",
+	});
 };
 
 /**
