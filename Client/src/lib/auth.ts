@@ -1,7 +1,7 @@
 import { toast } from "@/hooks/use-toast";
 
-// const API_BASE_URL = "http://127.0.0.1:8000";
-const API_BASE_URL = "https://api.thapargo.com";
+const API_BASE_URL = "http://127.0.0.1:8000";
+// const API_BASE_URL = "https://api.thapargo.com";
 
 /**
  * Generic API request handler with error handling
@@ -167,16 +167,16 @@ export const authApi = {
 			}
 
 			// Make logout API request
-			await apiRequest<void>(
-				"/auth/logout/",
-				{
-					method: "POST",
-					body: JSON.stringify({
-						refresh_token: refreshToken,
-					}),
-				},
-				"Failed to logout",
-			);
+			// await apiRequest<void>(
+			// 	"/auth/logout/",
+			// 	{
+			// 		method: "POST",
+			// 		body: JSON.stringify({
+			// 			refresh_token: refreshToken,
+			// 		}),
+			// 	},
+			// 	"Failed to logout",
+			// );
 		} catch (error) {
 			console.error("Logout Error:", error);
 			toast({
@@ -185,7 +185,7 @@ export const authApi = {
 				variant: "destructive",
 			});
 
-			throw error;
+			// throw error;
 		}
 		sessionStorage.removeItem("access");
 		sessionStorage.removeItem("refresh");
