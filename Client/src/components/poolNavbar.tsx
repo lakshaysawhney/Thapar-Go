@@ -281,7 +281,10 @@ export function PoolNavbar({ onCreatePool }: Readonly<NavbarProps>) {
 									<Button
 										variant="outline"
 										className="flex items-center gap-2 justify-start text-destructive border-white/20 dark:border-white/10"
-										onClick={handleLogout}
+										onClick={() => {
+											toggleMenu();
+											handleLogout();
+										}}
 									>
 										<LogOut className="h-4 w-4" />
 										<span>Log out</span>
@@ -293,14 +296,20 @@ export function PoolNavbar({ onCreatePool }: Readonly<NavbarProps>) {
 									<Button
 										variant="outline"
 										className="w-full"
-										onClick={() => router.push("/login")}
+										onClick={() => {
+											toggleMenu();
+											router.push("/login");
+										}}
 									>
 										Login
 									</Button>
 									<Button
 										variant="default"
 										className="bg-primary hover:bg-primary/90 w-full"
-										onClick={() => router.push("/signup")}
+										onClick={() => {
+											toggleMenu();
+											router.push("/signup");
+										}}
 									>
 										Sign Up
 									</Button>
