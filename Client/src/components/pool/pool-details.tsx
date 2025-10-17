@@ -27,8 +27,6 @@ import { useState } from "react";
 import { EditPoolForm } from "@/components/pool/edit-pool-form";
 import { poolApi } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
-import { authApi } from "@/lib";
-import { useRouter } from "next/navigation";
 
 interface PoolDetailsProps {
 	pool: Pool | null;
@@ -57,7 +55,6 @@ export function PoolDetails({
 	const [isJoining, setIsJoining] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
 	const { toast } = useToast();
-	const router = useRouter();
 
 	if (!pool) return null;
 

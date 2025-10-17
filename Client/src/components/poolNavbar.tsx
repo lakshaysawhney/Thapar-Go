@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogOut, User, Home, PlusCircle } from "lucide-react";
+import { Menu, X, LogOut, Home, PlusCircle } from "lucide-react";
 import { useTheme } from "next-themes";
 import { authApi } from "@/lib";
 import { siteConfig } from "@/lib/config";
